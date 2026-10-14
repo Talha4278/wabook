@@ -15,9 +15,16 @@ async function handle({ request }: { request: Request }) {
   const url = new URL(request.url);
   const q = url.searchParams.get("secret") || "";
   if (secret && auth !== `Bearer ${secret}` && q !== secret) {
-    return new Response("forbidden", { status: 403 });
+    return new Response(JSON.stringify({ error: "Forbidden: invalid secret" }), {
+      status: 403,
+      headers: { "Content-Type": "application/json" },
+    });
   }
   const { sweepAllDueReminders } = await import("@/lib/booking/api");
   const result = await sweepAllDueReminders();
-  return Response.json(result);
+  return Response.json({
+    ok: true,
+    timestamp: new Date().toISOString(),
+    ...result,
+  });
 }
