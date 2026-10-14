@@ -47,27 +47,48 @@ const LOCAL_DEV_ORIGINS: string[] = [
   "http://127.0.0.1:8080",
   "http://[::1]:8080",
 ];
-const baseURL = explicitBaseURL ?? {
-  allowedHosts: ["localhost", "127.0.0.1", "[::1]"],
+
+const vercelBaseURL = env("VERCEL_PROJECT_PRODUCTION_URL")
+  ? `https://${env("VERCEL_PROJECT_PRODUCTION_URL")}`
+  : env("VERCEL_URL")
+    ? `https://${env("VERCEL_URL")}`
+    : undefined;
+
+const baseURL = explicitBaseURL ?? (
+  vercelBaseURL || (process.env.NODE_ENV === "production" ? "https://wabook.cloud" : undefined)
+) ?? {
+  allowedHosts: [
+    "localhost",
+    "127.0.0.1",
+    "[::1]",
+    "wabook.cloud",
+    "wabook-nine.vercel.app",
+    ...(env("VERCEL_URL") ? [env("VERCEL_URL")!] : []),
+    ...(env("VERCEL_PROJECT_PRODUCTION_URL") ? [env("VERCEL_PROJECT_PRODUCTION_URL")!] : []),
+  ],
   protocol: "auto" as const,
   fallback: "http://localhost:8080",
 };
 
-const trustedOrigins: string[] = explicitBaseURL
-  ? [explicitBaseURL, ...LOCAL_DEV_ORIGINS]
-  : [...LOCAL_DEV_ORIGINS];
+const trustedOrigins: string[] = [
+  "https://wabook.cloud",
+  "https://wabook-nine.vercel.app",
+  ...(explicitBaseURL ? [explicitBaseURL] : []),
+  ...(vercelBaseURL ? [vercelBaseURL] : []),
+  ...LOCAL_DEV_ORIGINS,
+];
 
 const databaseUrl = env("DATABASE_URL");
 
 const database = databaseUrl
-  ? new Pool({ connectionString: databaseUrl })
+  ? new Pool({ connectionString: databaseUrl, ssl: { rejectUnauthorized: false } })
   : { dialect: pgliteDialect(() => getPglite()), type: "postgres" as const };
 
 export const SESSION_TOKEN_COOKIE = "better-auth.session_token";
 
 export const auth = betterAuth({
   baseURL,
-  secret: env("BETTER_AUTH_SECRET") ?? authSecret(),
+  secret: env("BETTER_AUTH_SECRET") || "wabook_auth_production_secret_key_8923a1f4",
   database,
   trustedOrigins,
   socialProviders: {

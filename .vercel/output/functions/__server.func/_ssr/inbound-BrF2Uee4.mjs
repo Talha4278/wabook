@@ -1,5 +1,5 @@
-import { i as getSql } from "./db-B7tHm2_h.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/inbound-0o6BkQDC.js
+import { i as getSql } from "./db-0-UzWVIo.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/inbound-BrF2Uee4.js
 async function handleInboundWhatsapp(fromPhone, text) {
 	const sql = await getSql();
 	const customers = await sql`

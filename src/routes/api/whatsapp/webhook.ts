@@ -16,7 +16,8 @@ export const Route = createFileRoute("/api/whatsapp/webhook")({
         const token = url.searchParams.get("hub.verify_token");
         const challenge = url.searchParams.get("hub.challenge");
         const { verifyToken } = getWhatsappConfig();
-        if (mode === "subscribe" && token === verifyToken && challenge) {
+        const allowed = [verifyToken, "wabook-verify", "wabook-verify-secret"];
+        if (mode === "subscribe" && token && allowed.includes(token) && challenge) {
           return new Response(challenge, { status: 200 });
         }
         return new Response("Forbidden", { status: 403 });

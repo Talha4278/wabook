@@ -1,6 +1,6 @@
 import { i as TSS_SERVER_FUNCTION, r as createServerFn } from "./ssr.mjs";
-import { t as authMiddleware } from "./middleware-C7v2h_Jj.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/api-DpOdzk7Z.js
+import { t as authMiddleware } from "./middleware-BmGI48yx.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/api-DGItVMUW.js
 var createServerRpc = (serverFnMeta, splitImportFn) => {
 	const url = "/_serverFn/" + serverFnMeta.id;
 	return Object.assign(splitImportFn, {
@@ -221,7 +221,7 @@ var DEFAULT_TEMPLATE_UR = `السلام علیکم {{name}}
 
 تصدیق کے لیے YES لکھیں، منسوخ کے لیے NO۔`;
 async function db() {
-	const { getSql } = await import("./db-B7tHm2_h.mjs").then((n) => n.t).then((n) => n.t);
+	const { getSql } = await import("./db-0-UzWVIo.mjs").then((n) => n.t).then((n) => n.t);
 	return getSql();
 }
 function parseHours(hours) {

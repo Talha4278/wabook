@@ -1,5 +1,5 @@
-import { n as createMiddleware } from "../index.js";
-//#region src/lib/auth/middleware.ts
+import { n as createMiddleware } from "./ssr.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/middleware-BmGI48yx.js
 /**
 * Auth middleware for server functions — the standard way to get the caller's
 * verified user id. When deployed the session cookie is same-origin and rides
@@ -26,15 +26,15 @@ import { n as createMiddleware } from "../index.js";
 * per-user data and scope every query by `context.userId`.
 */
 var authMiddleware = createMiddleware({ type: "function" }).client(async ({ next }) => {
-	const { getBearerToken } = await import("./client-DntVSK3C.js").then((n) => n.n);
+	const { getBearerToken } = await import("./client-DntVSK3C.mjs").then((n) => n.n);
 	const isDevMode = typeof window !== "undefined" && window.localStorage.getItem("wabook_dev_mode") === "true";
 	return next({ sendContext: {
 		bearerToken: getBearerToken() ?? void 0,
 		isDevMode
 	} });
 }).server(async ({ next, context }) => {
-	const { assertSameSiteRequest } = await import("./isolation.server-CGNg1r0B.js");
-	const { requireUserId } = await import("./verify.server-DO6UKi7D.js");
+	const { assertSameSiteRequest } = await import("./isolation.server-CGNg1r0B.mjs");
+	const { requireUserId } = await import("./verify.server-BfzY_0r0.mjs");
 	assertSameSiteRequest();
 	const ctx = context;
 	return next({ context: { userId: await requireUserId(ctx.bearerToken, ctx.isDevMode) } });

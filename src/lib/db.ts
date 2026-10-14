@@ -139,6 +139,11 @@ async function createSql(): Promise<Sql> {
         "or a server route loader, never from client code.",
     );
   }
+  if (dbSource !== "neon" && process.env.VERCEL) {
+    throw new Error(
+      "DATABASE_URL is not configured in Vercel environment variables. Please add your Neon PostgreSQL connection string (DATABASE_URL) in Vercel Project Settings > Environment Variables, then redeploy.",
+    );
+  }
   return dbSource === "neon" ? createNeonSql() : createPgliteSql();
 }
 
@@ -161,14 +166,14 @@ export async function getPglite(): Promise<import("@electric-sql/pglite").PGlite
 }
 
 export function ensureDbReady(): Promise<void> {
-  if (dbSource !== "pglite") return Promise.resolve();
+  if (dbSource !== "pglite" || process.env.VERCEL) return Promise.resolve();
   return getSql().then(() => undefined);
 }
 
 const globalBoot = globalThis as typeof globalThis & {
   __pgBootstrapPromise__?: Promise<void>;
 };
-if (typeof window === "undefined" && dbSource === "pglite") {
+if (typeof window === "undefined" && dbSource === "pglite" && !process.env.VERCEL) {
   globalBoot.__pgBootstrapPromise__ ??= ensureDbReady().catch((err) => {
     globalBoot.__pgBootstrapPromise__ = undefined;
     console.error("[db] PGLite bootstrap failed:", err);

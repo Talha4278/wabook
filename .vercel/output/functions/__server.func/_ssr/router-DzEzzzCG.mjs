@@ -3,10 +3,10 @@ import { t as __exportAll } from "./rolldown-runtime-D7D4PA-g.mjs";
 import { K as require_react, _ as createRootRoute, b as require_jsx_runtime, d as HeadContent, g as createFileRoute, h as lazyRouteComponent, m as Outlet, p as createRouter, u as Scripts, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as getServerFnById, i as TSS_SERVER_FUNCTION, r as createServerFn } from "./ssr.mjs";
 import { F as string, I as union, M as object, j as number, k as literal } from "../_libs/@better-auth/core+[...].mjs";
-import { t as auth } from "./server-BQodwNtx.mjs";
-import { t as authMiddleware } from "./middleware-C7v2h_Jj.mjs";
+import { t as auth } from "./server-D0ChcEkX.mjs";
+import { t as authMiddleware } from "./middleware-BmGI48yx.mjs";
 import { a as TriangleAlert } from "../_libs/lucide-react.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-B2FXF5FF.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DzEzzzCG.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var createSsrRpc = (functionId) => {
@@ -22,7 +22,7 @@ var createSsrRpc = (functionId) => {
 	});
 };
 async function db() {
-	const { getSql } = await import("./db-B7tHm2_h.mjs").then((n) => n.t).then((n) => n.t);
+	const { getSql } = await import("./db-0-UzWVIo.mjs").then((n) => n.t).then((n) => n.t);
 	return getSql();
 }
 var getDashboard = createServerFn({ method: "GET" }).middleware([authMiddleware]).handler(createSsrRpc("a86639b5ea8524bc0f1eeb5d2447792499ed0681e0ba24c8d6b714ae30f9f07d"));
@@ -443,11 +443,11 @@ var Route$6 = createRootRoute({
 		})]
 	})
 });
-var $$splitComponentImporter$2 = () => import("./routes-B8GM4cUG.mjs");
+var $$splitComponentImporter$2 = () => import("./routes-D_P94-xA.mjs");
 var Route$5 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$2, "component") });
 var $$splitComponentImporter$1 = () => import("./login-BBq5LqLc.mjs");
 var Route$4 = createFileRoute("/login")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
-var $$splitComponentImporter = () => import("./book._slug-LUjSYaSQ.mjs");
+var $$splitComponentImporter = () => import("./book._slug-dNqbItI7.mjs");
 var Route$3 = createFileRoute("/book/$slug")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
 var Route$2 = createFileRoute("/api/auth/$")({ server: { handlers: {
 	GET: ({ request }) => auth.handler(request),
@@ -465,7 +465,7 @@ async function handle({ request }) {
 		status: 403,
 		headers: { "Content-Type": "application/json" }
 	});
-	const { sweepAllDueReminders } = await import("./api-CLSoMdZS.mjs");
+	const { sweepAllDueReminders } = await import("./api-BiUY_r1J.mjs");
 	const result = await sweepAllDueReminders();
 	return Response.json({
 		ok: true,
@@ -481,11 +481,15 @@ var Route = createFileRoute("/api/whatsapp/webhook")({ server: { handlers: {
 		const token = url.searchParams.get("hub.verify_token");
 		const challenge = url.searchParams.get("hub.challenge");
 		const { verifyToken } = getWhatsappConfig();
-		if (mode === "subscribe" && token === verifyToken && challenge) return new Response(challenge, { status: 200 });
+		if (mode === "subscribe" && token && [
+			verifyToken,
+			"wabook-verify",
+			"wabook-verify-secret"
+		].includes(token) && challenge) return new Response(challenge, { status: 200 });
 		return new Response("Forbidden", { status: 403 });
 	},
 	POST: async ({ request }) => {
-		const { handleInboundWhatsapp } = await import("./inbound-0o6BkQDC.mjs");
+		const { handleInboundWhatsapp } = await import("./inbound-BrF2Uee4.mjs");
 		let payload = {};
 		try {
 			payload = await request.json();

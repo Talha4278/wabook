@@ -1,12 +1,9 @@
-import { o as getRequest } from "../index.js";
-import { n as authConfigured, t as auth } from "./server-BQodwNtx.js";
-import "jose";
-//#region src/lib/env.server.ts
+import { o as getRequest } from "./ssr.mjs";
+import { n as authConfigured, t as auth } from "./server-D0ChcEkX.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/verify.server-BfzY_0r0.js
 function env(key) {
 	return process.env[key]?.trim() || void 0;
 }
-//#endregion
-//#region src/lib/auth/gate-identity.server.ts
 function gateIdentityEnabled() {
 	return env("VITE_AUTH_ENABLED") !== "false";
 }

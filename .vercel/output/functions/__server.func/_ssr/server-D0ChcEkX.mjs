@@ -1,46 +1,17 @@
-import { a as isDynamicBaseURLConfig, c as wildcardMatch, i as getProtocol, n as getHost, o as isRequestLike, r as getOrigin, s as resolveBaseURL, t as getBaseURL } from "./url-Dj5TGTcl.js";
-import { n as ensureDbReady, r as getPglite } from "./db-B7tHm2_h.js";
-import { createKyselyAdapter, getKyselyDatabaseType } from "@better-auth/kysely-adapter";
-import { createLogger, env, isDevelopment, isProduction, isTest, logger, shouldPublishLog } from "@better-auth/core/env";
-import { APIError, BASE_ERROR_CODES, BetterAuthError } from "@better-auth/core/error";
-import { normalizePathname } from "@better-auth/core/utils/url";
-import defu$1, { createDefu, defu } from "defu";
-import { EncryptJWT, SignJWT, base64url, calculateJwkThumbprint, decodeProtectedHeader, jwtDecrypt, jwtVerify } from "jose";
-import { createRandomStringGenerator } from "@better-auth/utils/random";
-import { hkdf } from "@noble/hashes/hkdf.js";
-import { sha256 } from "@noble/hashes/sha2.js";
-import { hashPassword, verifyPassword } from "@better-auth/utils/password";
-import "@better-auth/utils";
-import { createHash } from "@better-auth/utils/hash";
-import { xchacha20poly1305 } from "@noble/ciphers/chacha.js";
-import { bytesToHex, hexToBytes, managedNonce, utf8ToBytes } from "@noble/ciphers/utils.js";
-import { getAuthTables } from "@better-auth/core/db";
-import { filterOutputFields } from "@better-auth/core/utils/db";
-import { safeJSONParse } from "@better-auth/core/utils/json";
-import { createRouter, kAPIErrorHeaderSymbol, serializeCookie, serializeSignedCookie, toResponse } from "better-call";
-import * as z$1 from "zod";
-import { base64Url } from "@better-auth/utils/base64";
-import { binary } from "@better-auth/utils/binary";
-import { createHMAC } from "@better-auth/utils/hmac";
-import { defineRequestState, getBetterAuthVersion, getCurrentAdapter, getCurrentAuthContext, hasRequestState, queueAfterTransactionHook, runWithAdapter, runWithEndpointContext, runWithRequestState, runWithTransaction } from "@better-auth/core/context";
-import { isAPIError } from "@better-auth/core/utils/is-api-error";
-import { createAuthEndpoint, createAuthMiddleware } from "@better-auth/core/api";
-import { deprecate } from "@better-auth/core/utils/deprecate";
-import { createRateLimitKey, findInvalidTrustedProxies, getIp } from "@better-auth/core/utils/ip";
-import { ATTR_CONTEXT, ATTR_DB_COLLECTION_NAME, ATTR_HOOK_TYPE, ATTR_HTTP_RESPONSE_STATUS_CODE, ATTR_HTTP_ROUTE, ATTR_OPERATION_ID, withSpan } from "@better-auth/core/instrumentation";
-import { generateId } from "@better-auth/core/utils/id";
-import { isLoopbackHost } from "@better-auth/core/utils/host";
-import { JWTExpired } from "jose/errors";
-import { SocialProviderListEnum, socialProviders } from "@better-auth/core/social-providers";
-import { initGetFieldName, initGetModelName } from "@better-auth/core/db/adapter";
-import { CompiledQuery, PostgresAdapter, PostgresIntrospector, PostgresQueryCompiler, sql } from "kysely";
-import { createTelemetry } from "@better-auth/telemetry";
-import { randomBytes } from "node:crypto";
-import { Pool } from "pg";
-//#region node_modules/better-auth/dist/crypto/random.mjs
+import { $t as generateId, A as looseObject, B as base64Url, Bt as ATTR_CONTEXT, Ct as JWTExpired, D as boolean, E as array, F as string, Ft as normalizePathname, Gt as getAuthTables, H as jwtVerify, Ht as ATTR_OPERATION_ID, Jt as runWithAdapter, Kt as getCurrentAdapter, M as object, N as optional, O as email, P as record, Qt as initGetFieldName, S as filterOutputFields, T as any, Ut as import_src, V as decodeProtectedHeader, Vt as ATTR_HOOK_TYPE, Wt as safeJSONParse, Xt as getBetterAuthVersion, Yt as runWithTransaction, Zt as initGetModelName, _ as runWithEndpointContext, a as isLoopbackHost, an as createLogger, b as serializeCookie, c as getIp, d as createAuthMiddleware, dt as encode, en as createRandomStringGenerator, f as isAPIError, fn as isDevelopment, g as getCurrentAuthContext, h as runWithRequestState, in as BASE_ERROR_CODES, j as number, l as deprecate, ln as env, m as hasRequestState, mn as isTest, n as socialProviders, nn as BetterAuthError, o as createRateLimitKey, on as logger, p as defineRequestState, pn as isProduction, qt as queueAfterTransactionHook, rn as kAPIErrorHeaderSymbol, s as findInvalidTrustedProxies, sn as shouldPublishLog, t as SocialProviderListEnum, tn as APIError, u as createAuthEndpoint, v as createRouter$1, x as serializeSignedCookie, y as toResponse, zt as withSpan } from "../_libs/@better-auth/core+[...].mjs";
+import { a as isDynamicBaseURLConfig, c as wildcardMatch, i as getProtocol, n as getHost, o as isRequestLike, r as getOrigin, s as resolveBaseURL, t as getBaseURL } from "./url-Dj5TGTcl.mjs";
+import { n as ensureDbReady, r as getPglite } from "./db-0-UzWVIo.mjs";
+import { a as PostgresIntrospector, c as sql, i as PostgresAdapter, n as getKyselyDatabaseType, o as PostgresQueryCompiler, s as CompiledQuery, t as createKyselyAdapter } from "../_libs/@better-auth/kysely-adapter+[...].mjs";
+import { n as defu, t as createDefu } from "../_libs/defu.mjs";
+import { i as jwtDecrypt, n as EncryptJWT, r as SignJWT, t as calculateJwkThumbprint } from "../_libs/jose.mjs";
+import { n as hkdf, t as sha256 } from "../_libs/noble__hashes.mjs";
+import { i as verifyPassword, n as binary, r as hashPassword, t as createHMAC } from "../_libs/better-auth__utils.mjs";
+import { n as createHash, t as createTelemetry } from "../_libs/@better-auth/telemetry+[...].mjs";
+import { a as utf8ToBytes, i as managedNonce, n as bytesToHex, r as hexToBytes, t as xchacha20poly1305 } from "../_libs/noble__ciphers.mjs";
+import { n as string$1, t as boolean$1 } from "../_libs/zod.mjs";
+import { t as Pool } from "../_libs/pg.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/server-D0ChcEkX.js
 var generateRandomString = createRandomStringGenerator("a-z", "0-9", "A-Z", "-_");
-//#endregion
-//#region node_modules/better-auth/dist/crypto/jwt.mjs
 async function signJWT(payload, secret, expiresIn = 3600) {
 	return await new SignJWT(payload).setProtectedHeader({ alg: "HS256" }).setIssuedAt().setExpirationTime(Math.floor(Date.now() / 1e3) + expiresIn).sign(new TextEncoder().encode(secret));
 }
@@ -123,7 +94,7 @@ async function symmetricEncodeJWT(payload, secret, salt, expiresIn = 3600) {
 	const encryptionSecret = deriveEncryptionSecret(getCurrentSecret(secret), salt);
 	const thumbprint = await calculateJwkThumbprint({
 		kty: "oct",
-		k: base64url.encode(encryptionSecret)
+		k: encode(encryptionSecret)
 	}, "sha256");
 	return await new EncryptJWT(payload).setProtectedHeader({
 		alg,
@@ -153,7 +124,7 @@ async function symmetricDecodeJWT(token, secret, salt) {
 					const encryptionSecret = deriveEncryptionSecret(s.value, salt);
 					if (kid === await calculateJwkThumbprint({
 						kty: "oct",
-						k: base64url.encode(encryptionSecret)
+						k: encode(encryptionSecret)
 					}, "sha256")) return encryptionSecret;
 				}
 				throw new Error("no matching decryption secret");
@@ -176,8 +147,6 @@ async function symmetricDecodeJWT(token, secret, salt) {
 		return null;
 	}
 }
-//#endregion
-//#region node_modules/better-auth/dist/crypto/password.mjs
 /**
 * `@better-auth/utils/password` uses the "node" export condition in package.json
 * to automatically pick the right implementation:
@@ -188,8 +157,6 @@ var hashPassword$1 = hashPassword;
 var verifyPassword$1$1 = async ({ hash, password }) => {
 	return verifyPassword(hash, password);
 };
-//#endregion
-//#region node_modules/better-auth/dist/crypto/index.mjs
 var ENVELOPE_PREFIX = "$ba$";
 function parseEnvelope(data) {
 	if (!data.startsWith(ENVELOPE_PREFIX)) return null;
@@ -235,8 +202,6 @@ var symmetricDecrypt = async ({ key, data }) => {
 	if (key.legacySecret) return rawDecrypt(key.legacySecret, data);
 	throw new Error("Cannot decrypt legacy bare-hex payload: no legacy secret available. Set BETTER_AUTH_SECRET for backwards compatibility.");
 };
-//#endregion
-//#region node_modules/better-auth/dist/context/store-capabilities.mjs
 function hasServerSessionStore(options) {
 	return !!options.database || !!options.secondaryStorage;
 }
@@ -246,8 +211,6 @@ function hasServerAccountStore(options) {
 function shouldBindAccountCookieToSessionUser(options) {
 	return hasServerAccountStore(options);
 }
-//#endregion
-//#region node_modules/better-auth/dist/db/schema.mjs
 var cache = /* @__PURE__ */ new WeakMap();
 function getFields(options, modelName, mode) {
 	const cacheKey = `${modelName}:${mode}`;
@@ -383,18 +346,12 @@ function getSessionDefaultFields(options) {
 	for (const key in fields) if (fields[key].defaultValue !== void 0) defaults[key] = typeof fields[key].defaultValue === "function" ? fields[key].defaultValue() : fields[key].defaultValue;
 	return defaults;
 }
-//#endregion
-//#region node_modules/better-auth/dist/utils/date.mjs
 var getDate = (span, unit = "ms") => {
 	return new Date(Date.now() + (unit === "sec" ? span * 1e3 : span));
 };
-//#endregion
-//#region node_modules/better-auth/dist/utils/is-promise.mjs
 function isPromise(obj) {
 	return !!obj && (typeof obj === "object" || typeof obj === "function") && typeof obj.then === "function";
 }
-//#endregion
-//#region node_modules/better-auth/dist/utils/time.mjs
 var SEC = 1e3;
 var MIN = SEC * 60;
 var HOUR = MIN * 60;
@@ -474,8 +431,6 @@ function parse(value) {
 function sec(value) {
 	return Math.round(parse(value) / 1e3);
 }
-//#endregion
-//#region node_modules/better-auth/dist/cookies/cookie-utils.mjs
 function tryDecode$1(str) {
 	if (str.indexOf("%") === -1) return str;
 	try {
@@ -645,8 +600,6 @@ function setRequestCookie(headers, name, value) {
 	if (cookieNameRegex.test(name)) cookieMap.set(name, value);
 	headers.set("cookie", Array.from(cookieMap, ([k, v]) => `${k}=${encodeURIComponent(v)}`).join("; "));
 }
-//#endregion
-//#region node_modules/better-auth/dist/cookies/session-store.mjs
 /**
 * Per-cookie byte ceiling.
 * Safari's ~4093 floor is the lowest among browsers.
@@ -803,16 +756,14 @@ async function getAccountCookie(c) {
 	}
 	return null;
 }
-var getSessionQuerySchema = z$1.optional(z$1.object({
+var getSessionQuerySchema = optional(object({
 	/**
 	* If cookie cache is enabled, it will disable the cache
 	* and fetch the session from the database
 	*/
-	disableCookieCache: z$1.coerce.boolean().meta({ description: "Disable cookie cache and fetch session from database" }).optional(),
-	disableRefresh: z$1.coerce.boolean().meta({ description: "Disable session refresh. Useful for checking session status, without updating the session" }).optional()
+	disableCookieCache: boolean$1().meta({ description: "Disable cookie cache and fetch session from database" }).optional(),
+	disableRefresh: boolean$1().meta({ description: "Disable session refresh. Useful for checking session status, without updating the session" }).optional()
 }));
-//#endregion
-//#region node_modules/better-auth/dist/cookies/index.mjs
 function createCookieGetter(options) {
 	const baseURLString = typeof options.baseURL === "string" ? options.baseURL : void 0;
 	const dynamicProtocol = typeof options.baseURL === "object" && options.baseURL !== null ? options.baseURL.protocol : void 0;
@@ -1006,24 +957,22 @@ function deleteSessionCookie(ctx, skipDontRememberMe) {
 	sessionStore.setCookies(cleanCookies);
 	if (!skipDontRememberMe) expireCookie(ctx, ctx.context.authCookies.dontRememberToken);
 }
-//#endregion
-//#region node_modules/better-auth/dist/state.mjs
-var stateDataSchema = z$1.looseObject({
-	callbackURL: z$1.string(),
-	codeVerifier: z$1.string(),
-	errorURL: z$1.string().optional(),
-	newUserURL: z$1.string().optional(),
-	expiresAt: z$1.number(),
+var stateDataSchema = looseObject({
+	callbackURL: string(),
+	codeVerifier: string(),
+	errorURL: string().optional(),
+	newUserURL: string().optional(),
+	expiresAt: number(),
 	/**
 	* CSRF nonce returned to the OAuth provider. When using cookie state storage,
 	* this must match the callback `state` query parameter.
 	*/
-	oauthState: z$1.string().optional(),
-	link: z$1.object({
-		email: z$1.string(),
-		userId: z$1.coerce.string()
+	oauthState: string().optional(),
+	link: object({
+		email: string(),
+		userId: string$1()
 	}).optional(),
-	requestSignUp: z$1.boolean().optional()
+	requestSignUp: boolean().optional()
 });
 new Set(Object.keys(stateDataSchema.shape));
 var StateError = class extends BetterAuthError {
@@ -1138,8 +1087,6 @@ async function parseGenericState(c, state, settings) {
 	});
 	return parsedData;
 }
-//#endregion
-//#region node_modules/better-auth/dist/oauth2/errors.mjs
 var HANDLING_DOCS_URL = "https://www.better-auth.com/docs/concepts/oauth#handling-providers-without-email";
 /**
 * Redirect the user to the OAuth error page with a machine-readable `error`
@@ -1164,11 +1111,7 @@ function redirectOnError(ctx, errorURL, error, description) {
 function missingEmailLogMessage(providerId, options) {
 	return `${options?.source === "generic" ? `Generic OAuth provider "${providerId}"` : `Provider "${providerId}"`} did not return an email${options?.source === "id_token" ? " in the id token" : ""}. Either request the provider's email scope, or synthesize one via \`mapProfileToUser\`. See ${HANDLING_DOCS_URL}`;
 }
-//#endregion
-//#region node_modules/better-auth/dist/api/state/oauth.mjs
 var { get: getOAuthState, set: setOAuthState } = defineRequestState(() => null);
-//#endregion
-//#region node_modules/better-auth/dist/oauth2/state.mjs
 async function generateState(c, link, additionalData) {
 	const callbackURL = c.body?.callbackURL || c.context.options.baseURL;
 	if (!callbackURL) throw APIError.from("BAD_REQUEST", BASE_ERROR_CODES.CALLBACK_URL_REQUIRED);
@@ -1214,11 +1157,7 @@ async function parseState(c) {
 	if (parsedData) await setOAuthState(parsedData);
 	return parsedData;
 }
-//#endregion
-//#region node_modules/better-auth/dist/utils/hide-metadata.mjs
 var HIDE_METADATA = { scope: "server" };
-//#endregion
-//#region node_modules/better-auth/dist/auth/trusted-origins.mjs
 /**
 * Matches the given url against an origin or origin pattern
 * See "options.trustedOrigins" for details of supported patterns
@@ -1242,8 +1181,6 @@ var matchesOriginPattern = (url, pattern, settings) => {
 	const protocol = getProtocol(url);
 	return protocol === "http:" || protocol === "https:" || !protocol ? pattern === getOrigin(url) : url.startsWith(pattern);
 };
-//#endregion
-//#region node_modules/better-auth/dist/api/middlewares/origin-check.mjs
 /**
 * Checks if CSRF should be skipped for backward compatibility.
 * Previously, disableOriginCheck also disabled CSRF checks.
@@ -1387,8 +1324,6 @@ async function validateFormCsrf(ctx) {
 	}
 	if (headers.get("origin") || headers.get("referer")) return await validateOrigin(ctx, true);
 }
-//#endregion
-//#region node_modules/better-auth/dist/api/rate-limiter/index.mjs
 var memory = /* @__PURE__ */ new Map();
 var MEMORY_STORE_MAX_ENTRIES = 1e5;
 function pruneMemoryStore() {
@@ -1768,8 +1703,6 @@ function getDefaultSpecialRules() {
 		max: 3
 	}];
 }
-//#endregion
-//#region node_modules/better-auth/dist/api/state/should-session-refresh.mjs
 /**
 * State for skipping session refresh
 *
@@ -1779,8 +1712,6 @@ function getDefaultSpecialRules() {
 * data stored in cookies.
 */
 var { get: getShouldSkipSessionRefresh, set: setShouldSkipSessionRefresh } = defineRequestState(() => false);
-//#endregion
-//#region node_modules/better-auth/dist/api/routes/session.mjs
 var getSession = () => createAuthEndpoint("/get-session", {
 	method: ["GET", "POST"],
 	operationId: "getSession",
@@ -2166,7 +2097,7 @@ var listSessions = () => createAuthEndpoint("/list-sessions", {
 */
 var revokeSession = createAuthEndpoint("/revoke-session", {
 	method: "POST",
-	body: z$1.object({ token: z$1.string().meta({ description: "The token to revoke" }) }),
+	body: object({ token: string().meta({ description: "The token to revoke" }) }),
 	use: [sensitiveSessionMiddleware],
 	requireHeaders: true,
 	metadata: { openapi: {
@@ -2267,8 +2198,6 @@ var revokeOtherSessions = createAuthEndpoint("/revoke-other-sessions", {
 	await Promise.all(otherSessions.map((session) => ctx.context.internalAdapter.deleteSession(session.token)));
 	return ctx.json({ status: true });
 });
-//#endregion
-//#region node_modules/better-auth/dist/db/verification-token-storage.mjs
 var defaultKeyHasher = async (identifier) => {
 	const hash = await createHash("SHA-256").digest(new TextEncoder().encode(identifier));
 	return base64Url.encode(new Uint8Array(hash), { padding: false });
@@ -2289,8 +2218,6 @@ function getStorageOption(identifier, config) {
 	}
 	return config;
 }
-//#endregion
-//#region node_modules/better-auth/dist/db/with-hooks.mjs
 function getWithHooks(adapter, ctx) {
 	const hooksEntries = ctx.hooks;
 	async function createWithHooks(data, model, customCreateFn) {
@@ -2301,7 +2228,7 @@ function getWithHooks(adapter, ctx) {
 			if (toRun) {
 				const result = await withSpan(`db create.before ${model}`, {
 					[ATTR_HOOK_TYPE]: "create.before",
-					[ATTR_DB_COLLECTION_NAME]: model,
+					[import_src.ATTR_DB_COLLECTION_NAME]: model,
 					[ATTR_CONTEXT]: source
 				}, () => toRun(actualData, context));
 				if (result === false) return null;
@@ -2323,7 +2250,7 @@ function getWithHooks(adapter, ctx) {
 			if (toRun) await queueAfterTransactionHook(async () => {
 				await withSpan(`db create.after ${model}`, {
 					[ATTR_HOOK_TYPE]: "create.after",
-					[ATTR_DB_COLLECTION_NAME]: model,
+					[import_src.ATTR_DB_COLLECTION_NAME]: model,
 					[ATTR_CONTEXT]: source
 				}, () => toRun(created, context));
 			});
@@ -2338,7 +2265,7 @@ function getWithHooks(adapter, ctx) {
 			if (toRun) {
 				const result = await withSpan(`db update.before ${model}`, {
 					[ATTR_HOOK_TYPE]: "update.before",
-					[ATTR_DB_COLLECTION_NAME]: model,
+					[import_src.ATTR_DB_COLLECTION_NAME]: model,
 					[ATTR_CONTEXT]: source
 				}, () => toRun(data, context));
 				if (result === false) return null;
@@ -2359,7 +2286,7 @@ function getWithHooks(adapter, ctx) {
 			if (toRun) await queueAfterTransactionHook(async () => {
 				await withSpan(`db update.after ${model}`, {
 					[ATTR_HOOK_TYPE]: "update.after",
-					[ATTR_DB_COLLECTION_NAME]: model,
+					[import_src.ATTR_DB_COLLECTION_NAME]: model,
 					[ATTR_CONTEXT]: source
 				}, () => toRun(updated, context));
 			});
@@ -2374,7 +2301,7 @@ function getWithHooks(adapter, ctx) {
 			if (toRun) {
 				const result = await withSpan(`db updateMany.before ${model}`, {
 					[ATTR_HOOK_TYPE]: "updateMany.before",
-					[ATTR_DB_COLLECTION_NAME]: model,
+					[import_src.ATTR_DB_COLLECTION_NAME]: model,
 					[ATTR_CONTEXT]: source
 				}, () => toRun(data, context));
 				if (result === false) return null;
@@ -2395,7 +2322,7 @@ function getWithHooks(adapter, ctx) {
 			if (toRun) await queueAfterTransactionHook(async () => {
 				await withSpan(`db updateMany.after ${model}`, {
 					[ATTR_HOOK_TYPE]: "updateMany.after",
-					[ATTR_DB_COLLECTION_NAME]: model,
+					[import_src.ATTR_DB_COLLECTION_NAME]: model,
 					[ATTR_CONTEXT]: source
 				}, () => toRun(updated, context));
 			});
@@ -2416,9 +2343,9 @@ function getWithHooks(adapter, ctx) {
 			const toRun = hooks[model]?.delete?.before;
 			if (toRun) {
 				if (await withSpan(`db delete.before ${model}`, {
-					[ATTR_HOOK_TYPE]: "delete.before",
-					[ATTR_DB_COLLECTION_NAME]: model,
-					[ATTR_CONTEXT]: source
+					["better_auth.hook.type"]: "delete.before",
+					[import_src.ATTR_DB_COLLECTION_NAME]: model,
+					["better_auth.context"]: source
 				}, () => toRun(entityToDelete, context)) === false) return null;
 			}
 		}
@@ -2432,7 +2359,7 @@ function getWithHooks(adapter, ctx) {
 			if (toRun) await queueAfterTransactionHook(async () => {
 				await withSpan(`db delete.after ${model}`, {
 					[ATTR_HOOK_TYPE]: "delete.after",
-					[ATTR_DB_COLLECTION_NAME]: model,
+					[import_src.ATTR_DB_COLLECTION_NAME]: model,
 					[ATTR_CONTEXT]: source
 				}, () => toRun(entityToDelete, context));
 			});
@@ -2452,9 +2379,9 @@ function getWithHooks(adapter, ctx) {
 			const toRun = hooks[model]?.delete?.before;
 			if (toRun) {
 				if (await withSpan(`db delete.before ${model}`, {
-					[ATTR_HOOK_TYPE]: "delete.before",
-					[ATTR_DB_COLLECTION_NAME]: model,
-					[ATTR_CONTEXT]: source
+					["better_auth.hook.type"]: "delete.before",
+					[import_src.ATTR_DB_COLLECTION_NAME]: model,
+					["better_auth.context"]: source
 				}, () => toRun(entity, context)) === false) return null;
 			}
 		}
@@ -2468,7 +2395,7 @@ function getWithHooks(adapter, ctx) {
 			if (toRun) await queueAfterTransactionHook(async () => {
 				await withSpan(`db delete.after ${model}`, {
 					[ATTR_HOOK_TYPE]: "delete.after",
-					[ATTR_DB_COLLECTION_NAME]: model,
+					[import_src.ATTR_DB_COLLECTION_NAME]: model,
 					[ATTR_CONTEXT]: source
 				}, () => toRun(entity, context));
 			});
@@ -2511,9 +2438,9 @@ function getWithHooks(adapter, ctx) {
 			} catch {}
 			if (snapshot) {
 				for (const { source, fn } of beforeHooks) if (await withSpan(`db delete.before ${model}`, {
-					[ATTR_HOOK_TYPE]: "delete.before",
-					[ATTR_DB_COLLECTION_NAME]: model,
-					[ATTR_CONTEXT]: source
+					["better_auth.hook.type"]: "delete.before",
+					[import_src.ATTR_DB_COLLECTION_NAME]: model,
+					["better_auth.context"]: source
 				}, () => fn(snapshot, context)) === false) return null;
 			}
 		}
@@ -2524,7 +2451,7 @@ function getWithHooks(adapter, ctx) {
 			if (toRun) await queueAfterTransactionHook(async () => {
 				await withSpan(`db delete.after ${model}`, {
 					[ATTR_HOOK_TYPE]: "delete.after",
-					[ATTR_DB_COLLECTION_NAME]: model,
+					[import_src.ATTR_DB_COLLECTION_NAME]: model,
 					[ATTR_CONTEXT]: source
 				}, () => toRun(consumed, context));
 			});
@@ -2540,8 +2467,6 @@ function getWithHooks(adapter, ctx) {
 		consumeOneWithHooks
 	};
 }
-//#endregion
-//#region node_modules/better-auth/dist/db/internal-adapter.mjs
 function getTTLSeconds(expiresAt, now = Date.now()) {
 	const expiresMs = typeof expiresAt === "number" ? expiresAt : expiresAt.getTime();
 	return Math.max(Math.floor((expiresMs - now) / 1e3), 0);
@@ -3387,8 +3312,6 @@ var createInternalAdapter = (adapter, ctx) => {
 		refreshUserSessions
 	};
 };
-//#endregion
-//#region node_modules/better-auth/dist/context/helpers.mjs
 async function runPluginInit(context) {
 	let options = context.options;
 	const plugins = options.plugins || [];
@@ -3535,8 +3458,6 @@ async function getTrustedProviders(options, request) {
 	if (Array.isArray(trustedProviders)) return trustedProviders.filter((v) => Boolean(v));
 	return (await trustedProviders(request) ?? []).filter((v) => Boolean(v));
 }
-//#endregion
-//#region node_modules/better-auth/dist/oauth2/utils.mjs
 /**
 * Check if a string looks like encrypted data
 */
@@ -3562,8 +3483,6 @@ function setTokenUtil(token, ctx) {
 	});
 	return token;
 }
-//#endregion
-//#region node_modules/better-auth/dist/utils/request.mjs
 function safeCloneRequest(request) {
 	if (!request) return;
 	try {
@@ -3584,8 +3503,6 @@ function safeCloneRequest(request) {
 		});
 	}
 }
-//#endregion
-//#region node_modules/better-auth/dist/api/routes/email-verification.mjs
 async function createEmailVerificationToken(secret, email, updateTo, expiresIn = 3600, extraPayload) {
 	return await signJWT({
 		email: email.toLowerCase(),
@@ -3614,9 +3531,9 @@ var sendVerificationEmail = createAuthEndpoint("/send-verification-email", {
 	method: "POST",
 	operationId: "sendVerificationEmail",
 	cloneRequest: true,
-	body: z$1.object({
-		email: z$1.email().meta({ description: "The email to send the verification email to" }),
-		callbackURL: z$1.string().meta({ description: "The URL to use for email verification callback" }).optional()
+	body: object({
+		email: email().meta({ description: "The email to send the verification email to" }),
+		callbackURL: string().meta({ description: "The URL to use for email verification callback" }).optional()
 	}),
 	metadata: { openapi: {
 		operationId: "sendVerificationEmail",
@@ -3700,9 +3617,9 @@ var sendVerificationEmail = createAuthEndpoint("/send-verification-email", {
 var verifyEmail = createAuthEndpoint("/verify-email", {
 	method: "GET",
 	operationId: "verifyEmail",
-	query: z$1.object({
-		token: z$1.string().meta({ description: "The token to verify the email" }),
-		callbackURL: z$1.string().meta({ description: "The URL to redirect to after email verification" }).optional()
+	query: object({
+		token: string().meta({ description: "The token to verify the email" }),
+		callbackURL: string().meta({ description: "The URL to redirect to after email verification" }).optional()
 	}),
 	use: [originCheck((ctx) => ctx.query.callbackURL)],
 	metadata: { openapi: {
@@ -3754,10 +3671,10 @@ var verifyEmail = createAuthEndpoint("/verify-email", {
 		if (e instanceof JWTExpired) return redirectOnError(BASE_ERROR_CODES.TOKEN_EXPIRED);
 		return redirectOnError(BASE_ERROR_CODES.INVALID_TOKEN);
 	}
-	const parsed = z$1.object({
-		email: z$1.email(),
-		updateTo: z$1.string().optional(),
-		requestType: z$1.string().optional()
+	const parsed = object({
+		email: email(),
+		updateTo: string().optional(),
+		requestType: string().optional()
 	}).parse(jwt.payload);
 	const user = await ctx.context.internalAdapter.findUserByEmail(parsed.email);
 	if (!user) return redirectOnError(BASE_ERROR_CODES.USER_NOT_FOUND);
@@ -3894,8 +3811,6 @@ var verifyEmail = createAuthEndpoint("/verify-email", {
 		user: null
 	});
 });
-//#endregion
-//#region node_modules/better-auth/dist/oauth2/link-account.mjs
 async function handleOAuthUserInfo(c, opts) {
 	const { userInfo, account, callbackURL, disableSignUp, overrideUserInfo } = opts;
 	const dbUser = await c.context.internalAdapter.findOAuthUser(userInfo.email.toLowerCase(), account.accountId, account.providerId).catch((e) => {
@@ -4063,8 +3978,6 @@ async function applyUpdateUserInfoOnLink(c, userId, userInfo) {
 		return;
 	}
 }
-//#endregion
-//#region node_modules/better-auth/dist/api/routes/account.mjs
 var listUserAccounts = createAuthEndpoint("/list-accounts", {
 	method: "GET",
 	use: [sessionMiddleware],
@@ -4122,11 +4035,11 @@ var listUserAccounts = createAuthEndpoint("/list-accounts", {
 var linkSocialAccount = createAuthEndpoint("/link-social", {
 	method: "POST",
 	requireHeaders: true,
-	body: z$1.object({
+	body: object({
 		/**
 		* Callback URL to redirect to after the user has signed in.
 		*/
-		callbackURL: z$1.string().meta({ description: "The URL to redirect to after the user has signed in" }).optional(),
+		callbackURL: string().meta({ description: "The URL to redirect to after the user has signed in" }).optional(),
 		/**
 		* OAuth2 provider to use
 		*/
@@ -4134,38 +4047,38 @@ var linkSocialAccount = createAuthEndpoint("/link-social", {
 		/**
 		* ID Token for direct authentication without redirect
 		*/
-		idToken: z$1.object({
-			token: z$1.string(),
-			nonce: z$1.string().optional(),
-			accessToken: z$1.string().optional(),
-			refreshToken: z$1.string().optional(),
-			scopes: z$1.array(z$1.string()).optional()
+		idToken: object({
+			token: string(),
+			nonce: string().optional(),
+			accessToken: string().optional(),
+			refreshToken: string().optional(),
+			scopes: array(string()).optional()
 		}).optional(),
 		/**
 		* Whether to allow sign up for new users
 		*/
-		requestSignUp: z$1.boolean().optional(),
+		requestSignUp: boolean().optional(),
 		/**
 		* Additional scopes to request when linking the account.
 		* This is useful for requesting additional permissions when
 		* linking a social account compared to the initial authentication.
 		*/
-		scopes: z$1.array(z$1.string()).meta({ description: "Additional scopes to request from the provider" }).optional(),
+		scopes: array(string()).meta({ description: "Additional scopes to request from the provider" }).optional(),
 		/**
 		* The URL to redirect to if there is an error during the link process.
 		*/
-		errorCallbackURL: z$1.string().meta({ description: "The URL to redirect to if there is an error during the link process" }).optional(),
+		errorCallbackURL: string().meta({ description: "The URL to redirect to if there is an error during the link process" }).optional(),
 		/**
 		* Disable automatic redirection to the provider
 		*
 		* This is useful if you want to handle the redirection
 		* yourself like in a popup or a different tab.
 		*/
-		disableRedirect: z$1.boolean().meta({ description: "Disable automatic redirection to the provider. Useful for handling the redirection yourself" }).optional(),
+		disableRedirect: boolean().meta({ description: "Disable automatic redirection to the provider. Useful for handling the redirection yourself" }).optional(),
 		/**
 		* Any additional data to pass through the oauth flow.
 		*/
-		additionalData: z$1.record(z$1.string(), z$1.any()).optional()
+		additionalData: record(string(), any()).optional()
 	}),
 	use: [sessionMiddleware],
 	metadata: { openapi: {
@@ -4275,9 +4188,9 @@ var linkSocialAccount = createAuthEndpoint("/link-social", {
 });
 var unlinkAccount = createAuthEndpoint("/unlink-account", {
 	method: "POST",
-	body: z$1.object({
-		providerId: z$1.string(),
-		accountId: z$1.string().optional()
+	body: object({
+		providerId: string(),
+		accountId: string().optional()
 	}),
 	use: [freshSessionMiddleware],
 	metadata: { openapi: {
@@ -4396,10 +4309,10 @@ async function getValidAccessToken(ctx, { resolvedUserId, providerId, accountId,
 }
 var getAccessToken = createAuthEndpoint("/get-access-token", {
 	method: "POST",
-	body: z$1.object({
-		providerId: z$1.string().meta({ description: "The provider ID for the OAuth provider" }),
-		accountId: z$1.string().meta({ description: "The account ID associated with the refresh token" }).optional(),
-		userId: z$1.string().meta({ description: "The user ID associated with the account" }).optional()
+	body: object({
+		providerId: string().meta({ description: "The provider ID for the OAuth provider" }),
+		accountId: string().meta({ description: "The account ID associated with the refresh token" }).optional(),
+		userId: string().meta({ description: "The user ID associated with the account" }).optional()
 	}),
 	metadata: { openapi: {
 		description: "Get a valid access token, doing a refresh if needed",
@@ -4433,10 +4346,10 @@ var getAccessToken = createAuthEndpoint("/get-access-token", {
 });
 var refreshToken = createAuthEndpoint("/refresh-token", {
 	method: "POST",
-	body: z$1.object({
-		providerId: z$1.string().meta({ description: "The provider ID for the OAuth provider" }),
-		accountId: z$1.string().meta({ description: "The account ID associated with the refresh token" }).optional(),
-		userId: z$1.string().meta({ description: "The user ID associated with the account" }).optional()
+	body: object({
+		providerId: string().meta({ description: "The provider ID for the OAuth provider" }),
+		accountId: string().meta({ description: "The account ID associated with the refresh token" }).optional(),
+		userId: string().meta({ description: "The user ID associated with the account" }).optional()
 	}),
 	metadata: { openapi: {
 		description: "Refresh the access token using a refresh token",
@@ -4565,10 +4478,10 @@ var accountInfo = createAuthEndpoint("/account-info", {
 			} } }
 		} }
 	} },
-	query: z$1.optional(z$1.object({
-		accountId: z$1.string().meta({ description: "The provider given account id for which to get the account info" }).optional(),
-		providerId: z$1.string().meta({ description: "The provider ID to disambiguate provider-issued account IDs" }).optional(),
-		userId: z$1.string().meta({ description: "The user ID associated with the account" }).optional()
+	query: optional(object({
+		accountId: string().meta({ description: "The provider given account id for which to get the account info" }).optional(),
+		providerId: string().meta({ description: "The provider ID to disambiguate provider-issued account IDs" }).optional(),
+		userId: string().meta({ description: "The user ID associated with the account" }).optional()
 	}))
 }, async (ctx) => {
 	const { accountId: providedAccountId, providerId: providedProviderId, userId } = ctx.query || {};
@@ -4612,15 +4525,13 @@ var accountInfo = createAuthEndpoint("/account-info", {
 	});
 	return ctx.json(info);
 });
-//#endregion
-//#region node_modules/better-auth/dist/api/routes/callback.mjs
-var schema = z$1.object({
-	code: z$1.string().optional(),
-	error: z$1.string().optional(),
-	device_id: z$1.string().optional(),
-	error_description: z$1.string().optional(),
-	state: z$1.string().optional(),
-	user: z$1.string().optional()
+var schema = object({
+	code: string().optional(),
+	error: string().optional(),
+	device_id: string().optional(),
+	error_description: string().optional(),
+	state: string().optional(),
+	user: string().optional()
 });
 var callbackOAuth = createAuthEndpoint("/callback/:id", {
 	method: ["GET", "POST"],
@@ -4779,8 +4690,6 @@ var callbackOAuth = createAuthEndpoint("/callback/:id", {
 	}
 	throw c.redirect(toRedirectTo);
 });
-//#endregion
-//#region node_modules/better-auth/dist/api/routes/error.mjs
 function sanitize(input) {
 	return input.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;").replace(/&(?!amp;|lt;|gt;|quot;|#39;|#x[0-9a-fA-F]+;|#[0-9]+;)/g, "&amp;");
 }
@@ -5158,8 +5067,6 @@ var error = createAuthEndpoint("/error", {
 	});
 	return new Response(html(c.context.options, safeCode, safeDescription), { headers: { "Content-Type": "text/html" } });
 });
-//#endregion
-//#region node_modules/better-auth/dist/api/routes/ok.mjs
 var ok = createAuthEndpoint("/ok", {
 	method: "GET",
 	metadata: {
@@ -5182,8 +5089,6 @@ var ok = createAuthEndpoint("/ok", {
 }, async (ctx) => {
 	return ctx.json({ ok: true });
 });
-//#endregion
-//#region node_modules/better-auth/dist/utils/password.mjs
 async function validatePassword(ctx, data) {
 	const credentialAccount = (await ctx.context.internalAdapter.findAccounts(data.userId))?.find((account) => account.providerId === "credential");
 	const currentPassword = credentialAccount?.password;
@@ -5207,8 +5112,6 @@ async function checkPassword(userId, c) {
 	})) throw APIError.from("BAD_REQUEST", BASE_ERROR_CODES.INVALID_PASSWORD);
 	return true;
 }
-//#endregion
-//#region node_modules/better-auth/dist/api/routes/password.mjs
 function redirectError(ctx, callbackURL, query) {
 	const url = callbackURL ? new URL(callbackURL, ctx.baseURL) : new URL(`${ctx.baseURL}/error`);
 	if (query) Object.entries(query).forEach(([k, v]) => url.searchParams.set(k, v));
@@ -5221,18 +5124,18 @@ function redirectCallback(ctx, callbackURL, query) {
 }
 var requestPasswordReset = createAuthEndpoint("/request-password-reset", {
 	method: "POST",
-	body: z$1.object({
+	body: object({
 		/**
 		* The email address of the user to send a password reset email to.
 		*/
-		email: z$1.email().meta({ description: "The email address of the user to send a password reset email to" }),
+		email: email().meta({ description: "The email address of the user to send a password reset email to" }),
 		/**
 		* The URL to redirect the user to reset their password.
 		* If the token isn't valid or expired, it'll be redirected with a query parameter `?
 		* error=INVALID_TOKEN`. If the token is valid, it'll be redirected with a query parameter `?
 		* token=VALID_TOKEN
 		*/
-		redirectTo: z$1.string().meta({ description: "The URL to redirect the user to reset their password. If the token isn't valid or expired, it'll be redirected with a query parameter `?error=INVALID_TOKEN`. If the token is valid, it'll be redirected with a query parameter `?token=VALID_TOKEN" }).optional()
+		redirectTo: string().meta({ description: "The URL to redirect the user to reset their password. If the token isn't valid or expired, it'll be redirected with a query parameter `?error=INVALID_TOKEN`. If the token is valid, it'll be redirected with a query parameter `?token=VALID_TOKEN" }).optional()
 	}),
 	metadata: { openapi: {
 		operationId: "requestPasswordReset",
@@ -5294,7 +5197,7 @@ var requestPasswordReset = createAuthEndpoint("/request-password-reset", {
 var requestPasswordResetCallback = createAuthEndpoint("/reset-password/:token", {
 	method: "GET",
 	operationId: "resetPasswordCallback",
-	query: z$1.object({ callbackURL: z$1.string().meta({ description: "The URL to redirect the user to reset their password" }) }),
+	query: object({ callbackURL: string().meta({ description: "The URL to redirect the user to reset their password" }) }),
 	use: [originCheck((ctx) => ctx.query.callbackURL)],
 	metadata: { openapi: {
 		operationId: "resetPasswordCallback",
@@ -5331,10 +5234,10 @@ var requestPasswordResetCallback = createAuthEndpoint("/reset-password/:token", 
 var resetPassword = createAuthEndpoint("/reset-password", {
 	method: "POST",
 	operationId: "resetPassword",
-	query: z$1.object({ token: z$1.string().optional() }).optional(),
-	body: z$1.object({
-		newPassword: z$1.string().meta({ description: "The new password to set" }),
-		token: z$1.string().meta({ description: "The token to reset the password" }).optional()
+	query: object({ token: string().optional() }).optional(),
+	body: object({
+		newPassword: string().meta({ description: "The new password to set" }),
+		token: string().meta({ description: "The token to reset the password" }).optional()
 	}),
 	metadata: { openapi: {
 		operationId: "resetPassword",
@@ -5376,11 +5279,11 @@ var resetPassword = createAuthEndpoint("/reset-password", {
 });
 var verifyPassword$1 = createAuthEndpoint("/verify-password", {
 	method: "POST",
-	body: z$1.object({ 
+	body: object({ 
 	/**
 	* The password to verify
 	*/
-password: z$1.string().meta({ description: "The password to verify" }) }),
+password: string().meta({ description: "The password to verify" }) }),
 	metadata: {
 		scope: "server",
 		openapi: {
@@ -5405,27 +5308,25 @@ password: z$1.string().meta({ description: "The password to verify" }) }),
 	})) throw APIError.from("BAD_REQUEST", BASE_ERROR_CODES.INVALID_PASSWORD);
 	return ctx.json({ status: true });
 });
-//#endregion
-//#region node_modules/better-auth/dist/api/routes/sign-in.mjs
-var socialSignInBodySchema = z$1.object({
+var socialSignInBodySchema = object({
 	/**
 	* Callback URL to redirect to after the user
 	* has signed in.
 	*/
-	callbackURL: z$1.string().meta({ description: "Callback URL to redirect to after the user has signed in" }).optional(),
+	callbackURL: string().meta({ description: "Callback URL to redirect to after the user has signed in" }).optional(),
 	/**
 	* callback url to redirect if the user is newly registered.
 	*
 	* useful if you have different routes for existing users and new users
 	*/
-	newUserCallbackURL: z$1.string().optional(),
+	newUserCallbackURL: string().optional(),
 	/**
 	* Callback url to redirect to if an error happens
 	*
 	* If it's initiated from the client sdk this defaults to
 	* the current url.
 	*/
-	errorCallbackURL: z$1.string().meta({ description: "Callback URL to redirect to if an error happens" }).optional(),
+	errorCallbackURL: string().meta({ description: "Callback URL to redirect to if an error happens" }).optional(),
 	/**
 	* OAuth2 provider to use`
 	*/
@@ -5436,7 +5337,7 @@ var socialSignInBodySchema = z$1.object({
 	* This is useful if you want to handle the redirection
 	* yourself like in a popup or a different tab.
 	*/
-	disableRedirect: z$1.boolean().meta({ description: "Disable automatic redirection to the provider. Useful for handling the redirection yourself" }).optional(),
+	disableRedirect: boolean().meta({ description: "Disable automatic redirection to the provider. Useful for handling the redirection yourself" }).optional(),
 	/**
 	* ID token from the provider
 	*
@@ -5448,40 +5349,40 @@ var socialSignInBodySchema = z$1.object({
 	* it. Currently only `apple` and `google` is
 	* supported out of the box.
 	*/
-	idToken: z$1.optional(z$1.object({
+	idToken: optional(object({
 		/**
 		* ID token from the provider
 		*/
-		token: z$1.string().meta({ description: "ID token from the provider" }),
+		token: string().meta({ description: "ID token from the provider" }),
 		/**
 		* The nonce used to generate the token
 		*/
-		nonce: z$1.string().meta({ description: "Nonce used to generate the token" }).optional(),
+		nonce: string().meta({ description: "Nonce used to generate the token" }).optional(),
 		/**
 		* Access token from the provider
 		*/
-		accessToken: z$1.string().meta({ description: "Access token from the provider" }).optional(),
+		accessToken: string().meta({ description: "Access token from the provider" }).optional(),
 		/**
 		* Refresh token from the provider
 		*/
-		refreshToken: z$1.string().meta({ description: "Refresh token from the provider" }).optional(),
+		refreshToken: string().meta({ description: "Refresh token from the provider" }).optional(),
 		/**
 		* Expiry date of the token
 		*/
-		expiresAt: z$1.number().meta({ description: "Expiry date of the token" }).optional(),
+		expiresAt: number().meta({ description: "Expiry date of the token" }).optional(),
 		/**
 		* The user object from the provider.
 		* This is only available for some providers like Apple.
 		*/
-		user: z$1.object({
-			name: z$1.object({
-				firstName: z$1.string().optional(),
-				lastName: z$1.string().optional()
+		user: object({
+			name: object({
+				firstName: string().optional(),
+				lastName: string().optional()
 			}).optional(),
-			email: z$1.string().optional()
+			email: string().optional()
 		}).meta({ description: "The user object from the provider. Only available for some providers like Apple." }).optional()
 	})),
-	scopes: z$1.array(z$1.string()).meta({ description: "Array of scopes to request from the provider. This will override the default scopes passed." }).optional(),
+	scopes: array(string()).meta({ description: "Array of scopes to request from the provider. This will override the default scopes passed." }).optional(),
 	/**
 	* Explicitly request sign-up
 	*
@@ -5489,15 +5390,15 @@ var socialSignInBodySchema = z$1.object({
 	* disableImplicitSignUp for this provider is
 	* true
 	*/
-	requestSignUp: z$1.boolean().meta({ description: "Explicitly request sign-up. Useful when disableImplicitSignUp is true for this provider" }).optional(),
+	requestSignUp: boolean().meta({ description: "Explicitly request sign-up. Useful when disableImplicitSignUp is true for this provider" }).optional(),
 	/**
 	* The login hint to use for the authorization code request
 	*/
-	loginHint: z$1.string().meta({ description: "The login hint to use for the authorization code request" }).optional(),
+	loginHint: string().meta({ description: "The login hint to use for the authorization code request" }).optional(),
 	/**
 	* Additional data to be passed through the OAuth flow
 	*/
-	additionalData: z$1.record(z$1.string(), z$1.any()).optional().meta({ description: "Additional data to be passed through the OAuth flow" })
+	additionalData: record(string(), any()).optional().meta({ description: "Additional data to be passed through the OAuth flow" })
 });
 var signInSocial = () => createAuthEndpoint("/sign-in/social", {
 	method: "POST",
@@ -5608,25 +5509,25 @@ var signInEmail = () => createAuthEndpoint("/sign-in/email", {
 	operationId: "signInEmail",
 	use: [formCsrfMiddleware],
 	cloneRequest: true,
-	body: z$1.object({
+	body: object({
 		/**
 		* Email of the user
 		*/
-		email: z$1.string().meta({ description: "Email of the user" }),
+		email: string().meta({ description: "Email of the user" }),
 		/**
 		* Password of the user
 		*/
-		password: z$1.string().meta({ description: "Password of the user" }),
+		password: string().meta({ description: "Password of the user" }),
 		/**
 		* Callback URL to use as a redirect for email
 		* verification and for possible redirects
 		*/
-		callbackURL: z$1.string().meta({ description: "Callback URL to use as a redirect for email verification" }).optional(),
+		callbackURL: string().meta({ description: "Callback URL to use as a redirect for email verification" }).optional(),
 		/**
 		* If this is false, the session will not be remembered
 		* @default true
 		*/
-		rememberMe: z$1.boolean().meta({ description: "If this is false, the session will not be remembered. Default is `true`." }).default(true).optional()
+		rememberMe: boolean().meta({ description: "If this is false, the session will not be remembered. Default is `true`." }).default(true).optional()
 	}),
 	metadata: {
 		allowedMediaTypes: ["application/x-www-form-urlencoded", "application/json"],
@@ -5677,9 +5578,9 @@ var signInEmail = () => createAuthEndpoint("/sign-in/email", {
 			message: "Email and password is not enabled"
 		});
 	}
-	const { email, password } = ctx.body;
-	if (!z$1.email().safeParse(email).success) throw APIError.from("BAD_REQUEST", BASE_ERROR_CODES.INVALID_EMAIL);
-	const user = await ctx.context.internalAdapter.findUserByEmail(email, { includeAccounts: true });
+	const { email: email$1, password } = ctx.body;
+	if (!email().safeParse(email$1).success) throw APIError.from("BAD_REQUEST", BASE_ERROR_CODES.INVALID_EMAIL);
+	const user = await ctx.context.internalAdapter.findUserByEmail(email$1, { includeAccounts: true });
 	if (!user) {
 		await ctx.context.password.hash(password);
 		ctx.context.logger.warn("User not found");
@@ -5735,8 +5636,6 @@ var signInEmail = () => createAuthEndpoint("/sign-in/email", {
 		user: parseUserOutput(ctx.context.options, user.user)
 	});
 });
-//#endregion
-//#region node_modules/better-auth/dist/api/routes/sign-out.mjs
 var signOut = createAuthEndpoint("/sign-out", {
 	method: "POST",
 	operationId: "signOut",
@@ -5762,16 +5661,14 @@ var signOut = createAuthEndpoint("/sign-out", {
 	deleteSessionCookie(ctx);
 	return ctx.json({ success: true });
 });
-//#endregion
-//#region node_modules/better-auth/dist/api/routes/sign-up.mjs
-var signUpEmailBodySchema = z$1.object({
-	name: z$1.string(),
-	email: z$1.email(),
-	password: z$1.string().nonempty(),
-	image: z$1.string().optional(),
-	callbackURL: z$1.string().optional(),
-	rememberMe: z$1.boolean().optional()
-}).and(z$1.record(z$1.string(), z$1.any()));
+var signUpEmailBodySchema = object({
+	name: string(),
+	email: email(),
+	password: string().nonempty(),
+	image: string().optional(),
+	callbackURL: string().optional(),
+	rememberMe: boolean().optional()
+}).and(record(string(), any()));
 var signUpEmail = () => createAuthEndpoint("/sign-up/email", {
 	method: "POST",
 	operationId: "signUpWithEmailAndPassword",
@@ -5899,8 +5796,8 @@ var signUpEmail = () => createAuthEndpoint("/sign-up/email", {
 			code: "EMAIL_PASSWORD_SIGN_UP_DISABLED"
 		});
 		const body = ctx.body;
-		const { name, email, password, image, callbackURL: _callbackURL, rememberMe, ...rest } = body;
-		if (!z$1.email().safeParse(email).success) throw APIError.from("BAD_REQUEST", BASE_ERROR_CODES.INVALID_EMAIL);
+		const { name, email: email$2, password, image, callbackURL: _callbackURL, rememberMe, ...rest } = body;
+		if (!email().safeParse(email$2).success) throw APIError.from("BAD_REQUEST", BASE_ERROR_CODES.INVALID_EMAIL);
 		if (!password || typeof password !== "string") throw APIError.from("BAD_REQUEST", BASE_ERROR_CODES.INVALID_PASSWORD);
 		const minPasswordLength = ctx.context.password.config.minPasswordLength;
 		if (password.length < minPasswordLength) {
@@ -5915,10 +5812,10 @@ var signUpEmail = () => createAuthEndpoint("/sign-up/email", {
 		const shouldReturnGenericDuplicateResponse = ctx.context.options.emailAndPassword.requireEmailVerification || ctx.context.options.emailAndPassword.autoSignIn === false;
 		const shouldSkipAutoSignIn = ctx.context.options.emailAndPassword.autoSignIn === false || shouldReturnGenericDuplicateResponse;
 		const additionalUserFields = parseUserInput(ctx.context.options, rest, "create");
-		const normalizedEmail = email.toLowerCase();
+		const normalizedEmail = email$2.toLowerCase();
 		const dbUser = await ctx.context.internalAdapter.findUserByEmail(normalizedEmail);
 		if (dbUser?.user) {
-			ctx.context.logger.info(`Sign-up attempt for existing email: ${email}`);
+			ctx.context.logger.info(`Sign-up attempt for existing email: ${email$2}`);
 			if (shouldReturnGenericDuplicateResponse) {
 				/**
 				* Hash the password to reduce timing differences
@@ -6018,9 +5915,7 @@ var signUpEmail = () => createAuthEndpoint("/sign-up/email", {
 		});
 	});
 });
-//#endregion
-//#region node_modules/better-auth/dist/api/routes/update-session.mjs
-var updateSessionBodySchema = z$1.record(z$1.string().meta({ description: "Field name must be a string" }), z$1.any());
+var updateSessionBodySchema = record(string().meta({ description: "Field name must be a string" }), any());
 var updateSession = () => createAuthEndpoint("/update-session", {
 	method: "POST",
 	operationId: "updateSession",
@@ -6068,9 +5963,7 @@ var updateSession = () => createAuthEndpoint("/update-session", {
 	});
 	return ctx.json({ session: parseSessionOutput(ctx.context.options, newSession) });
 });
-//#endregion
-//#region node_modules/better-auth/dist/api/routes/update-user.mjs
-var updateUserBodySchema = z$1.record(z$1.string().meta({ description: "Field name must be a string" }), z$1.any());
+var updateUserBodySchema = record(string().meta({ description: "Field name must be a string" }), any());
 var updateUser = () => createAuthEndpoint("/update-user", {
 	method: "POST",
 	operationId: "updateUser",
@@ -6137,20 +6030,20 @@ var updateUser = () => createAuthEndpoint("/update-user", {
 var changePassword = createAuthEndpoint("/change-password", {
 	method: "POST",
 	operationId: "changePassword",
-	body: z$1.object({
+	body: object({
 		/**
 		* The new password to set
 		*/
-		newPassword: z$1.string().meta({ description: "The new password to set" }),
+		newPassword: string().meta({ description: "The new password to set" }),
 		/**
 		* The current password of the user
 		*/
-		currentPassword: z$1.string().meta({ description: "The current password is required" }),
+		currentPassword: string().meta({ description: "The current password is required" }),
 		/**
 		* revoke all sessions that are not the
 		* current one logged in by the user
 		*/
-		revokeOtherSessions: z$1.boolean().meta({ description: "Must be a boolean value" }).optional()
+		revokeOtherSessions: boolean().meta({ description: "Must be a boolean value" }).optional()
 	}),
 	use: [sensitiveSessionMiddleware],
 	metadata: { openapi: {
@@ -6256,11 +6149,11 @@ var changePassword = createAuthEndpoint("/change-password", {
 });
 var setPassword = createAuthEndpoint.serverOnly({
 	method: "POST",
-	body: z$1.object({ 
+	body: object({ 
 	/**
 	* The new password to set
 	*/
-newPassword: z$1.string().meta({ description: "The new password to set is required" }) }),
+newPassword: string().meta({ description: "The new password to set is required" }) }),
 	use: [sensitiveSessionMiddleware]
 }, async (ctx) => {
 	const { newPassword } = ctx.body;
@@ -6291,21 +6184,21 @@ newPassword: z$1.string().meta({ description: "The new password to set is requir
 var deleteUser = createAuthEndpoint("/delete-user", {
 	method: "POST",
 	use: [sensitiveSessionMiddleware],
-	body: z$1.object({
+	body: object({
 		/**
 		* The callback URL to redirect to after the user is deleted
 		* this is only used on delete user callback
 		*/
-		callbackURL: z$1.string().meta({ description: "The callback URL to redirect to after the user is deleted" }).optional(),
+		callbackURL: string().meta({ description: "The callback URL to redirect to after the user is deleted" }).optional(),
 		/**
 		* The password of the user. If the password isn't provided, session freshness
 		* will be checked.
 		*/
-		password: z$1.string().meta({ description: "The password of the user is required to delete the user" }).optional(),
+		password: string().meta({ description: "The password of the user is required to delete the user" }).optional(),
 		/**
 		* The token to delete the user. If the token is provided, the user will be deleted
 		*/
-		token: z$1.string().meta({ description: "The token to delete the user is required" }).optional()
+		token: string().meta({ description: "The token to delete the user is required" }).optional()
 	}),
 	metadata: { openapi: {
 		operationId: "deleteUser",
@@ -6407,9 +6300,9 @@ var deleteUser = createAuthEndpoint("/delete-user", {
 });
 var deleteUserCallback = createAuthEndpoint("/delete-user/callback", {
 	method: "GET",
-	query: z$1.object({
-		token: z$1.string().meta({ description: "The token to verify the deletion request" }),
-		callbackURL: z$1.string().meta({ description: "The URL to redirect to after deletion" }).optional()
+	query: object({
+		token: string().meta({ description: "The token to verify the deletion request" }),
+		callbackURL: string().meta({ description: "The URL to redirect to after deletion" }).optional()
 	}),
 	use: [originCheck((ctx) => ctx.query.callbackURL)],
 	metadata: { openapi: {
@@ -6461,9 +6354,9 @@ var deleteUserCallback = createAuthEndpoint("/delete-user/callback", {
 });
 var changeEmail = createAuthEndpoint("/change-email", {
 	method: "POST",
-	body: z$1.object({
-		newEmail: z$1.email().meta({ description: "The new email address to set must be a valid email address" }),
-		callbackURL: z$1.string().meta({ description: "The URL to redirect to after email verification" }).optional()
+	body: object({
+		newEmail: email().meta({ description: "The new email address to set must be a valid email address" }),
+		callbackURL: string().meta({ description: "The URL to redirect to after email verification" }).optional()
 	}),
 	use: [sensitiveSessionMiddleware],
 	metadata: { openapi: {
@@ -6576,8 +6469,6 @@ var changeEmail = createAuthEndpoint("/change-email", {
 	}, ctx.request));
 	return ctx.json({ status: true });
 });
-//#endregion
-//#region node_modules/better-auth/dist/api/dispatch.mjs
 var defuReplaceArrays = createDefu((obj, key, value) => {
 	if (Array.isArray(obj[key]) && Array.isArray(value)) {
 		obj[key] = value;
@@ -6648,7 +6539,7 @@ async function runBeforeHooks(context, hooks, endpoint, operationId) {
 		const route = endpoint.path ?? "/:virtual";
 		const result = await withSpan(`hook before ${route} ${hookSource}`, {
 			[ATTR_HOOK_TYPE]: "before",
-			[ATTR_HTTP_ROUTE]: route,
+			[import_src.ATTR_HTTP_ROUTE]: route,
 			[ATTR_CONTEXT]: hookSource,
 			[ATTR_OPERATION_ID]: operationId
 		}, () => hook.handler({
@@ -6682,7 +6573,7 @@ async function runAfterHooks(context, hooks, endpoint, operationId) {
 		const route = endpoint.path ?? "/:virtual";
 		const result = await withSpan(`hook after ${route} ${hookSource}`, {
 			[ATTR_HOOK_TYPE]: "after",
-			[ATTR_HTTP_ROUTE]: route,
+			[import_src.ATTR_HTTP_ROUTE]: route,
 			[ATTR_CONTEXT]: hookSource,
 			[ATTR_OPERATION_ID]: operationId
 		}, () => hook.handler(context)).catch((e) => {
@@ -6771,7 +6662,7 @@ async function dispatchAuthEndpoint(endpoint, input) {
 		headers: input.headers ? new Headers(input.headers) : void 0
 	};
 	return withSpan(`${methodName} ${route}`, {
-		[ATTR_HTTP_ROUTE]: route,
+		[import_src.ATTR_HTTP_ROUTE]: route,
 		[ATTR_OPERATION_ID]: operationId
 	}, async () => runWithEndpointContext(internalContext, async () => {
 		const { beforeHooks, afterHooks } = getHooks(internalContext.context);
@@ -6797,7 +6688,7 @@ async function dispatchAuthEndpoint(endpoint, input) {
 		internalContext.returnHeaders = true;
 		internalContext.returnStatus = true;
 		const result = await runWithEndpointContext(internalContext, () => withSpan(`handler ${route}`, {
-			[ATTR_HTTP_ROUTE]: route,
+			[import_src.ATTR_HTTP_ROUTE]: route,
 			[ATTR_OPERATION_ID]: operationId
 		}, () => endpoint(internalContext))).catch((e) => {
 			if (isAPIError(e)) return {
@@ -6839,8 +6730,6 @@ async function dispatchAuthEndpoint(endpoint, input) {
 		} : result.response;
 	}));
 }
-//#endregion
-//#region node_modules/better-auth/dist/api/to-auth-endpoints.mjs
 /**
 * Resolves the per-call `AuthContext` for endpoints with a dynamic `baseURL`.
 *
@@ -6891,8 +6780,6 @@ function toAuthEndpoints(endpoints, ctx) {
 	}
 	return api;
 }
-//#endregion
-//#region node_modules/better-auth/dist/api/index.mjs
 function checkEndpointConflicts(options, logger) {
 	const endpointRegistry = /* @__PURE__ */ new Map();
 	options.plugins?.forEach((plugin) => {
@@ -6959,9 +6846,9 @@ function getEndpoints(ctx, options) {
 		const middleware = (async (context) => {
 			const authContext = await ctx;
 			return withSpan(`middleware ${m.path} ${plugin.id}`, {
-				[ATTR_HOOK_TYPE]: "middleware",
-				[ATTR_HTTP_ROUTE]: m.path,
-				[ATTR_CONTEXT]: `plugin:${plugin.id}`
+				["better_auth.hook.type"]: "middleware",
+				[import_src.ATTR_HTTP_ROUTE]: m.path,
+				["better_auth.context"]: `plugin:${plugin.id}`
 			}, () => m.middleware({
 				...context,
 				context: {
@@ -7017,7 +6904,7 @@ function getEndpoints(ctx, options) {
 var router = (ctx, options) => {
 	const { api, middlewares } = getEndpoints(ctx, options);
 	const basePath = new URL(ctx.baseURL).pathname;
-	return createRouter(api, {
+	return createRouter$1(api, {
 		routerContext: ctx,
 		openapi: { disabled: true },
 		basePath,
@@ -7049,7 +6936,7 @@ var router = (ctx, options) => {
 				const response = await withSpan(`onResponse ${plugin.id}`, {
 					[ATTR_HOOK_TYPE]: "onResponse",
 					[ATTR_CONTEXT]: `plugin:${plugin.id}`,
-					[ATTR_HTTP_RESPONSE_STATUS_CODE]: res.status
+					[import_src.ATTR_HTTP_RESPONSE_STATUS_CODE]: res.status
 				}, () => plugin.onResponse(res, ctx));
 				if (response) return response.response;
 			}
@@ -7079,8 +6966,6 @@ var router = (ctx, options) => {
 		}
 	});
 };
-//#endregion
-//#region node_modules/better-auth/dist/db/adapter-base.mjs
 async function getBaseAdapter(options, handleDirectDatabase) {
 	let adapter;
 	if (!options.database) {
@@ -7089,7 +6974,7 @@ async function getBaseAdapter(options, handleDirectDatabase) {
 			acc[key] = [];
 			return acc;
 		}, {});
-		const { memoryAdapter } = await import("@better-auth/memory-adapter");
+		const { memoryAdapter } = await import("../_libs/better-auth__memory-adapter.mjs").then((n) => n.t);
 		adapter = memoryAdapter(memoryDB)(options);
 	} else if (typeof options.database === "function") adapter = options.database(options);
 	else adapter = await handleDirectDatabase(options);
@@ -7101,14 +6986,12 @@ async function getBaseAdapter(options, handleDirectDatabase) {
 	}
 	return adapter;
 }
-//#endregion
-//#region node_modules/better-auth/dist/db/adapter-kysely.mjs
 async function getAdapter(options) {
 	return getBaseAdapter(options, async (opts) => {
-		const { createKyselyAdapter } = await import("./kysely-adapter-Cj_QZw5p.js");
+		const { createKyselyAdapter } = await import("./kysely-adapter-Cj_QZw5p.mjs");
 		const { kysely, databaseType, transaction } = await createKyselyAdapter(opts);
 		if (!kysely) throw new BetterAuthError("Failed to initialize database adapter");
-		const { kyselyAdapter } = await import("./kysely-adapter-Cj_QZw5p.js");
+		const { kyselyAdapter } = await import("./kysely-adapter-Cj_QZw5p.mjs");
 		return kyselyAdapter(kysely, {
 			type: databaseType || "sqlite",
 			debugLogs: opts.database && "debugLogs" in opts.database ? opts.database.debugLogs : false,
@@ -7116,8 +6999,6 @@ async function getAdapter(options) {
 		})(opts);
 	});
 }
-//#endregion
-//#region node_modules/better-auth/dist/db/get-schema.mjs
 function getSchema(config) {
 	const tables = getAuthTables(config);
 	const schema = {};
@@ -7152,8 +7033,6 @@ function getSchema(config) {
 	}
 	return schema;
 }
-//#endregion
-//#region node_modules/better-auth/dist/db/get-migration.mjs
 var map = {
 	postgres: {
 		string: [
@@ -7488,11 +7367,7 @@ async function getMigrations(config) {
 		compileMigrations
 	};
 }
-//#endregion
-//#region node_modules/better-auth/dist/utils/constants.mjs
 var DEFAULT_SECRET = "better-auth-secret-12345678901234567890";
-//#endregion
-//#region node_modules/better-auth/dist/context/secret-utils.mjs
 /**
 * Estimates the entropy of a string in bits.
 * This is a simple approximation that helps detect low-entropy secrets.
@@ -7541,8 +7416,6 @@ function buildSecretConfig(secrets, legacySecret) {
 		legacySecret: legacySecret && legacySecret !== "better-auth-secret-12345678901234567890" ? legacySecret : void 0
 	};
 }
-//#endregion
-//#region node_modules/better-auth/dist/context/create-context.mjs
 /**
 * Estimates the entropy of a string in bits.
 * This is a simple approximation that helps detect low-entropy secrets.
@@ -7568,13 +7441,13 @@ function validateSecret(secret, logger) {
 }
 async function createAuthContext(adapter, options, getDatabaseType) {
 	const isStateful = hasServerSessionStore(options);
-	if (!isStateful) options = defu$1(options, { session: { cookieCache: {
+	if (!isStateful) options = defu(options, { session: { cookieCache: {
 		enabled: true,
 		strategy: "jwe",
 		refreshCache: true,
 		maxAge: options.session?.expiresIn || 604800
 	} } });
-	if (!options.database) options = defu$1(options, { account: { storeAccountCookie: true } });
+	if (!options.database) options = defu(options, { account: { storeAccountCookie: true } });
 	const plugins = options.plugins || [];
 	const internalPlugins = getInternalPlugins(options);
 	const logger = createLogger(options.logger);
@@ -7752,8 +7625,6 @@ Most of the features of Better Auth will not work correctly.`);
 	if (isPromise(initOrPromise)) await initOrPromise;
 	return ctx;
 }
-//#endregion
-//#region node_modules/better-auth/dist/context/init.mjs
 var init = async (options) => {
 	const adapter = await getAdapter(options);
 	const getDatabaseType = (database) => getKyselyDatabaseType(database) || "unknown";
@@ -7765,8 +7636,6 @@ var init = async (options) => {
 	};
 	return ctx;
 };
-//#endregion
-//#region node_modules/better-auth/dist/auth/base.mjs
 var createBetterAuth = (options, initFn) => {
 	const authContext = initFn(options);
 	const { api } = getEndpoints(authContext, options);
@@ -7810,8 +7679,6 @@ var createBetterAuth = (options, initFn) => {
 		}
 	};
 };
-//#endregion
-//#region node_modules/better-auth/dist/auth/full.mjs
 /**
 * Better Auth initializer for full mode (with Kysely)
 *
@@ -7836,11 +7703,7 @@ var createBetterAuth = (options, initFn) => {
 var betterAuth = (options) => {
 	return createBetterAuth(options, init);
 };
-//#endregion
-//#region node_modules/better-auth/dist/version.mjs
 var PACKAGE_VERSION = "1.6.30";
-//#endregion
-//#region node_modules/better-auth/dist/plugins/bearer/index.mjs
 var BEARER_SCHEME = "bearer ";
 function tryDecode(str) {
 	try {
@@ -7907,8 +7770,6 @@ var bearer = (options) => {
 		options
 	};
 };
-//#endregion
-//#region node_modules/better-auth/dist/integrations/cookie-plugin-guard.mjs
 /**
 * Warns when a cookie integration plugin is not effectively last.
 *
@@ -7924,8 +7785,6 @@ function warnIfCookiePluginNotLast(ctx, pluginId) {
 	if (!plugins.slice(index + 1).some((p) => p.hooks && Array.isArray(p.hooks.after) && p.hooks.after.length > 0)) return;
 	ctx.logger.warn(`[better-auth] Cookie integration plugin "${pluginId}" should be placed last in the plugins array. Plugins with \`hooks.after\` running after it may set cookies that are not forwarded to the framework cookie store. Move your cookie integration plugin to the end of the \`plugins\` array to avoid missing \`Set-Cookie\` headers.`);
 }
-//#endregion
-//#region node_modules/better-auth/dist/integrations/tanstack-start.mjs
 /**
 * TanStack Start cookie plugin for React.
 *
@@ -7963,7 +7822,7 @@ var tanstackStartCookies = () => {
 					const setCookies = returned?.get("set-cookie");
 					if (!setCookies) return;
 					const parsed = parseSetCookieHeader(setCookies);
-					const { setCookie } = await import("../index.js").then((n) => n.t);
+					const { setCookie } = await import("./ssr.mjs").then((n) => n.s).then((n) => n.t);
 					parsed.forEach((value, key) => {
 						if (!key) return;
 						try {
@@ -7976,8 +7835,6 @@ var tanstackStartCookies = () => {
 		}] }
 	};
 };
-//#endregion
-//#region src/lib/auth/pglite-dialect.ts
 /** Factory used by `auth/server.ts`: `pgliteDialect(() => getPglite())`. */
 function pgliteDialect(getClient) {
 	return {
@@ -8051,18 +7908,11 @@ var PGliteConnection = class {
 		for (let i = 0; i < result.rows.length; i += chunkSize) yield { rows: result.rows.slice(i, i + chunkSize) };
 	}
 };
-//#endregion
-//#region src/lib/auth/server.ts
 /**
 * Self-hosted Better Auth for THIS app (server-only).
 * Direct Google OAuth 2.0 integration without external brokers.
 */
 ensureDbReady();
-var globalAuthRef = globalThis;
-function authSecret() {
-	globalAuthRef.__authSecret__ ??= randomBytes(32).toString("hex");
-	return globalAuthRef.__authSecret__;
-}
 var env$1 = (key) => {
 	const value = process.env[key]?.trim();
 	return value ? value : void 0;
@@ -8080,24 +7930,38 @@ var LOCAL_DEV_ORIGINS = [
 	"http://127.0.0.1:8080",
 	"http://[::1]:8080"
 ];
-var baseURL = explicitBaseURL ?? {
+var vercelBaseURL = env$1("VERCEL_PROJECT_PRODUCTION_URL") ? `https://${env$1("VERCEL_PROJECT_PRODUCTION_URL")}` : env$1("VERCEL_URL") ? `https://${env$1("VERCEL_URL")}` : void 0;
+var baseURL = explicitBaseURL ?? (vercelBaseURL || "https://wabook.cloud") ?? {
 	allowedHosts: [
 		"localhost",
 		"127.0.0.1",
-		"[::1]"
+		"[::1]",
+		"wabook.cloud",
+		"wabook-nine.vercel.app",
+		...env$1("VERCEL_URL") ? [env$1("VERCEL_URL")] : [],
+		...env$1("VERCEL_PROJECT_PRODUCTION_URL") ? [env$1("VERCEL_PROJECT_PRODUCTION_URL")] : []
 	],
 	protocol: "auto",
 	fallback: "http://localhost:8080"
 };
-var trustedOrigins = explicitBaseURL ? [explicitBaseURL, ...LOCAL_DEV_ORIGINS] : [...LOCAL_DEV_ORIGINS];
+var trustedOrigins = [
+	"https://wabook.cloud",
+	"https://wabook-nine.vercel.app",
+	...explicitBaseURL ? [explicitBaseURL] : [],
+	...vercelBaseURL ? [vercelBaseURL] : [],
+	...LOCAL_DEV_ORIGINS
+];
 var databaseUrl = env$1("DATABASE_URL");
-var database = databaseUrl ? new Pool({ connectionString: databaseUrl }) : {
+var database = databaseUrl ? new Pool({
+	connectionString: databaseUrl,
+	ssl: { rejectUnauthorized: false }
+}) : {
 	dialect: pgliteDialect(() => getPglite()),
 	type: "postgres"
 };
 var auth = betterAuth({
 	baseURL,
-	secret: env$1("BETTER_AUTH_SECRET") ?? authSecret(),
+	secret: env$1("BETTER_AUTH_SECRET") || "wabook_auth_production_secret_key_8923a1f4",
 	database,
 	trustedOrigins,
 	socialProviders: { google: {

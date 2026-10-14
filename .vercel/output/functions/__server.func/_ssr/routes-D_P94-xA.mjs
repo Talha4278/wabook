@@ -1,9 +1,9 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { K as require_react, b as require_jsx_runtime, v as Navigate } from "../_libs/@tanstack/react-router+[...].mjs";
 import { S as Bell, _ as Copy, b as Check, c as Send, d as MessageSquare, f as Menu, g as CreditCard, h as Link2, i as UserPlus, l as Plus, m as List, n as Users, o as Trash2, p as LoaderCircle, r as UserX, s as Stethoscope, t as X, u as Pencil, v as ChevronRight, x as CalendarDays, y as ChevronLeft } from "../_libs/lucide-react.mjs";
-import { _ as updateBookingStatus, c as deleteStaff, f as runReminderSweep, h as simulateInbound, i as createDashboardBooking, l as getDashboard, m as sendBookingReminder, o as createStaff, p as saveSettings, r as completeOnboarding, s as deleteService, v as upsertService } from "./router-B2FXF5FF.mjs";
+import { _ as updateBookingStatus, c as deleteStaff, f as runReminderSweep, h as simulateInbound, i as createDashboardBooking, l as getDashboard, m as sendBookingReminder, o as createStaff, p as saveSettings, r as completeOnboarding, s as deleteService, v as upsertService } from "./router-DzEzzzCG.mjs";
 import { i as signOut, t as authClient } from "./client-DntVSK3C.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-B8GM4cUG.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-D_P94-xA.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 /**
