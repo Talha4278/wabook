@@ -1,0 +1,47 @@
+import { i as getSql } from "./db-B7tHm2_h.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/inbound-0o6BkQDC.js
+async function handleInboundWhatsapp(fromPhone, text) {
+	const sql = await getSql();
+	const customers = await sql`
+    select id, business_id, name from customers
+    where right(regexp_replace(phone, '[^0-9]', '', 'g'), 10) = ${fromPhone.replace(/\D/g, "").slice(-10)}
+  `;
+	if (!customers[0]) return { handled: false };
+	const reply = text.trim().toUpperCase();
+	const yes = [
+		"YES",
+		"Y",
+		"HAAN",
+		"OK",
+		"CONFIRM"
+	].includes(reply);
+	const no = [
+		"NO",
+		"N",
+		"CANCEL"
+	].includes(reply);
+	if (!yes && !no) {
+		await sql`
+      insert into wa_messages (business_id, customer_id, direction, body, simulated)
+      values (${customers[0].business_id}, ${customers[0].id}, 'in', ${text.slice(0, 500)}, false)
+    `;
+		return { handled: true };
+	}
+	const booking = await sql`
+    select id from bookings
+    where customer_id = ${customers[0].id} and status = 'pending'
+    order by starts_at
+    limit 1
+  `;
+	if (booking[0]) {
+		await sql`update bookings set status = ${yes ? "confirmed" : "cancelled"}, source = 'whatsapp' where id = ${booking[0].id}`;
+		if (!yes) await sql`update reminder_jobs set status = 'skipped' where booking_id = ${booking[0].id} and status = 'queued'`;
+	}
+	await sql`
+    insert into wa_messages (business_id, customer_id, booking_id, direction, body, simulated)
+    values (${customers[0].business_id}, ${customers[0].id}, ${booking[0]?.id ?? null}, 'in', ${text.slice(0, 500)}, false)
+  `;
+	return { handled: true };
+}
+//#endregion
+export { handleInboundWhatsapp };
