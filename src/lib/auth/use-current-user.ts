@@ -57,17 +57,14 @@ export type CurrentUserState = {
  */
 export function useCurrentUserState(): CurrentUserState {
   const [mounted, setMounted] = useState(false);
-  const [isDevMode, setIsDevMode] = useState(false);
 
   useEffect(() => {
     setMounted(true);
     if (typeof window !== "undefined") {
-      const dev = window.localStorage.getItem("wabook_dev_mode");
-      if (dev === "false") {
-        setIsDevMode(false);
-      } else {
-        window.localStorage.setItem("wabook_dev_mode", "true");
-        setIsDevMode(true);
+      try {
+        window.localStorage.removeItem("wabook_dev_mode");
+      } catch {
+        /* ignore */
       }
     }
   }, []);
@@ -96,11 +93,6 @@ export function useCurrentUserState(): CurrentUserState {
       },
       isPending: false,
     };
-  }
-
-  // When in dev mode (default for local testing), return dev user immediately
-  if (isDevMode) {
-    return { user: DEV_USER, isPending: false };
   }
 
   return {

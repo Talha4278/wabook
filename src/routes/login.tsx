@@ -1,12 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { signIn } from "@/lib/auth/client";
+import { useEffect, useState } from "react";
+import { authClient, signIn } from "@/lib/auth/client";
 
 export const Route = createFileRoute("/login")({ component: Login });
 
 function Login() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const session = authClient.useSession();
+
+  useEffect(() => {
+    if (session.data?.user) {
+      window.location.href = "/";
+    }
+  }, [session.data?.user]);
 
   const handleGoogleSignIn = async () => {
     setBusy(true);
@@ -14,18 +21,13 @@ function Login() {
     try {
       await signIn("google", { callbackURL: "/" });
     } catch (err) {
-      setError(
-        "Google OAuth credentials required: GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET are not configured yet. Set them to enable live Google login, or use Dev Mode below to test.",
-      );
+      const message =
+        err instanceof Error
+          ? err.message
+          : "Failed to sign in with Google. Please try again.";
+      setError(message);
     } finally {
       setBusy(false);
-    }
-  };
-
-  const handleEnterDevMode = () => {
-    if (typeof window !== "undefined") {
-      window.localStorage.setItem("wabook_dev_mode", "true");
-      window.location.href = "/";
     }
   };
 
@@ -52,7 +54,7 @@ function Login() {
           </div>
         )}
 
-        <div className="mt-8 space-y-3">
+        <div className="mt-8">
           <button
             type="button"
             disabled={busy}
@@ -78,14 +80,6 @@ function Login() {
               />
             </svg>
             {busy ? "Redirecting to Google…" : "Continue with Google"}
-          </button>
-
-          <button
-            type="button"
-            onClick={handleEnterDevMode}
-            className="block w-full text-center rounded-md border border-border bg-elevated px-4 py-2 text-xs font-medium text-muted transition-colors hover:text-fg hover:bg-surface"
-          >
-            Enter in Dev Mode (Skip for testing) →
           </button>
         </div>
       </div>

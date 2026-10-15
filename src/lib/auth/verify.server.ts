@@ -83,10 +83,9 @@ export async function getSessionUser(
  */
 export async function requireUserId(
   bearerToken?: string,
-  isDevMode?: boolean,
 ): Promise<string> {
-  // If explicitly in dev mode or Google OAuth is not yet configured, return the dev user
-  if (isDevMode || !authConfigured) {
+  // If Google OAuth is not yet configured, return the dev user
+  if (!authConfigured) {
     return DEV_USER_ID;
   }
   const user = await getSessionUser(bearerToken);

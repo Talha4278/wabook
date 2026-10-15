@@ -31,13 +31,9 @@ export const authMiddleware = createMiddleware({ type: "function" })
     // cookie, so forward it to the server. Null when deployed (cookie auth), so
     // this is a no-op there.
     const { getBearerToken } = await import("./client");
-    const isDevMode =
-      typeof window !== "undefined" &&
-      window.localStorage.getItem("wabook_dev_mode") === "true";
     return next({
       sendContext: {
         bearerToken: getBearerToken() ?? undefined,
-        isDevMode,
       },
     });
   })
@@ -50,7 +46,7 @@ export const authMiddleware = createMiddleware({ type: "function" })
     const { requireUserId } = await import("./verify.server");
     // Reject scripted cross-site/sibling requests before touching per-user data.
     assertSameSiteRequest();
-    const ctx = context as { bearerToken?: string; isDevMode?: boolean };
-    const userId = await requireUserId(ctx.bearerToken, ctx.isDevMode);
+    const ctx = context as { bearerToken?: string };
+    const userId = await requireUserId(ctx.bearerToken);
     return next({ context: { userId } });
   });

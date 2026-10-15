@@ -1,12 +1,12 @@
-import { t as __exportAll } from "./rolldown-runtime-D7D4PA-g.js";
-import { t as getBaseURL } from "./url-Dj5TGTcl.js";
-import { useCallback, useRef, useSyncExternalStore } from "react";
-import { isSafeUrlScheme } from "@better-auth/core/utils/url";
-import { STORE_UNMOUNT_DELAY, atom, listenKeys, onMount, onSet } from "nanostores";
-import { defu } from "defu";
-import { createFetch } from "@better-fetch/fetch";
-import { capitalizeFirstLetter, toKebabCase } from "@better-auth/core/utils/string";
-//#region node_modules/better-auth/dist/client/parser.mjs
+import { o as __toESM } from "../_runtime.mjs";
+import { t as __exportAll } from "./rolldown-runtime-D7D4PA-g.mjs";
+import { K as require_react } from "../_libs/@tanstack/react-router+[...].mjs";
+import { It as capitalizeFirstLetter, Lt as toKebabCase, Pt as isSafeUrlScheme, i as createFetch } from "../_libs/@better-auth/core+[...].mjs";
+import { t as getBaseURL } from "./url-Dj5TGTcl.mjs";
+import { n as defu } from "../_libs/defu.mjs";
+import { a as atom, i as onSet, n as STORE_UNMOUNT_DELAY, r as onMount, t as listenKeys } from "../_libs/nanostores.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/client-DaPSa0yY.js
+var import_react = /* @__PURE__ */ __toESM(require_react());
 var PROTO_POLLUTION_PATTERNS = {
 	proto: /"(?:_|\\u0{2}5[Ff]){2}(?:p|\\u0{2}70)(?:r|\\u0{2}72)(?:o|\\u0{2}6[Ff])(?:t|\\u0{2}74)(?:o|\\u0{2}6[Ff])(?:_|\\u0{2}5[Ff]){2}"\s*:/,
 	constructor: /"(?:c|\\u0063)(?:o|\\u006[Ff])(?:n|\\u006[Ee])(?:s|\\u0073)(?:t|\\u0074)(?:r|\\u0072)(?:u|\\u0075)(?:c|\\u0063)(?:t|\\u0074)(?:o|\\u006[Ff])(?:r|\\u0072)"\s*:/,
@@ -74,8 +74,6 @@ function betterJSONParse(value, options = {}) {
 function parseJSON(value, options = { strict: true }) {
 	return betterJSONParse(value, options);
 }
-//#endregion
-//#region node_modules/better-auth/dist/client/fetch-plugins.mjs
 var redirectPlugin = {
 	id: "redirect",
 	name: "Redirect",
@@ -89,8 +87,6 @@ var redirectPlugin = {
 		}
 	} }
 };
-//#endregion
-//#region node_modules/better-auth/dist/client/equality.mjs
 function isPlainObject(value) {
 	if (typeof value !== "object" || value === null) return false;
 	const prototype = Object.getPrototypeOf(value);
@@ -129,8 +125,6 @@ function withEquality(store, isEqual) {
 		if (isEqual(store.value, newValue)) abort();
 	});
 }
-//#endregion
-//#region node_modules/better-auth/dist/client/broadcast-channel.mjs
 var kBroadcastChannel = Symbol.for("better-auth:broadcast-channel");
 var now$1 = () => Math.floor(Date.now() / 1e3);
 var WindowBroadcastChannel = class {
@@ -172,8 +166,6 @@ function getGlobalBroadcastChannel(name = "better-auth.message") {
 	if (!globalThis[kBroadcastChannel]) globalThis[kBroadcastChannel] = new WindowBroadcastChannel(name);
 	return globalThis[kBroadcastChannel];
 }
-//#endregion
-//#region node_modules/better-auth/dist/client/focus-manager.mjs
 var kFocusManager = Symbol.for("better-auth:focus-manager");
 var WindowFocusManager = class {
 	listeners = /* @__PURE__ */ new Set();
@@ -201,8 +193,6 @@ function getGlobalFocusManager() {
 	if (!globalThis[kFocusManager]) globalThis[kFocusManager] = new WindowFocusManager();
 	return globalThis[kFocusManager];
 }
-//#endregion
-//#region node_modules/better-auth/dist/client/online-manager.mjs
 var kOnlineManager = Symbol.for("better-auth:online-manager");
 var WindowOnlineManager = class {
 	listeners = /* @__PURE__ */ new Set();
@@ -233,8 +223,6 @@ function getGlobalOnlineManager() {
 	if (!globalThis[kOnlineManager]) globalThis[kOnlineManager] = new WindowOnlineManager();
 	return globalThis[kOnlineManager];
 }
-//#endregion
-//#region node_modules/better-auth/dist/client/session-refresh.mjs
 var now = () => Math.floor(Date.now() / 1e3);
 /**
 * Rate limit: don't refetch on focus if a session request was made within this many seconds
@@ -360,8 +348,6 @@ function createSessionRefreshManager(opts) {
 		broadcastSessionUpdate
 	};
 }
-//#endregion
-//#region node_modules/better-auth/dist/client/session-atom.mjs
 var isServer = () => typeof window === "undefined";
 var SESSION_MOUNT_DEDUPE_INTERVAL = STORE_UNMOUNT_DELAY;
 /**
@@ -384,7 +370,7 @@ function isSessionAtomEqual(a, b) {
 	return isJsonEqual(a.data, b.data) && a.error === b.error && a.isPending === b.isPending && a.isRefetching === b.isRefetching && a.refetch === b.refetch;
 }
 function getSessionAtom($fetch, options) {
-	const $signal = atom(false);
+	const $signal = /* @__PURE__ */ atom(false);
 	let flight;
 	let freshUntil = 0;
 	let sessionRevision = 0;
@@ -393,7 +379,7 @@ function getSessionAtom($fetch, options) {
 		freshUntil = 0;
 	});
 	const refetch = (queryParams) => fetchSession(queryParams);
-	const session = atom({
+	const session = /* @__PURE__ */ atom({
 		data: null,
 		error: null,
 		isPending: true,
@@ -523,8 +509,6 @@ function getSessionAtom($fetch, options) {
 		broadcastSessionUpdate: (trigger) => broadcastSessionUpdate(trigger)
 	};
 }
-//#endregion
-//#region node_modules/better-auth/dist/client/config.mjs
 var resolvePublicAuthUrl = (basePath) => {
 	if (typeof process === "undefined") return void 0;
 	const path = basePath ?? "/api/auth";
@@ -621,13 +605,9 @@ var getClientConfig = (options, loadEnv) => {
 		$store
 	};
 };
-//#endregion
-//#region node_modules/better-auth/dist/utils/is-atom.mjs
 function isAtom(value) {
 	return typeof value === "object" && value !== null && "get" in value && typeof value.get === "function" && "lc" in value && typeof value.lc === "number";
 }
-//#endregion
-//#region node_modules/better-auth/dist/client/proxy.mjs
 function getMethod(path, knownPathMethods, args) {
 	const method = knownPathMethods[path];
 	const { fetchOptions, query: _query, ...body } = args || {};
@@ -701,8 +681,6 @@ function createDynamicPathProxy(routes, client, knownPathMethods, atoms, atomLis
 	}
 	return createProxy();
 }
-//#endregion
-//#region node_modules/better-auth/dist/client/react/react-store.mjs
 /**
 * Subscribe to store changes and get store's value.
 *
@@ -727,9 +705,9 @@ function createDynamicPathProxy(routes, client, knownPathMethods, atoms, atomLis
 * @returns Store value.
 */
 function useStore(store, options = {}) {
-	const snapshotRef = useRef(store.get());
+	const snapshotRef = (0, import_react.useRef)(store.get());
 	const { keys, deps = [store, keys] } = options;
-	const subscribe = useCallback((onChange) => {
+	const subscribe = (0, import_react.useCallback)((onChange) => {
 		const emitChange = (value) => {
 			if (snapshotRef.current === value) return;
 			snapshotRef.current = value;
@@ -740,10 +718,8 @@ function useStore(store, options = {}) {
 		return store.listen(emitChange);
 	}, deps);
 	const get = () => snapshotRef.current;
-	return useSyncExternalStore(subscribe, get, get);
+	return (0, import_react.useSyncExternalStore)(subscribe, get, get);
 }
-//#endregion
-//#region node_modules/better-auth/dist/client/react/index.mjs
 function getAtomKey(str) {
 	return `use${capitalizeFirstLetter(str)}`;
 }
@@ -758,8 +734,6 @@ function createAuthClient(options) {
 		$store
 	}, $fetch, pluginPathMethods, pluginsAtoms, atomListeners);
 }
-//#endregion
-//#region src/lib/auth/client.ts
 var client_exports = /* @__PURE__ */ __exportAll({
 	authClient: () => authClient,
 	authEnabled: () => true,
@@ -807,7 +781,7 @@ async function signOut(opts = {}) {
 	setBearerToken(null);
 	if (typeof window !== "undefined") {
 		try {
-			window.localStorage.setItem("wabook_dev_mode", "false");
+			window.localStorage.removeItem("wabook_dev_mode");
 		} catch {}
 		window.location.href = redirectTo;
 	}

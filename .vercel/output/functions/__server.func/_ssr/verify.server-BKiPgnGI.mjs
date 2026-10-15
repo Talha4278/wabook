@@ -1,12 +1,9 @@
-import { o as getRequest } from "../index.js";
-import { n as authConfigured, t as auth } from "./server-D0ChcEkX.js";
-import "jose";
-//#region src/lib/env.server.ts
+import { o as getRequest } from "./ssr.mjs";
+import { n as authConfigured, t as auth } from "./server-D0ChcEkX.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/verify.server-BKiPgnGI.js
 function env(key) {
 	return process.env[key]?.trim() || void 0;
 }
-//#endregion
-//#region src/lib/auth/gate-identity.server.ts
 function gateIdentityEnabled() {
 	return env("VITE_AUTH_ENABLED") !== "false";
 }
@@ -62,8 +59,8 @@ async function getSessionUser(bearerToken) {
 *   read/write everyone's rows.
 * - Auth disabled + no database -> the shared dev user id.
 */
-async function requireUserId(bearerToken, isDevMode) {
-	if (isDevMode || !authConfigured) return DEV_USER_ID;
+async function requireUserId(bearerToken) {
+	if (!authConfigured) return DEV_USER_ID;
 	const user = await getSessionUser(bearerToken);
 	if (!user) throw new UnauthorizedError();
 	return user.id;

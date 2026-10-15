@@ -62,7 +62,7 @@ export async function signOut(opts: { redirectTo?: string } = {}): Promise<void>
   setBearerToken(null);
   if (typeof window !== "undefined") {
     try {
-      window.localStorage.setItem("wabook_dev_mode", "false");
+      window.localStorage.removeItem("wabook_dev_mode");
     } catch {
       /* ignore */
     }

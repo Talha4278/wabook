@@ -2,11 +2,11 @@ import { o as __toESM } from "../_runtime.mjs";
 import { t as __exportAll } from "./rolldown-runtime-D7D4PA-g.mjs";
 import { K as require_react, _ as createRootRoute, b as require_jsx_runtime, d as HeadContent, g as createFileRoute, h as lazyRouteComponent, m as Outlet, p as createRouter, u as Scripts, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as getServerFnById, i as TSS_SERVER_FUNCTION, r as createServerFn } from "./ssr.mjs";
+import { t as authMiddleware } from "./middleware-CcmIlKRu.mjs";
 import { F as string, I as union, M as object, j as number, k as literal } from "../_libs/@better-auth/core+[...].mjs";
 import { t as auth } from "./server-D0ChcEkX.mjs";
-import { t as authMiddleware } from "./middleware-BmGI48yx.mjs";
 import { a as TriangleAlert } from "../_libs/lucide-react.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-DzEzzzCG.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-B4-TRbq-.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var createSsrRpc = (functionId) => {
@@ -443,11 +443,11 @@ var Route$6 = createRootRoute({
 		})]
 	})
 });
-var $$splitComponentImporter$2 = () => import("./routes-D_P94-xA.mjs");
+var $$splitComponentImporter$2 = () => import("./routes-Cxg1gT98.mjs");
 var Route$5 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$2, "component") });
-var $$splitComponentImporter$1 = () => import("./login-BBq5LqLc.mjs");
+var $$splitComponentImporter$1 = () => import("./login-C0r6gDi1.mjs");
 var Route$4 = createFileRoute("/login")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
-var $$splitComponentImporter = () => import("./book._slug-dNqbItI7.mjs");
+var $$splitComponentImporter = () => import("./book._slug-CLuzshx8.mjs");
 var Route$3 = createFileRoute("/book/$slug")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
 var Route$2 = createFileRoute("/api/auth/$")({ server: { handlers: {
 	GET: ({ request }) => auth.handler(request),
@@ -465,7 +465,7 @@ async function handle({ request }) {
 		status: 403,
 		headers: { "Content-Type": "application/json" }
 	});
-	const { sweepAllDueReminders } = await import("./api-BiUY_r1J.mjs");
+	const { sweepAllDueReminders } = await import("./api-DjyjJzk1.mjs");
 	const result = await sweepAllDueReminders();
 	return Response.json({
 		ok: true,

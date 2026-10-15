@@ -1,9 +1,9 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { K as require_react, b as require_jsx_runtime, v as Navigate } from "../_libs/@tanstack/react-router+[...].mjs";
 import { S as Bell, _ as Copy, b as Check, c as Send, d as MessageSquare, f as Menu, g as CreditCard, h as Link2, i as UserPlus, l as Plus, m as List, n as Users, o as Trash2, p as LoaderCircle, r as UserX, s as Stethoscope, t as X, u as Pencil, v as ChevronRight, x as CalendarDays, y as ChevronLeft } from "../_libs/lucide-react.mjs";
-import { _ as updateBookingStatus, c as deleteStaff, f as runReminderSweep, h as simulateInbound, i as createDashboardBooking, l as getDashboard, m as sendBookingReminder, o as createStaff, p as saveSettings, r as completeOnboarding, s as deleteService, v as upsertService } from "./router-DzEzzzCG.mjs";
-import { i as signOut, t as authClient } from "./client-DntVSK3C.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-D_P94-xA.js
+import { _ as updateBookingStatus, c as deleteStaff, f as runReminderSweep, h as simulateInbound, i as createDashboardBooking, l as getDashboard, m as sendBookingReminder, o as createStaff, p as saveSettings, r as completeOnboarding, s as deleteService, v as upsertService } from "./router-B4-TRbq-.mjs";
+import { i as signOut, t as authClient } from "./client-DaPSa0yY.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-Cxg1gT98.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 /**
@@ -21,20 +21,6 @@ function hasGateSessionMarker() {
 	if (typeof document === "undefined") return false;
 	return document.cookie.split(";").some((pair) => pair.trim().startsWith(`${GATE_SESSION_MARKER_COOKIE}=`));
 }
-/**
-* Stable fallback user, used ONLY when auth is disabled
-* (`VITE_AUTH_ENABLED=false`, the shipped default). With auth on, the sandbox
-* live preview does real sign-in via the baked preview client. Its id is
-* `"dev-user"` — the SAME id `verify.server.ts` returns server-side — so per-user
-* rows written in that mode belong to one consistent owner.
-*/
-var DEV_USER = {
-	id: "dev-user",
-	displayName: "Dev User",
-	primaryEmail: "dev@example.com",
-	profileImageUrl: null,
-	isDevFallback: true
-};
 /**
 * Current user + loading state. Same behavior in live preview and when deployed:
 *   - Auth enabled -> the real signed-in user; `user` is `null` while
@@ -58,16 +44,11 @@ var DEV_USER = {
 */
 function useCurrentUserState() {
 	const [mounted, setMounted] = (0, import_react.useState)(false);
-	const [isDevMode, setIsDevMode] = (0, import_react.useState)(false);
 	(0, import_react.useEffect)(() => {
 		setMounted(true);
-		if (typeof window !== "undefined") {
-			if (window.localStorage.getItem("wabook_dev_mode") === "false") setIsDevMode(false);
-			else {
-				window.localStorage.setItem("wabook_dev_mode", "true");
-				setIsDevMode(true);
-			}
-		}
+		if (typeof window !== "undefined") try {
+			window.localStorage.removeItem("wabook_dev_mode");
+		} catch {}
 	}, []);
 	const session = authClient.useSession();
 	if (!mounted) return {
@@ -83,10 +64,6 @@ function useCurrentUserState() {
 			profileImageUrl: realUser.image ?? null,
 			isDevFallback: false
 		},
-		isPending: false
-	};
-	if (isDevMode) return {
-		user: DEV_USER,
 		isPending: false
 	};
 	return {
