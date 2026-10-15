@@ -1,5 +1,5 @@
-import { getWhatsappConfig } from "./config-COO7Pf6s.js";
-//#region src/lib/whatsapp/send.ts
+import { getWhatsappConfig } from "./config-COO7Pf6s.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/send-BTWZvdeG.js
 function digits(phone) {
 	return phone.replace(/\D/g, "");
 }
@@ -59,7 +59,7 @@ async function sendWhatsappText(toPhone, body, creds) {
 		type: "template",
 		template: {
 			name: templateName,
-			language: { code: "en_US" },
+			language: { code: "en" },
 			...params && params.length > 0 ? { components: [{
 				type: "body",
 				parameters: params.map((p) => ({
@@ -69,28 +69,19 @@ async function sendWhatsappText(toPhone, body, creds) {
 			}] } : {}
 		}
 	} : null;
-	const first = await graphSend(phoneId, token, textPayload);
-	if (first.ok) return first;
 	if (templatePayload) {
-		const second = await graphSend(phoneId, token, templatePayload);
-		if (second.ok) return second;
-		if (second.error && (second.error.toLowerCase().includes("language") || second.error.toLowerCase().includes("does not exist") || second.error.toLowerCase().includes("132001"))) {
-			const third = await graphSend(phoneId, token, {
-				...templatePayload,
-				template: {
-					...templatePayload.template,
-					language: { code: "en" }
-				}
-			});
-			if (third.ok) return third;
-		}
-		return {
-			ok: false,
-			simulated: false,
-			error: second.error || first.error
-		};
+		const res = await graphSend(phoneId, token, templatePayload);
+		if (res.ok) return res;
+		const resAlt = await graphSend(phoneId, token, {
+			...templatePayload,
+			template: {
+				...templatePayload.template,
+				language: { code: "en_US" }
+			}
+		});
+		if (resAlt.ok) return resAlt;
 	}
-	return first;
+	return graphSend(phoneId, token, textPayload);
 }
 async function graphSend(phoneId, token, payload) {
 	try {

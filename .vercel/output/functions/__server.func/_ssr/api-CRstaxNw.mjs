@@ -1,6 +1,6 @@
 import { i as TSS_SERVER_FUNCTION, r as createServerFn } from "./ssr.mjs";
 import { t as authMiddleware } from "./middleware-CcmIlKRu.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/api-Dy3oaP3D.js
+//#region node_modules/.nitro/vite/services/ssr/assets/api-CRstaxNw.js
 var createServerRpc = (serverFnMeta, splitImportFn) => {
 	const url = "/_serverFn/" + serverFnMeta.id;
 	return Object.assign(splitImportFn, {
@@ -546,7 +546,7 @@ var createDashboardBooking = createServerFn({ method: "POST" }).middleware([auth
 		...parts,
 		shop: biz.name
 	});
-	const send = await (await import("./send-oXxmCk-B.mjs")).sendWhatsappText(phone, confirmBody, {
+	const send = await (await import("./send-BTWZvdeG.mjs")).sendWhatsappText(phone, confirmBody, {
 		token: rows[0].wa_token,
 		phoneId: rows[0].wa_phone_id,
 		templateParams: [
@@ -595,7 +595,7 @@ var runReminderSweep = createServerFn({ method: "POST" }).middleware([authMiddle
 	let sent = 0;
 	let simulated = 0;
 	for (const job of due) {
-		const result = await (await import("./send-oXxmCk-B.mjs")).sendWhatsappText(job.phone, job.body, {
+		const result = await (await import("./send-BTWZvdeG.mjs")).sendWhatsappText(job.phone, job.body, {
 			token: rows[0].wa_token,
 			phoneId: rows[0].wa_phone_id
 		});
@@ -651,7 +651,7 @@ var sendBookingReminder = createServerFn({ method: "POST" }).middleware([authMid
 		...fmtParts(booking[0].starts_at, biz.timezone),
 		shop: biz.name
 	});
-	const result = await (await import("./send-oXxmCk-B.mjs")).sendWhatsappText(booking[0].phone, body, {
+	const result = await (await import("./send-BTWZvdeG.mjs")).sendWhatsappText(booking[0].phone, body, {
 		token: shop.wa_token,
 		phoneId: shop.wa_phone_id
 	});
@@ -841,7 +841,7 @@ var createPublicBooking = createServerFn({ method: "POST" }).validator((d) => d)
 		...parts,
 		shop: biz.name
 	});
-	const send = await (await import("./send-oXxmCk-B.mjs")).sendWhatsappText(phone, confirmBody, {
+	const send = await (await import("./send-BTWZvdeG.mjs")).sendWhatsappText(phone, confirmBody, {
 		token: rows[0].wa_token,
 		phoneId: rows[0].wa_phone_id,
 		templateParams: [

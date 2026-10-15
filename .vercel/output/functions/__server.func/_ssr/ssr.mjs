@@ -554,67 +554,67 @@ async function getStartManifest(matchedRoutes) {
 var manifest = {
 	"1ced372dd5aacd686ef5abbe685c07d2d030113387d10367f3495592a70b613f": {
 		functionName: "getPublicSlots_createServerFn_handler",
-		importer: () => import("./api-Dy3oaP3D.mjs")
+		importer: () => import("./api-CRstaxNw.mjs")
 	},
 	"256340de9b8195b66b22505a3f1debcd5f9e2987f3d5856b7bbf7d4a207bc138": {
 		functionName: "saveWhatsapp_createServerFn_handler",
-		importer: () => import("./api-Dy3oaP3D.mjs")
+		importer: () => import("./api-CRstaxNw.mjs")
 	},
 	"34981fb2e11c2bacfd84d7ed2373b8e7537b2010d80e7eaf4cbe37736ad39144": {
 		functionName: "createPublicBooking_createServerFn_handler",
-		importer: () => import("./api-Dy3oaP3D.mjs")
+		importer: () => import("./api-CRstaxNw.mjs")
 	},
 	"39338aa23c2656e0d3a4db86e8a349d547e169a9cf198d8f849e93e92e87db0d": {
 		functionName: "saveSettings_createServerFn_handler",
-		importer: () => import("./api-Dy3oaP3D.mjs")
+		importer: () => import("./api-CRstaxNw.mjs")
 	},
 	"49070142af5e39b0c98049e1bd479874062d846c1a4b9d3338cf51bb9d3932f1": {
 		functionName: "simulateInbound_createServerFn_handler",
-		importer: () => import("./api-Dy3oaP3D.mjs")
+		importer: () => import("./api-CRstaxNw.mjs")
 	},
 	"620e629c4e76a94f7435d8af3f27e0f4ba9e00c798870e35c10a41820285b4b2": {
 		functionName: "deleteService_createServerFn_handler",
-		importer: () => import("./api-Dy3oaP3D.mjs")
+		importer: () => import("./api-CRstaxNw.mjs")
 	},
 	"69b13543496e7e243f46577d1661eb7def3dab8f2a6267dd1ec09b4dece6131a": {
 		functionName: "sendBookingReminder_createServerFn_handler",
-		importer: () => import("./api-Dy3oaP3D.mjs")
+		importer: () => import("./api-CRstaxNw.mjs")
 	},
 	"80d6851dd4b07c494b01010ef47535d8aa0ee282b1a5c3057343c4302a50e605": {
 		functionName: "runReminderSweep_createServerFn_handler",
-		importer: () => import("./api-Dy3oaP3D.mjs")
+		importer: () => import("./api-CRstaxNw.mjs")
 	},
 	"905fb7fb8fbf1169e551462b82ac2167659f78882e043d9f536e73e552b5c3fb": {
 		functionName: "completeOnboarding_createServerFn_handler",
-		importer: () => import("./api-Dy3oaP3D.mjs")
+		importer: () => import("./api-CRstaxNw.mjs")
 	},
 	"a4c00551ff12fc1ee4797dc421b0c4ec1f0db483755def9b78f5f13f4a4d00e5": {
 		functionName: "deleteStaff_createServerFn_handler",
-		importer: () => import("./api-Dy3oaP3D.mjs")
+		importer: () => import("./api-CRstaxNw.mjs")
 	},
 	"a86639b5ea8524bc0f1eeb5d2447792499ed0681e0ba24c8d6b714ae30f9f07d": {
 		functionName: "getDashboard_createServerFn_handler",
-		importer: () => import("./api-Dy3oaP3D.mjs")
+		importer: () => import("./api-CRstaxNw.mjs")
 	},
 	"b5d00e9a48fca3d70e3e0ed48747f54dd9c8b00b1c3fac7f6a266ec0940ecde1": {
 		functionName: "createStaff_createServerFn_handler",
-		importer: () => import("./api-Dy3oaP3D.mjs")
+		importer: () => import("./api-CRstaxNw.mjs")
 	},
 	"b8f0d1c3d3f1d9d0e9ab4b4b3341bc39333fbf8c95e441d2bda821476a00447e": {
 		functionName: "createDashboardBooking_createServerFn_handler",
-		importer: () => import("./api-Dy3oaP3D.mjs")
+		importer: () => import("./api-CRstaxNw.mjs")
 	},
 	"d9ceac3c79e85f4840e39a8cab52a96ee32fc5dcddd2684bec74842bcd9827d8": {
 		functionName: "getPublicShop_createServerFn_handler",
-		importer: () => import("./api-Dy3oaP3D.mjs")
+		importer: () => import("./api-CRstaxNw.mjs")
 	},
 	"e895f8d593e77aef871d1859d0f9e0b84c188f8c2e95336696ab1eee3094fedc": {
 		functionName: "updateBookingStatus_createServerFn_handler",
-		importer: () => import("./api-Dy3oaP3D.mjs")
+		importer: () => import("./api-CRstaxNw.mjs")
 	},
 	"f36671d0077819e3d2a8c37d2208b4a485a74abf4f317af7f1b5d2de784fd5f0": {
 		functionName: "upsertService_createServerFn_handler",
-		importer: () => import("./api-Dy3oaP3D.mjs")
+		importer: () => import("./api-CRstaxNw.mjs")
 	}
 };
 async function getServerFnById(id, access) {
@@ -2100,7 +2100,7 @@ var getBaseManifest = getProdBaseManifest;
 var createEarlyHintsForRequest = createEarlyHintsCollector;
 async function loadEntries() {
 	const [routerEntry, startEntry, pluginAdapters] = await Promise.all([
-		import("./router-6x0HBDml.mjs").then((n) => n.t),
+		import("./router-CGdyjbW-.mjs").then((n) => n.t),
 		import("./start-5Z2QO8AU.mjs"),
 		import("./empty-plugin-adapters-D9UWiqvJ.mjs")
 	]);

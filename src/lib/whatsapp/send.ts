@@ -66,7 +66,7 @@ export async function sendWhatsappText(
         type: "template",
         template: {
           name: templateName,
-          language: { code: "en_US" },
+          language: { code: "en" },
           ...(params && params.length > 0
             ? {
                 components: [
@@ -84,31 +84,24 @@ export async function sendWhatsappText(
       }
     : null;
 
-  const first = await graphSend(phoneId, token, textPayload);
-  if (first.ok) return first;
+  // Try template first for business-initiated booking confirmations
   if (templatePayload) {
-    const second = await graphSend(phoneId, token, templatePayload);
-    if (second.ok) return second;
-    // If the template failed on en_US, retry with language code "en"
-    if (
-      second.error &&
-      (second.error.toLowerCase().includes("language") ||
-        second.error.toLowerCase().includes("does not exist") ||
-        second.error.toLowerCase().includes("132001"))
-    ) {
-      const altPayload = {
-        ...templatePayload,
-        template: {
-          ...templatePayload.template,
-          language: { code: "en" },
-        },
-      };
-      const third = await graphSend(phoneId, token, altPayload);
-      if (third.ok) return third;
-    }
-    return { ok: false, simulated: false, error: second.error || first.error };
+    const res = await graphSend(phoneId, token, templatePayload);
+    if (res.ok) return res;
+    // If "en" fails, retry with "en_US"
+    const altPayload = {
+      ...templatePayload,
+      template: {
+        ...templatePayload.template,
+        language: { code: "en_US" },
+      },
+    };
+    const resAlt = await graphSend(phoneId, token, altPayload);
+    if (resAlt.ok) return resAlt;
   }
-  return first;
+
+  // Fallback to plain text payload (works when recipient is within 24h customer window)
+  return graphSend(phoneId, token, textPayload);
 }
 
 async function graphSend(
