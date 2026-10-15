@@ -6,7 +6,7 @@ import { t as authMiddleware } from "./middleware-CcmIlKRu.mjs";
 import { F as string, I as union, M as object, j as number, k as literal } from "../_libs/@better-auth/core+[...].mjs";
 import { t as auth } from "./server-D0ChcEkX.mjs";
 import { a as TriangleAlert } from "../_libs/lucide-react.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CGdyjbW-.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-Czi6-7X-.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var createSsrRpc = (functionId) => {
@@ -443,11 +443,11 @@ var Route$6 = createRootRoute({
 		})]
 	})
 });
-var $$splitComponentImporter$2 = () => import("./routes-CTDmm5BE.mjs");
+var $$splitComponentImporter$2 = () => import("./routes-B-cVDhzf.mjs");
 var Route$5 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$2, "component") });
 var $$splitComponentImporter$1 = () => import("./login-C0r6gDi1.mjs");
 var Route$4 = createFileRoute("/login")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
-var $$splitComponentImporter = () => import("./book._slug-DgoknrCb.mjs");
+var $$splitComponentImporter = () => import("./book._slug-CYDD7xx6.mjs");
 var Route$3 = createFileRoute("/book/$slug")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
 var Route$2 = createFileRoute("/api/auth/$")({ server: { handlers: {
 	GET: ({ request }) => auth.handler(request),
@@ -455,23 +455,59 @@ var Route$2 = createFileRoute("/api/auth/$")({ server: { handlers: {
 } } });
 var Route$1 = createFileRoute("/api/cron/reminders")({ server: { handlers: {
 	GET: handle,
-	POST: handle
+	POST: handle,
+	HEAD: handleHead
 } } });
+var lastSweepTime = 0;
+var THROTTLE_WINDOW_MS = 5e3;
+async function handleHead() {
+	return new Response(null, {
+		status: 200,
+		headers: {
+			"Cache-Control": "no-store, no-cache, must-revalidate",
+			"Access-Control-Allow-Origin": "*"
+		}
+	});
+}
 async function handle({ request }) {
-	const secret = process.env.CRON_SECRET?.trim();
-	const auth = request.headers.get("authorization") || "";
-	const q = new URL(request.url).searchParams.get("secret") || "";
-	if (secret && auth !== `Bearer ${secret}` && q !== secret) return new Response(JSON.stringify({ error: "Forbidden: invalid secret" }), {
-		status: 403,
-		headers: { "Content-Type": "application/json" }
-	});
-	const { sweepAllDueReminders } = await import("./api-DlX-PLyp.mjs");
-	const result = await sweepAllDueReminders();
-	return Response.json({
+	const now = Date.now();
+	if (now - lastSweepTime < THROTTLE_WINDOW_MS) return Response.json({
 		ok: true,
+		throttled: true,
 		timestamp: (/* @__PURE__ */ new Date()).toISOString(),
-		...result
-	});
+		sent: 0,
+		simulated: 0,
+		message: "Sweep recently processed, waiting for next interval"
+	}, { headers: {
+		"Cache-Control": "no-store, no-cache, must-revalidate",
+		"Access-Control-Allow-Origin": "*"
+	} });
+	lastSweepTime = now;
+	try {
+		const { sweepAllDueReminders } = await import("./api-HlbS3z-r.mjs");
+		const result = await sweepAllDueReminders();
+		return Response.json({
+			ok: true,
+			timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+			...result
+		}, { headers: {
+			"Cache-Control": "no-store, no-cache, must-revalidate",
+			"Access-Control-Allow-Origin": "*"
+		} });
+	} catch (err) {
+		console.error("[CRON_REMINDERS_ERROR]", err);
+		return Response.json({
+			ok: false,
+			error: err instanceof Error ? err.message : "Internal sweep error",
+			timestamp: (/* @__PURE__ */ new Date()).toISOString()
+		}, {
+			status: 500,
+			headers: {
+				"Cache-Control": "no-store, no-cache, must-revalidate",
+				"Access-Control-Allow-Origin": "*"
+			}
+		});
+	}
 }
 var Route = createFileRoute("/api/whatsapp/webhook")({ server: { handlers: {
 	GET: async ({ request }) => {
