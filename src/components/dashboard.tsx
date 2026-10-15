@@ -1,20 +1,24 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   Bell,
+  Building2,
   CalendarDays,
   Check,
   ChevronLeft,
   ChevronRight,
+  Clock,
   Copy,
   CreditCard,
   Link2,
   List,
   Loader2,
+  LogOut,
   Menu,
   MessageSquare,
   Pencil,
   Plus,
   Send,
+  Sparkles,
   Stethoscope,
   Trash2,
   UserPlus,
@@ -24,6 +28,7 @@ import {
 } from "lucide-react";
 import { RedirectToSignIn, UserButton } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
+import { signOut } from "@/lib/auth/client";
 import {
   createDashboardBooking,
   getDashboard,
@@ -32,6 +37,7 @@ import {
   simulateInbound,
   updateBookingStatus,
   completeOnboarding,
+  type CompleteOnboardingInput,
   upsertService,
   deleteService,
   createStaff,
@@ -201,10 +207,10 @@ export function Dashboard() {
     return (
       <ClinicSetup
         busy={busy}
-        onSave={async (name) => {
+        onSave={async (payload) => {
           setBusy(true);
           try {
-            setData(await completeOnboarding({ data: { name } }));
+            setData(await completeOnboarding({ data: payload }));
           } catch (e) {
             setError(e instanceof Error ? e.message : "Could not save clinic");
           } finally {
@@ -1668,42 +1674,757 @@ function BillingView() {
   );
 }
 
-function ClinicSetup({ onSave, busy }: { onSave: (name: string) => void; busy: boolean }) {
+const TIMEZONES = [
+  { value: "Asia/Karachi", label: "Pakistan Standard Time (PKT, UTC+5)" },
+  { value: "Asia/Dubai", label: "Gulf Standard Time (GST, UTC+4)" },
+  { value: "Asia/Riyadh", label: "Arabia Standard Time (AST, UTC+3)" },
+  { value: "Europe/London", label: "London / UK (GMT/BST, UTC+0/+1)" },
+  { value: "America/New_York", label: "US Eastern Time (EST/EDT, UTC-5/-4)" },
+  { value: "America/Chicago", label: "US Central Time (CST/CDT, UTC-6/-5)" },
+  { value: "America/Los_Angeles", label: "US Pacific Time (PST/PDT, UTC-8/-7)" },
+  { value: "Asia/Kolkata", label: "India Standard Time (IST, UTC+5:30)" },
+  { value: "Asia/Dhaka", label: "Bangladesh Time (BST, UTC+6)" },
+];
+
+const INITIAL_HOURS: DayHours[] = [
+  { day: 1, closed: false, open: "09:00", close: "17:00" },
+  { day: 2, closed: false, open: "09:00", close: "17:00" },
+  { day: 3, closed: false, open: "09:00", close: "17:00" },
+  { day: 4, closed: false, open: "09:00", close: "17:00" },
+  { day: 5, closed: false, open: "09:00", close: "17:00" },
+  { day: 6, closed: false, open: "09:00", close: "17:00" },
+  { day: 0, closed: true, open: "09:00", close: "17:00" },
+];
+
+const DAY_LABELS: Record<number, string> = {
+  1: "Mon",
+  2: "Tue",
+  3: "Wed",
+  4: "Thu",
+  5: "Fri",
+  6: "Sat",
+  0: "Sun",
+};
+
+const SUGGESTED_SERVICES = [
+  { name: "General Consultation", durationMin: 30, pricePkr: 2000, category: "Consultation" },
+  { name: "Follow-up Visit", durationMin: 15, pricePkr: 1000, category: "Consultation" },
+  { name: "Comprehensive Checkup", durationMin: 45, pricePkr: 3500, category: "General" },
+];
+
+function ClinicSetup({
+  onSave,
+  busy,
+}: {
+  onSave: (payload: CompleteOnboardingInput) => Promise<void>;
+  busy: boolean;
+}) {
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [name, setName] = useState("");
+  const [timezone, setTimezone] = useState("Asia/Karachi");
+  const [bufferMinutes, setBufferMinutes] = useState(15);
+  const [hours, setHours] = useState<DayHours[]>(INITIAL_HOURS);
+  const [staffList, setStaffList] = useState<string[]>([]);
+  const [staffDraft, setStaffDraft] = useState("");
+  const [servicesList, setServicesList] = useState<
+    Array<{ name: string; durationMin: number; pricePkr: number; category: string }>
+  >([]);
+  const [serviceDraft, setServiceDraft] = useState({
+    name: "",
+    durationMin: 30,
+    pricePkr: 2000,
+    category: "General",
+  });
+  const [validationError, setValidationError] = useState<string | null>(null);
+
+  const applySchedulePreset = (open: string, close: string, sunClosed = true) => {
+    setHours((prev) =>
+      prev.map((h) => ({
+        ...h,
+        open,
+        close,
+        closed: h.day === 0 ? sunClosed : false,
+      })),
+    );
+  };
+
+  const handleAddStaff = () => {
+    const trimmed = staffDraft.trim();
+    if (!trimmed) return;
+    if (staffList.some((s) => s.toLowerCase() === trimmed.toLowerCase())) {
+      setValidationError("Practitioner already added.");
+      return;
+    }
+    setStaffList([...staffList, trimmed]);
+    setStaffDraft("");
+    setValidationError(null);
+  };
+
+  const handleRemoveStaff = (idx: number) => {
+    setStaffList(staffList.filter((_, i) => i !== idx));
+  };
+
+  const handleAddService = (item?: {
+    name: string;
+    durationMin: number;
+    pricePkr: number;
+    category: string;
+  }) => {
+    const s = item || serviceDraft;
+    const sName = s.name.trim();
+    if (!sName) {
+      setValidationError("Please enter a service name.");
+      return;
+    }
+    setServicesList([
+      ...servicesList,
+      {
+        name: sName,
+        durationMin: Number(s.durationMin) || 15,
+        pricePkr: Number(s.pricePkr) || 0,
+        category: s.category?.trim() || "General",
+      },
+    ]);
+    if (!item) {
+      setServiceDraft({
+        name: "",
+        durationMin: 30,
+        pricePkr: 2000,
+        category: serviceDraft.category,
+      });
+    }
+    setValidationError(null);
+  };
+
+  const handleRemoveService = (idx: number) => {
+    setServicesList(servicesList.filter((_, i) => i !== idx));
+  };
+
+  const handleNextFromStep1 = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (name.trim().length < 2) {
+      setValidationError("Please enter a clinic name (at least 2 characters).");
+      return;
+    }
+    setValidationError(null);
+    setStep(2);
+  };
+
+  const handleNextFromStep2 = () => {
+    const openDays = hours.filter((h) => !h.closed);
+    if (openDays.length === 0) {
+      setValidationError("Please keep at least one day open for appointments.");
+      return;
+    }
+    setValidationError(null);
+    setStep(3);
+  };
+
+  const handleNextFromStep3 = () => {
+    if (staffList.length === 0) {
+      setValidationError("Please add at least one practitioner or doctor.");
+      return;
+    }
+    setValidationError(null);
+    setStep(4);
+  };
+
+  const handleFinish = async () => {
+    if (servicesList.length === 0) {
+      setValidationError("Please add at least one service before launching.");
+      return;
+    }
+    setValidationError(null);
+    await onSave({
+      name: name.trim(),
+      timezone,
+      bufferMinutes,
+      hours,
+      staff: staffList,
+      services: servicesList,
+    });
+  };
+
   return (
-    <div className="grid min-h-screen place-items-center bg-bg px-4">
-      <form
-        className="w-full max-w-md space-y-5 rounded-2xl border border-border bg-surface p-6"
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSave(name);
-        }}
-      >
-        <p className="text-xs font-semibold uppercase tracking-wider text-accent">WaBook</p>
-        <h1 className="text-2xl font-semibold tracking-tight">Name your clinic</h1>
-        <p className="text-sm text-muted">
-          This is what patients see on the booking link and in WhatsApp reminders. You can change it later.
-        </p>
-        <label className="block text-sm">
-          Clinic name
-          <input
-            autoFocus
-            required
-            minLength={2}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="e.g. Hashir Dental & Aesthetic Clinic"
-            className="mt-1.5 w-full rounded-md border border-border bg-elevated px-3 py-2.5 text-fg"
-          />
-        </label>
-        <button
-          type="submit"
-          disabled={busy || name.trim().length < 2}
-          className="w-full rounded-md bg-accent py-2.5 text-sm font-semibold text-accent-fg disabled:opacity-50"
-        >
-          {busy ? "Saving…" : "Continue"}
-        </button>
-      </form>
+    <div className="min-h-screen bg-bg px-4 py-8 sm:px-6">
+      <div className="mx-auto max-w-2xl">
+        {/* Top brand & account switcher */}
+        <div className="mb-6 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="grid size-9 place-items-center rounded-lg bg-accent text-accent-fg font-semibold">
+              W
+            </div>
+            <div>
+              <p className="font-semibold text-fg tracking-tight">WaBook</p>
+              <p className="text-xs text-muted">Clinic Onboarding</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => void signOut()}
+            className="flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-xs text-muted transition-colors hover:bg-elevated hover:text-fg"
+          >
+            <LogOut className="size-3.5" /> Sign out
+          </button>
+        </div>
+
+        {/* Multi-step progress bar */}
+        <div className="mb-6 rounded-xl border border-border bg-surface p-4">
+          <div className="grid grid-cols-4 gap-2 text-center text-xs font-medium">
+            <button
+              type="button"
+              onClick={() => setStep(1)}
+              className={`flex items-center justify-center gap-1.5 rounded-lg py-2 transition-colors ${
+                step === 1
+                  ? "bg-accent-dim text-accent font-semibold"
+                  : name.trim().length >= 2
+                    ? "text-fg hover:bg-elevated"
+                    : "text-muted"
+              }`}
+            >
+              <Building2 className="size-3.5" />
+              <span className="hidden sm:inline">1. Profile</span>
+              <span className="sm:hidden">1</span>
+            </button>
+
+            <button
+              type="button"
+              disabled={name.trim().length < 2}
+              onClick={() => setStep(2)}
+              className={`flex items-center justify-center gap-1.5 rounded-lg py-2 transition-colors ${
+                step === 2
+                  ? "bg-accent-dim text-accent font-semibold"
+                  : step > 2
+                    ? "text-fg hover:bg-elevated"
+                    : "text-muted disabled:opacity-40"
+              }`}
+            >
+              <Clock className="size-3.5" />
+              <span className="hidden sm:inline">2. Hours</span>
+              <span className="sm:hidden">2</span>
+            </button>
+
+            <button
+              type="button"
+              disabled={step < 3 && name.trim().length < 2}
+              onClick={() => {
+                if (name.trim().length >= 2) setStep(3);
+              }}
+              className={`flex items-center justify-center gap-1.5 rounded-lg py-2 transition-colors ${
+                step === 3
+                  ? "bg-accent-dim text-accent font-semibold"
+                  : staffList.length > 0
+                    ? "text-fg hover:bg-elevated"
+                    : "text-muted disabled:opacity-40"
+              }`}
+            >
+              <Users className="size-3.5" />
+              <span className="hidden sm:inline">3. Staff</span>
+              <span className="sm:hidden">3</span>
+            </button>
+
+            <button
+              type="button"
+              disabled={staffList.length === 0}
+              onClick={() => {
+                if (staffList.length > 0) setStep(4);
+              }}
+              className={`flex items-center justify-center gap-1.5 rounded-lg py-2 transition-colors ${
+                step === 4
+                  ? "bg-accent-dim text-accent font-semibold"
+                  : servicesList.length > 0
+                    ? "text-fg hover:bg-elevated"
+                    : "text-muted disabled:opacity-40"
+              }`}
+            >
+              <Stethoscope className="size-3.5" />
+              <span className="hidden sm:inline">4. Services</span>
+              <span className="sm:hidden">4</span>
+            </button>
+          </div>
+        </div>
+
+        {validationError && (
+          <div className="mb-6 rounded-md border border-warn/40 bg-warn/10 p-3 text-xs text-warn leading-relaxed flex items-center justify-between">
+            <span>{validationError}</span>
+            <button
+              type="button"
+              onClick={() => setValidationError(null)}
+              className="text-warn hover:opacity-75 ml-2"
+            >
+              <X className="size-3.5" />
+            </button>
+          </div>
+        )}
+
+        {/* Step 1: Clinic Profile */}
+        {step === 1 && (
+          <form
+            onSubmit={handleNextFromStep1}
+            className="rounded-2xl border border-border bg-surface p-6 sm:p-8 space-y-6 shadow-sm"
+          >
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-accent">Step 1 of 4</p>
+              <h1 className="mt-1 text-2xl font-bold tracking-tight text-fg">Set up your clinic profile</h1>
+              <p className="mt-2 text-sm text-muted">
+                Enter your practice name and timezone. Your booking link and automated WhatsApp messages will display this name.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <label className="block text-sm font-medium text-fg">
+                Clinic / Practice name *
+                <input
+                  autoFocus
+                  required
+                  minLength={2}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="e.g. Apex Dental & Healthcare"
+                  className="mt-1.5 w-full rounded-md border border-border bg-elevated px-3 py-2.5 text-sm text-fg placeholder:text-muted/60 focus:border-accent focus:outline-none"
+                />
+              </label>
+
+              <label className="block text-sm font-medium text-fg">
+                Clinic Timezone
+                <select
+                  value={timezone}
+                  onChange={(e) => setTimezone(e.target.value)}
+                  className="mt-1.5 w-full rounded-md border border-border bg-elevated px-3 py-2.5 text-sm text-fg focus:border-accent focus:outline-none"
+                >
+                  {TIMEZONES.map((tz) => (
+                    <option key={tz.value} value={tz.value}>
+                      {tz.label}
+                    </option>
+                  ))}
+                </select>
+                <span className="mt-1 block text-xs text-muted">
+                  Appointments and reminder sweeps operate according to this time.
+                </span>
+              </label>
+            </div>
+
+            <div className="flex justify-end pt-4 border-t border-border">
+              <button
+                type="submit"
+                disabled={name.trim().length < 2}
+                className="flex items-center gap-2 rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-accent-fg transition-opacity hover:opacity-90 disabled:opacity-50"
+              >
+                Next: Working Hours <ChevronRight className="size-4" />
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* Step 2: Working Hours & Schedule */}
+        {step === 2 && (
+          <div className="rounded-2xl border border-border bg-surface p-6 sm:p-8 space-y-6 shadow-sm">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-accent">Step 2 of 4</p>
+              <h1 className="mt-1 text-2xl font-bold tracking-tight text-fg">Configure working hours</h1>
+              <p className="mt-2 text-sm text-muted">
+                Specify when patients can book appointments. You can adjust individual days anytime later in settings.
+              </p>
+            </div>
+
+            {/* Quick Presets */}
+            <div>
+              <p className="text-xs font-medium text-muted mb-2">Quick schedule presets:</p>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => applySchedulePreset("09:00", "17:00", true)}
+                  className="rounded-md border border-border bg-elevated px-2.5 py-1 text-xs font-medium text-fg hover:border-accent transition-colors"
+                >
+                  9:00 AM – 5:00 PM (Mon–Sat)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => applySchedulePreset("10:00", "19:00", true)}
+                  className="rounded-md border border-border bg-elevated px-2.5 py-1 text-xs font-medium text-fg hover:border-accent transition-colors"
+                >
+                  10:00 AM – 7:00 PM (Mon–Sat)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => applySchedulePreset("17:00", "22:00", true)}
+                  className="rounded-md border border-border bg-elevated px-2.5 py-1 text-xs font-medium text-fg hover:border-accent transition-colors"
+                >
+                  5:00 PM – 10:00 PM (Evening)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => applySchedulePreset("09:00", "18:00", false)}
+                  className="rounded-md border border-border bg-elevated px-2.5 py-1 text-xs font-medium text-fg hover:border-accent transition-colors"
+                >
+                  All 7 Days Open
+                </button>
+              </div>
+            </div>
+
+            {/* Days Table */}
+            <div className="space-y-2 rounded-xl border border-border bg-elevated/40 p-4">
+              {hours.map((h) => (
+                <div
+                  key={h.day}
+                  className={`flex flex-wrap items-center justify-between gap-3 rounded-lg p-2 transition-colors ${
+                    h.closed ? "opacity-60 bg-surface/40" : "bg-surface"
+                  }`}
+                >
+                  <label className="flex items-center gap-3 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={!h.closed}
+                      onChange={(e) =>
+                        setHours((prev) =>
+                          prev.map((x) =>
+                            x.day === h.day ? { ...x, closed: !e.target.checked } : x,
+                          ),
+                        )
+                      }
+                      className="size-4 rounded accent-accent cursor-pointer"
+                    />
+                    <span className="text-sm font-semibold text-fg w-20">
+                      {DAY_LABELS[h.day]}
+                    </span>
+                    <span className="text-xs text-muted">
+                      {h.closed ? "Closed" : "Open"}
+                    </span>
+                  </label>
+
+                  {!h.closed ? (
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="time"
+                        value={h.open}
+                        onChange={(e) =>
+                          setHours((prev) =>
+                            prev.map((x) =>
+                              x.day === h.day ? { ...x, open: e.target.value } : x,
+                            ),
+                          )
+                        }
+                        className="rounded-md border border-border bg-elevated px-2.5 py-1 text-xs text-fg"
+                      />
+                      <span className="text-xs text-muted">to</span>
+                      <input
+                        type="time"
+                        value={h.close}
+                        onChange={(e) =>
+                          setHours((prev) =>
+                            prev.map((x) =>
+                              x.day === h.day ? { ...x, close: e.target.value } : x,
+                            ),
+                          )
+                        }
+                        className="rounded-md border border-border bg-elevated px-2.5 py-1 text-xs text-fg"
+                      />
+                    </div>
+                  ) : (
+                    <span className="text-xs text-muted italic">No appointments on this day</span>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Buffer time */}
+            <div className="rounded-xl border border-border bg-surface p-4 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-sm font-medium text-fg">Appointment Buffer Time</p>
+                <p className="text-xs text-muted">Break / sanitization gap between patient slots</p>
+              </div>
+              <div className="flex items-center gap-2">
+                {[5, 10, 15, 20, 30].map((min) => (
+                  <button
+                    key={min}
+                    type="button"
+                    onClick={() => setBufferMinutes(min)}
+                    className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
+                      bufferMinutes === min
+                        ? "bg-accent text-accent-fg"
+                        : "border border-border bg-elevated text-fg hover:border-accent"
+                    }`}
+                  >
+                    {min}m
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-4 border-t border-border">
+              <button
+                type="button"
+                onClick={() => setStep(1)}
+                className="flex items-center gap-1.5 rounded-md border border-border px-4 py-2 text-sm font-medium text-muted hover:bg-elevated hover:text-fg"
+              >
+                <ChevronLeft className="size-4" /> Back
+              </button>
+              <button
+                type="button"
+                onClick={handleNextFromStep2}
+                className="flex items-center gap-2 rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-accent-fg transition-opacity hover:opacity-90"
+              >
+                Next: Practitioners <ChevronRight className="size-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Practitioners / Staff */}
+        {step === 3 && (
+          <div className="rounded-2xl border border-border bg-surface p-6 sm:p-8 space-y-6 shadow-sm">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-accent">Step 3 of 4</p>
+              <h1 className="mt-1 text-2xl font-bold tracking-tight text-fg">Add clinic practitioners</h1>
+              <p className="mt-2 text-sm text-muted">
+                Add doctors, specialists, or consultants who take appointments at your clinic. Add at least one practitioner.
+              </p>
+            </div>
+
+            {/* Input form */}
+            <div className="flex gap-2">
+              <input
+                autoFocus
+                placeholder="e.g. Dr. Ayesha Ahmed or your name"
+                value={staffDraft}
+                onChange={(e) => setStaffDraft(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleAddStaff();
+                  }
+                }}
+                className="flex-1 rounded-md border border-border bg-elevated px-3 py-2.5 text-sm text-fg placeholder:text-muted/60 focus:border-accent focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={handleAddStaff}
+                disabled={!staffDraft.trim()}
+                className="inline-flex items-center gap-1.5 rounded-md bg-accent px-4 py-2.5 text-sm font-semibold text-accent-fg transition-opacity hover:opacity-90 disabled:opacity-50"
+              >
+                <Plus className="size-4" /> Add
+              </button>
+            </div>
+
+            {/* Added practitioners list */}
+            <div className="space-y-2">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                Added Practitioners ({staffList.length})
+              </p>
+
+              {staffList.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted">
+                  No practitioners added yet. Type a name above and click "Add".
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                  {staffList.map((doc, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center justify-between gap-2 rounded-xl border border-border bg-elevated/70 px-3.5 py-2.5"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="grid size-7 shrink-0 place-items-center rounded-full bg-accent/20 text-xs font-bold text-accent">
+                          {doc.charAt(0).toUpperCase()}
+                        </div>
+                        <p className="truncate text-sm font-medium text-fg">{doc}</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveStaff(idx)}
+                        className="rounded p-1 text-muted transition-colors hover:bg-surface hover:text-danger"
+                        title="Remove practitioner"
+                      >
+                        <Trash2 className="size-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between pt-4 border-t border-border">
+              <button
+                type="button"
+                onClick={() => setStep(2)}
+                className="flex items-center gap-1.5 rounded-md border border-border px-4 py-2 text-sm font-medium text-muted hover:bg-elevated hover:text-fg"
+              >
+                <ChevronLeft className="size-4" /> Back
+              </button>
+              <button
+                type="button"
+                disabled={staffList.length === 0}
+                onClick={handleNextFromStep3}
+                className="flex items-center gap-2 rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-accent-fg transition-opacity hover:opacity-90 disabled:opacity-50"
+              >
+                Next: Services & Pricing <ChevronRight className="size-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Services & Pricing */}
+        {step === 4 && (
+          <div className="rounded-2xl border border-border bg-surface p-6 sm:p-8 space-y-6 shadow-sm">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-accent">Step 4 of 4</p>
+              <h1 className="mt-1 text-2xl font-bold tracking-tight text-fg">Define your services & pricing</h1>
+              <p className="mt-2 text-sm text-muted">
+                Add the treatments, consultations, or procedures patients can book. Add at least one service.
+              </p>
+            </div>
+
+            {/* Quick Suggestions */}
+            <div>
+              <p className="text-xs font-medium text-muted mb-2">Click to quick-add common templates:</p>
+              <div className="flex flex-wrap gap-2">
+                {SUGGESTED_SERVICES.map((s, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => handleAddService(s)}
+                    className="inline-flex items-center gap-1.5 rounded-md border border-border bg-elevated px-2.5 py-1 text-xs font-medium text-fg hover:border-accent hover:text-accent transition-colors"
+                  >
+                    <Plus className="size-3" /> {s.name} ({s.durationMin}m · {money(s.pricePkr)})
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Custom service input form */}
+            <div className="rounded-xl border border-border bg-elevated/40 p-4 space-y-3">
+              <p className="text-xs font-semibold uppercase tracking-wider text-fg">Add custom service</p>
+              <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                <input
+                  placeholder="Service Name (e.g. Scaling & Polishing)"
+                  value={serviceDraft.name}
+                  onChange={(e) => setServiceDraft({ ...serviceDraft, name: e.target.value })}
+                  className="rounded-md border border-border bg-surface px-3 py-2 text-sm text-fg placeholder:text-muted/60 focus:border-accent focus:outline-none"
+                />
+                <input
+                  placeholder="Category (e.g. Consultation, Dental)"
+                  value={serviceDraft.category}
+                  onChange={(e) => setServiceDraft({ ...serviceDraft, category: e.target.value })}
+                  className="rounded-md border border-border bg-surface px-3 py-2 text-sm text-fg placeholder:text-muted/60 focus:border-accent focus:outline-none"
+                />
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs text-muted">Duration:</span>
+                  <select
+                    value={serviceDraft.durationMin}
+                    onChange={(e) =>
+                      setServiceDraft({ ...serviceDraft, durationMin: Number(e.target.value) })
+                    }
+                    className="rounded-md border border-border bg-surface px-2.5 py-1.5 text-xs text-fg"
+                  >
+                    <option value={15}>15 mins</option>
+                    <option value={30}>30 mins</option>
+                    <option value={45}>45 mins</option>
+                    <option value={60}>60 mins</option>
+                    <option value={90}>90 mins</option>
+                    <option value={120}>120 mins</option>
+                  </select>
+                </div>
+
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs text-muted">Fee (PKR):</span>
+                  <input
+                    type="number"
+                    min={0}
+                    step={100}
+                    value={serviceDraft.pricePkr}
+                    onChange={(e) =>
+                      setServiceDraft({ ...serviceDraft, pricePkr: Number(e.target.value) })
+                    }
+                    className="w-24 rounded-md border border-border bg-surface px-2.5 py-1.5 text-xs text-fg"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => handleAddService()}
+                  disabled={!serviceDraft.name.trim()}
+                  className="ml-auto inline-flex items-center gap-1.5 rounded-md bg-accent px-4 py-1.5 text-xs font-semibold text-accent-fg hover:opacity-90 disabled:opacity-50"
+                >
+                  <Plus className="size-3.5" /> Add Service
+                </button>
+              </div>
+            </div>
+
+            {/* Added services list */}
+            <div className="space-y-2">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                Configured Services ({servicesList.length})
+              </p>
+
+              {servicesList.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted">
+                  No services added yet. Use the quick-add buttons or fill out the form above.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                  {servicesList.map((svc, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-start justify-between gap-2 rounded-xl border border-border bg-surface p-3.5 shadow-xs"
+                    >
+                      <div>
+                        <p className="text-sm font-semibold text-fg">{svc.name}</p>
+                        <div className="mt-1 flex items-center gap-2">
+                          <span className="rounded bg-elevated px-2 py-0.5 text-[11px] text-muted">
+                            {svc.durationMin} min
+                          </span>
+                          <span className="rounded bg-elevated/70 px-2 py-0.5 text-[11px] text-muted">
+                            {svc.category}
+                          </span>
+                        </div>
+                        <p className="mt-2 text-xs font-bold text-accent">{money(svc.pricePkr)}</p>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveService(idx)}
+                        className="rounded p-1 text-muted transition-colors hover:bg-elevated hover:text-danger"
+                        title="Delete service"
+                      >
+                        <Trash2 className="size-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between pt-4 border-t border-border">
+              <button
+                type="button"
+                onClick={() => setStep(3)}
+                className="flex items-center gap-1.5 rounded-md border border-border px-4 py-2 text-sm font-medium text-muted hover:bg-elevated hover:text-fg"
+              >
+                <ChevronLeft className="size-4" /> Back
+              </button>
+              <button
+                type="button"
+                disabled={busy || servicesList.length === 0}
+                onClick={handleFinish}
+                className="flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 text-sm font-semibold text-accent-fg transition-opacity hover:opacity-90 disabled:opacity-50"
+              >
+                {busy ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" /> Saving Clinic…
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="size-4" /> Finish Setup & Launch Desk
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

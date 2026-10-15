@@ -1,6 +1,6 @@
-import { i as TSS_SERVER_FUNCTION, r as createServerFn } from "../index.js";
-import { t as authMiddleware } from "./middleware-CcmIlKRu.js";
-//#region node_modules/@tanstack/start-server-core/dist/esm/createServerRpc.js
+import { i as TSS_SERVER_FUNCTION, r as createServerFn } from "./ssr.mjs";
+import { t as authMiddleware } from "./middleware-CcmIlKRu.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/api-Df6Fi7DG.js
 var createServerRpc = (serverFnMeta, splitImportFn) => {
 	const url = "/_serverFn/" + serverFnMeta.id;
 	return Object.assign(splitImportFn, {
@@ -9,213 +9,51 @@ var createServerRpc = (serverFnMeta, splitImportFn) => {
 		[TSS_SERVER_FUNCTION]: true
 	});
 };
-//#endregion
-//#region src/lib/booking/catalog.ts
-/** Mon–Sat 5:00 PM – 10:00 PM PKT, Sunday closed. */
-var CLINIC_HOURS = [
+/** Standard initial schedule template: Monday–Saturday 9:00 AM – 5:00 PM, Sunday closed. */
+var DEFAULT_HOURS = [
 	{
 		day: 0,
 		closed: true,
-		open: "17:00",
-		close: "22:00"
+		open: "09:00",
+		close: "17:00"
 	},
 	{
 		day: 1,
 		closed: false,
-		open: "17:00",
-		close: "22:00"
+		open: "09:00",
+		close: "17:00"
 	},
 	{
 		day: 2,
 		closed: false,
-		open: "17:00",
-		close: "22:00"
+		open: "09:00",
+		close: "17:00"
 	},
 	{
 		day: 3,
 		closed: false,
-		open: "17:00",
-		close: "22:00"
+		open: "09:00",
+		close: "17:00"
 	},
 	{
 		day: 4,
 		closed: false,
-		open: "17:00",
-		close: "22:00"
+		open: "09:00",
+		close: "17:00"
 	},
 	{
 		day: 5,
 		closed: false,
-		open: "17:00",
-		close: "22:00"
+		open: "09:00",
+		close: "17:00"
 	},
 	{
 		day: 6,
 		closed: false,
-		open: "17:00",
-		close: "22:00"
+		open: "09:00",
+		close: "17:00"
 	}
 ];
-var CLINIC_STAFF = [
-	"Dr. Muhammad Hashir (BDS, RDS, CHPE)",
-	"Dr. Rameesha Hashir (BDS, RDS, Certified Aesthetician)",
-	"Dr. Umer Farooq (BDS, RDS, FCPS)"
-];
-/** Typical PKR list prices for a private clinic in Pakistan — owner can edit. */
-var CLINIC_SERVICES = [
-	{
-		category: "Dental",
-		name: "Root canal treatment",
-		durationMin: 90,
-		pricePkr: 15e3
-	},
-	{
-		category: "Dental",
-		name: "Scaling & polishing",
-		durationMin: 45,
-		pricePkr: 5e3
-	},
-	{
-		category: "Dental",
-		name: "Teeth whitening / bleaching",
-		durationMin: 60,
-		pricePkr: 18e3
-	},
-	{
-		category: "Dental",
-		name: "Cosmetic tooth-colored filling",
-		durationMin: 40,
-		pricePkr: 6e3
-	},
-	{
-		category: "Dental",
-		name: "Smile design consult",
-		durationMin: 60,
-		pricePkr: 8e3
-	},
-	{
-		category: "Dental",
-		name: "Gum treatment",
-		durationMin: 45,
-		pricePkr: 8e3
-	},
-	{
-		category: "Dental",
-		name: "Dental jewellery",
-		durationMin: 30,
-		pricePkr: 4e3
-	},
-	{
-		category: "Dental",
-		name: "Dental implants & bone management",
-		durationMin: 120,
-		pricePkr: 8e4
-	},
-	{
-		category: "Dental",
-		name: "Removable & fixed dentures",
-		durationMin: 90,
-		pricePkr: 25e3
-	},
-	{
-		category: "Dental",
-		name: "Cast partial dentures",
-		durationMin: 90,
-		pricePkr: 3e4
-	},
-	{
-		category: "Dental",
-		name: "Zirconium crown",
-		durationMin: 60,
-		pricePkr: 18e3
-	},
-	{
-		category: "Dental",
-		name: "PFM crown",
-		durationMin: 60,
-		pricePkr: 12e3
-	},
-	{
-		category: "Dental",
-		name: "Simple extraction",
-		durationMin: 30,
-		pricePkr: 4e3
-	},
-	{
-		category: "Dental",
-		name: "Complex extraction & surgery",
-		durationMin: 60,
-		pricePkr: 12e3
-	},
-	{
-		category: "Dental",
-		name: "Wisdom tooth surgery",
-		durationMin: 60,
-		pricePkr: 15e3
-	},
-	{
-		category: "Dental",
-		name: "Pits and fissure sealants",
-		durationMin: 30,
-		pricePkr: 3500
-	},
-	{
-		category: "Dental",
-		name: "Orthodontic treatment (visit)",
-		durationMin: 45,
-		pricePkr: 8e3
-	},
-	{
-		category: "Dental",
-		name: "Clear aligners (visit)",
-		durationMin: 45,
-		pricePkr: 15e3
-	},
-	{
-		category: "Aesthetic",
-		name: "Hydrafacial",
-		durationMin: 60,
-		pricePkr: 12e3
-	},
-	{
-		category: "Aesthetic",
-		name: "Laser",
-		durationMin: 45,
-		pricePkr: 1e4
-	},
-	{
-		category: "Aesthetic",
-		name: "PRP (face / hair)",
-		durationMin: 60,
-		pricePkr: 15e3
-	},
-	{
-		category: "Aesthetic",
-		name: "Microneedling",
-		durationMin: 45,
-		pricePkr: 1e4
-	},
-	{
-		category: "Aesthetic",
-		name: "Mesotherapy",
-		durationMin: 45,
-		pricePkr: 8e3
-	},
-	{
-		category: "Aesthetic",
-		name: "Mole removal",
-		durationMin: 30,
-		pricePkr: 8e3
-	},
-	{
-		category: "Aesthetic",
-		name: "Chemical peel",
-		durationMin: 40,
-		pricePkr: 7e3
-	}
-];
-//#endregion
-//#region src/lib/booking/types.ts
 var DEFAULT_TEMPLATE_EN = `Hi {{name}}
 This is {{shop}} reminding you of your {{service}} on {{date}} at {{time}}.
 
@@ -224,19 +62,17 @@ var DEFAULT_TEMPLATE_UR = `السلام علیکم {{name}}
 {{shop}} سے یاد دہانی: آپ کی {{service}} {{date}} کو {{time}} بجے ہے۔
 
 تصدیق کے لیے YES لکھیں، منسوخ کے لیے NO۔`;
-//#endregion
-//#region src/lib/booking/api.ts?tss-serverfn-split
 async function db() {
-	const { getSql } = await import("./db-0-UzWVIo.js").then((n) => n.t);
+	const { getSql } = await import("./db-0-UzWVIo.mjs").then((n) => n.t).then((n) => n.t);
 	return getSql();
 }
 function parseHours(hours) {
 	if (typeof hours === "string") try {
 		return JSON.parse(hours);
 	} catch {
-		return CLINIC_HOURS;
+		return DEFAULT_HOURS;
 	}
-	return hours?.length ? hours : CLINIC_HOURS;
+	return hours?.length ? hours : DEFAULT_HOURS;
 }
 function mapBusiness(r) {
 	return {
@@ -338,53 +174,20 @@ async function queueReminders(sql, biz, bookingId, startsAt, customerName, servi
     `;
 	}
 }
-async function seedCatalog(sql, businessId) {
-	await sql`delete from reminder_jobs where business_id = ${businessId}`;
-	await sql`delete from wa_messages where business_id = ${businessId}`;
-	await sql`delete from bookings where business_id = ${businessId}`;
-	await sql`delete from customers where business_id = ${businessId}`;
-	await sql`delete from services where business_id = ${businessId}`;
-	await sql`delete from staff where business_id = ${businessId}`;
-	for (const n of CLINIC_STAFF) await sql`insert into staff (business_id, name) values (${businessId}, ${n})`;
-	for (const s of CLINIC_SERVICES) await sql`
-      insert into services (business_id, name, duration_min, price_pkr, category)
-      values (${businessId}, ${s.name}, ${s.durationMin}, ${s.pricePkr}, ${s.category})
-    `;
-}
 async function seedIfEmpty(sql, userId) {
 	const existing = await sql`select * from businesses where user_id = ${userId} limit 1`;
-	if (existing[0]) {
-		const row = existing[0];
-		const svc = await sql`select name from services where business_id = ${row.id} limit 1`;
-		if (row.name === "Salon Aura" || svc[0]?.name === "Haircut & Style") {
-			await sql`
-        update businesses set
-          name = ${"Your clinic"},
-          hours = ${JSON.stringify(CLINIC_HOURS)}::jsonb,
-          onboarded = false,
-          template_en = ${DEFAULT_TEMPLATE_EN},
-          template_ur = ${DEFAULT_TEMPLATE_UR}
-        where id = ${row.id}
-      `;
-			await seedCatalog(sql, row.id);
-			return (await sql`select * from businesses where id = ${row.id}`)[0];
-		}
-		return row;
-	}
-	const name = "Your clinic";
-	const biz = (await sql`
+	if (existing[0]) return existing[0];
+	return (await sql`
     insert into businesses (
       user_id, name, slug, hours, template_en, template_ur, lang, onboarded
     ) values (
-      ${userId}, ${name}, ${slugify(name, userId)}, ${JSON.stringify(CLINIC_HOURS)}::jsonb, ${DEFAULT_TEMPLATE_EN}, ${DEFAULT_TEMPLATE_UR}, 'en', false
+      ${userId}, ${"My Clinic"}, ${slugify("clinic", userId)}, ${JSON.stringify(DEFAULT_HOURS)}::jsonb, ${DEFAULT_TEMPLATE_EN}, ${DEFAULT_TEMPLATE_UR}, 'en', false
     )
     returning *
   `)[0];
-	await seedCatalog(sql, biz.id);
-	return biz;
 }
 async function persistClinicWhatsapp(sql, row) {
-	const { getWhatsappConfig } = await import("./config-COO7Pf6s.js");
+	const { getWhatsappConfig } = await import("./config-COO7Pf6s.mjs");
 	const wa = getWhatsappConfig();
 	if (row.wa_token === wa.token && row.wa_phone_id === wa.phoneId) return row;
 	return (await sql`
@@ -543,14 +346,41 @@ var completeOnboarding_createServerFn_handler = createServerRpc({
 	filename: "src/lib/booking/api.ts"
 }, (opts) => completeOnboarding.__executeServer(opts));
 var completeOnboarding = createServerFn({ method: "POST" }).middleware([authMiddleware]).validator((d) => d).handler(completeOnboarding_createServerFn_handler, async ({ context, data }) => {
-	const name = data.name.trim();
-	if (name.length < 2) throw new Error("Enter your clinic name");
+	const name = data.name?.trim() || "";
+	if (name.length < 2) throw new Error("Please enter your clinic name (at least 2 characters).");
+	const staffNames = (data.staff || []).map((s) => typeof s === "string" ? s.trim() : "").filter((s) => s.length > 0);
+	if (staffNames.length === 0) throw new Error("Please add at least one practitioner or staff member.");
+	const services = (data.services || []).map((s) => ({
+		name: s.name?.trim() || "",
+		durationMin: Number(s.durationMin) || 30,
+		pricePkr: Number(s.pricePkr) || 0,
+		category: s.category?.trim() || "General"
+	})).filter((s) => s.name.length > 0);
+	if (services.length === 0) throw new Error("Please add at least one service.");
+	const hours = data.hours && Array.isArray(data.hours) && data.hours.length > 0 ? data.hours : DEFAULT_HOURS;
+	const tz = data.timezone?.trim() || "Asia/Karachi";
+	const bufferMinutes = Number(data.bufferMinutes) || 15;
 	const sql = await db();
-	if (!(await sql`select * from businesses where user_id = ${context.userId} limit 1`)[0]) throw new Error("No business");
+	const rows = await sql`select * from businesses where user_id = ${context.userId} limit 1`;
+	if (!rows[0]) throw new Error("No business found");
+	const bizId = rows[0].id;
 	await sql`
-      update businesses set name = ${name}, slug = ${slugify(name, context.userId)}, onboarded = true
-      where user_id = ${context.userId}
+      update businesses set
+        name = ${name},
+        slug = ${slugify(name, context.userId)},
+        timezone = ${tz},
+        buffer_minutes = ${bufferMinutes},
+        hours = ${JSON.stringify(hours)}::jsonb,
+        onboarded = true
+      where id = ${bizId}
     `;
+	await sql`delete from staff where business_id = ${bizId}`;
+	for (const sName of staffNames) await sql`insert into staff (business_id, name) values (${bizId}, ${sName})`;
+	await sql`delete from services where business_id = ${bizId}`;
+	for (const svc of services) await sql`
+        insert into services (business_id, name, duration_min, price_pkr, category)
+        values (${bizId}, ${svc.name}, ${svc.durationMin}, ${svc.pricePkr}, ${svc.category})
+      `;
 	return loadDashboard(context.userId);
 });
 var saveWhatsapp_createServerFn_handler = createServerRpc({
@@ -716,7 +546,7 @@ var createDashboardBooking = createServerFn({ method: "POST" }).middleware([auth
 		...parts,
 		shop: biz.name
 	});
-	const send = await (await import("./send-Dcymvhx0.js")).sendWhatsappText(phone, confirmBody, {
+	const send = await (await import("./send-Dcymvhx0.mjs")).sendWhatsappText(phone, confirmBody, {
 		token: rows[0].wa_token,
 		phoneId: rows[0].wa_phone_id,
 		templateParams: [
@@ -765,7 +595,7 @@ var runReminderSweep = createServerFn({ method: "POST" }).middleware([authMiddle
 	let sent = 0;
 	let simulated = 0;
 	for (const job of due) {
-		const result = await (await import("./send-Dcymvhx0.js")).sendWhatsappText(job.phone, job.body, {
+		const result = await (await import("./send-Dcymvhx0.mjs")).sendWhatsappText(job.phone, job.body, {
 			token: rows[0].wa_token,
 			phoneId: rows[0].wa_phone_id
 		});
@@ -821,7 +651,7 @@ var sendBookingReminder = createServerFn({ method: "POST" }).middleware([authMid
 		...fmtParts(booking[0].starts_at, biz.timezone),
 		shop: biz.name
 	});
-	const result = await (await import("./send-Dcymvhx0.js")).sendWhatsappText(booking[0].phone, body, {
+	const result = await (await import("./send-Dcymvhx0.mjs")).sendWhatsappText(booking[0].phone, body, {
 		token: shop.wa_token,
 		phoneId: shop.wa_phone_id
 	});
@@ -1011,7 +841,7 @@ var createPublicBooking = createServerFn({ method: "POST" }).validator((d) => d)
 		...parts,
 		shop: biz.name
 	});
-	const send = await (await import("./send-Dcymvhx0.js")).sendWhatsappText(phone, confirmBody, {
+	const send = await (await import("./send-Dcymvhx0.mjs")).sendWhatsappText(phone, confirmBody, {
 		token: rows[0].wa_token,
 		phoneId: rows[0].wa_phone_id,
 		templateParams: [

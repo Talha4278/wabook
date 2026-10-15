@@ -1,10 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { authMiddleware } from "@/lib/auth/middleware";
-import {
-  CLINIC_HOURS,
-  CLINIC_SERVICES,
-  CLINIC_STAFF,
-} from "./catalog";
+import { DEFAULT_HOURS } from "./catalog";
 import {
   DEFAULT_TEMPLATE_EN,
   DEFAULT_TEMPLATE_UR,
@@ -51,10 +47,10 @@ function parseHours(hours: DayHours[] | string): DayHours[] {
     try {
       return JSON.parse(hours) as DayHours[];
     } catch {
-      return CLINIC_HOURS;
+      return DEFAULT_HOURS;
     }
   }
-  return hours?.length ? hours : CLINIC_HOURS;
+  return hours?.length ? hours : DEFAULT_HOURS;
 }
 
 function mapBusiness(r: BizRow): Business {
@@ -178,53 +174,15 @@ async function queueReminders(
   }
 }
 
-async function seedCatalog(
-  sql: Awaited<ReturnType<typeof db>>,
-  businessId: number,
-) {
-  await sql`delete from reminder_jobs where business_id = ${businessId}`;
-  await sql`delete from wa_messages where business_id = ${businessId}`;
-  await sql`delete from bookings where business_id = ${businessId}`;
-  await sql`delete from customers where business_id = ${businessId}`;
-  await sql`delete from services where business_id = ${businessId}`;
-  await sql`delete from staff where business_id = ${businessId}`;
-  for (const n of CLINIC_STAFF) {
-    await sql`insert into staff (business_id, name) values (${businessId}, ${n})`;
-  }
-  for (const s of CLINIC_SERVICES) {
-    await sql`
-      insert into services (business_id, name, duration_min, price_pkr, category)
-      values (${businessId}, ${s.name}, ${s.durationMin}, ${s.pricePkr}, ${s.category})
-    `;
-  }
-}
-
 async function seedIfEmpty(sql: Awaited<ReturnType<typeof db>>, userId: string) {
   const existing = await sql<BizRow>`select * from businesses where user_id = ${userId} limit 1`;
   if (existing[0]) {
-    const row = existing[0];
-    const svc = await sql<{ name: string }>`select name from services where business_id = ${row.id} limit 1`;
-    if (row.name === "Salon Aura" || svc[0]?.name === "Haircut & Style") {
-      const hours = JSON.stringify(CLINIC_HOURS);
-      await sql`
-        update businesses set
-          name = ${"Your clinic"},
-          hours = ${hours}::jsonb,
-          onboarded = false,
-          template_en = ${DEFAULT_TEMPLATE_EN},
-          template_ur = ${DEFAULT_TEMPLATE_UR}
-        where id = ${row.id}
-      `;
-      await seedCatalog(sql, row.id);
-      const refreshed = await sql<BizRow>`select * from businesses where id = ${row.id}`;
-      return refreshed[0];
-    }
-    return row;
+    return existing[0];
   }
 
-  const name = "Your clinic";
-  const slug = slugify(name, userId);
-  const hours = JSON.stringify(CLINIC_HOURS);
+  const name = "My Clinic";
+  const slug = slugify("clinic", userId);
+  const hours = JSON.stringify(DEFAULT_HOURS);
   const inserted = await sql<BizRow>`
     insert into businesses (
       user_id, name, slug, hours, template_en, template_ur, lang, onboarded
@@ -233,9 +191,7 @@ async function seedIfEmpty(sql: Awaited<ReturnType<typeof db>>, userId: string) 
     )
     returning *
   `;
-  const biz = inserted[0];
-  await seedCatalog(sql, biz.id);
-  return biz;
+  return inserted[0];
 }
 
 async function persistClinicWhatsapp(
@@ -458,20 +414,87 @@ export const getDashboard = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async ({ context }) => loadDashboard(context.userId));
 
+export type CompleteOnboardingInput = {
+  name: string;
+  timezone?: string;
+  bufferMinutes?: number;
+  hours?: DayHours[];
+  staff: string[];
+  services: {
+    name: string;
+    durationMin: number;
+    pricePkr: number;
+    category?: string;
+  }[];
+};
+
 export const completeOnboarding = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
-  .validator((d: { name: string }) => d)
+  .validator((d: CompleteOnboardingInput) => d)
   .handler(async ({ context, data }) => {
-    const name = data.name.trim();
-    if (name.length < 2) throw new Error("Enter your clinic name");
+    const name = data.name?.trim() || "";
+    if (name.length < 2) throw new Error("Please enter your clinic name (at least 2 characters).");
+
+    const staffNames = (data.staff || [])
+      .map((s) => (typeof s === "string" ? s.trim() : ""))
+      .filter((s) => s.length > 0);
+    if (staffNames.length === 0) {
+      throw new Error("Please add at least one practitioner or staff member.");
+    }
+
+    const services = (data.services || [])
+      .map((s) => ({
+        name: s.name?.trim() || "",
+        durationMin: Number(s.durationMin) || 30,
+        pricePkr: Number(s.pricePkr) || 0,
+        category: s.category?.trim() || "General",
+      }))
+      .filter((s) => s.name.length > 0);
+
+    if (services.length === 0) {
+      throw new Error("Please add at least one service.");
+    }
+
+    const hours =
+      data.hours && Array.isArray(data.hours) && data.hours.length > 0
+        ? data.hours
+        : DEFAULT_HOURS;
+    const tz = data.timezone?.trim() || "Asia/Karachi";
+    const bufferMinutes = Number(data.bufferMinutes) || 15;
+
     const sql = await db();
     const rows = await sql<BizRow>`select * from businesses where user_id = ${context.userId} limit 1`;
-    if (!rows[0]) throw new Error("No business");
+    if (!rows[0]) throw new Error("No business found");
+    const bizId = rows[0].id;
     const slug = slugify(name, context.userId);
+
+    // Save business profile, hours, and mark as onboarded
     await sql`
-      update businesses set name = ${name}, slug = ${slug}, onboarded = true
-      where user_id = ${context.userId}
+      update businesses set
+        name = ${name},
+        slug = ${slug},
+        timezone = ${tz},
+        buffer_minutes = ${bufferMinutes},
+        hours = ${JSON.stringify(hours)}::jsonb,
+        onboarded = true
+      where id = ${bizId}
     `;
+
+    // Replace staff with user's inputted staff
+    await sql`delete from staff where business_id = ${bizId}`;
+    for (const sName of staffNames) {
+      await sql`insert into staff (business_id, name) values (${bizId}, ${sName})`;
+    }
+
+    // Replace services with user's inputted services
+    await sql`delete from services where business_id = ${bizId}`;
+    for (const svc of services) {
+      await sql`
+        insert into services (business_id, name, duration_min, price_pkr, category)
+        values (${bizId}, ${svc.name}, ${svc.durationMin}, ${svc.pricePkr}, ${svc.category})
+      `;
+    }
+
     return loadDashboard(context.userId);
   });
 

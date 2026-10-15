@@ -1,9 +1,9 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { K as require_react, b as require_jsx_runtime, v as Navigate } from "../_libs/@tanstack/react-router+[...].mjs";
-import { S as Bell, _ as Copy, b as Check, c as Send, d as MessageSquare, f as Menu, g as CreditCard, h as Link2, i as UserPlus, l as Plus, m as List, n as Users, o as Trash2, p as LoaderCircle, r as UserX, s as Stethoscope, t as X, u as Pencil, v as ChevronRight, x as CalendarDays, y as ChevronLeft } from "../_libs/lucide-react.mjs";
-import { _ as updateBookingStatus, c as deleteStaff, f as runReminderSweep, h as simulateInbound, i as createDashboardBooking, l as getDashboard, m as sendBookingReminder, o as createStaff, p as saveSettings, r as completeOnboarding, s as deleteService, v as upsertService } from "./router-B4-TRbq-.mjs";
+import { C as Check, E as Bell, S as ChevronLeft, T as Building2, _ as Link2, b as Clock, c as Sparkles, d as Pencil, f as MessageSquare, g as List, h as LoaderCircle, i as UserPlus, l as Send, m as LogOut, n as Users, o as Trash2, p as Menu, r as UserX, s as Stethoscope, t as X, u as Plus, v as CreditCard, w as CalendarDays, x as ChevronRight, y as Copy } from "../_libs/lucide-react.mjs";
+import { _ as updateBookingStatus, c as deleteStaff, f as runReminderSweep, h as simulateInbound, i as createDashboardBooking, l as getDashboard, m as sendBookingReminder, o as createStaff, p as saveSettings, r as completeOnboarding, s as deleteService, v as upsertService } from "./router-CGxfKhfK.mjs";
 import { i as signOut, t as authClient } from "./client-DaPSa0yY.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-Cxg1gT98.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-DSBdZRRw.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 /**
@@ -292,10 +292,10 @@ function Dashboard() {
 	});
 	if (!data.business.onboarded) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClinicSetup, {
 		busy,
-		onSave: async (name) => {
+		onSave: async (payload) => {
 			setBusy(true);
 			try {
-				setData(await completeOnboarding({ data: { name } }));
+				setData(await completeOnboarding({ data: payload }));
 			} catch (e) {
 				setError(e instanceof Error ? e.message : "Could not save clinic");
 			} finally {
@@ -1948,46 +1948,829 @@ function BillingView() {
 		})]
 	});
 }
+var TIMEZONES = [
+	{
+		value: "Asia/Karachi",
+		label: "Pakistan Standard Time (PKT, UTC+5)"
+	},
+	{
+		value: "Asia/Dubai",
+		label: "Gulf Standard Time (GST, UTC+4)"
+	},
+	{
+		value: "Asia/Riyadh",
+		label: "Arabia Standard Time (AST, UTC+3)"
+	},
+	{
+		value: "Europe/London",
+		label: "London / UK (GMT/BST, UTC+0/+1)"
+	},
+	{
+		value: "America/New_York",
+		label: "US Eastern Time (EST/EDT, UTC-5/-4)"
+	},
+	{
+		value: "America/Chicago",
+		label: "US Central Time (CST/CDT, UTC-6/-5)"
+	},
+	{
+		value: "America/Los_Angeles",
+		label: "US Pacific Time (PST/PDT, UTC-8/-7)"
+	},
+	{
+		value: "Asia/Kolkata",
+		label: "India Standard Time (IST, UTC+5:30)"
+	},
+	{
+		value: "Asia/Dhaka",
+		label: "Bangladesh Time (BST, UTC+6)"
+	}
+];
+var INITIAL_HOURS = [
+	{
+		day: 1,
+		closed: false,
+		open: "09:00",
+		close: "17:00"
+	},
+	{
+		day: 2,
+		closed: false,
+		open: "09:00",
+		close: "17:00"
+	},
+	{
+		day: 3,
+		closed: false,
+		open: "09:00",
+		close: "17:00"
+	},
+	{
+		day: 4,
+		closed: false,
+		open: "09:00",
+		close: "17:00"
+	},
+	{
+		day: 5,
+		closed: false,
+		open: "09:00",
+		close: "17:00"
+	},
+	{
+		day: 6,
+		closed: false,
+		open: "09:00",
+		close: "17:00"
+	},
+	{
+		day: 0,
+		closed: true,
+		open: "09:00",
+		close: "17:00"
+	}
+];
+var DAY_LABELS = {
+	1: "Mon",
+	2: "Tue",
+	3: "Wed",
+	4: "Thu",
+	5: "Fri",
+	6: "Sat",
+	0: "Sun"
+};
+var SUGGESTED_SERVICES = [
+	{
+		name: "General Consultation",
+		durationMin: 30,
+		pricePkr: 2e3,
+		category: "Consultation"
+	},
+	{
+		name: "Follow-up Visit",
+		durationMin: 15,
+		pricePkr: 1e3,
+		category: "Consultation"
+	},
+	{
+		name: "Comprehensive Checkup",
+		durationMin: 45,
+		pricePkr: 3500,
+		category: "General"
+	}
+];
 function ClinicSetup({ onSave, busy }) {
+	const [step, setStep] = (0, import_react.useState)(1);
 	const [name, setName] = (0, import_react.useState)("");
+	const [timezone, setTimezone] = (0, import_react.useState)("Asia/Karachi");
+	const [bufferMinutes, setBufferMinutes] = (0, import_react.useState)(15);
+	const [hours, setHours] = (0, import_react.useState)(INITIAL_HOURS);
+	const [staffList, setStaffList] = (0, import_react.useState)([]);
+	const [staffDraft, setStaffDraft] = (0, import_react.useState)("");
+	const [servicesList, setServicesList] = (0, import_react.useState)([]);
+	const [serviceDraft, setServiceDraft] = (0, import_react.useState)({
+		name: "",
+		durationMin: 30,
+		pricePkr: 2e3,
+		category: "General"
+	});
+	const [validationError, setValidationError] = (0, import_react.useState)(null);
+	const applySchedulePreset = (open, close, sunClosed = true) => {
+		setHours((prev) => prev.map((h) => ({
+			...h,
+			open,
+			close,
+			closed: h.day === 0 ? sunClosed : false
+		})));
+	};
+	const handleAddStaff = () => {
+		const trimmed = staffDraft.trim();
+		if (!trimmed) return;
+		if (staffList.some((s) => s.toLowerCase() === trimmed.toLowerCase())) {
+			setValidationError("Practitioner already added.");
+			return;
+		}
+		setStaffList([...staffList, trimmed]);
+		setStaffDraft("");
+		setValidationError(null);
+	};
+	const handleRemoveStaff = (idx) => {
+		setStaffList(staffList.filter((_, i) => i !== idx));
+	};
+	const handleAddService = (item) => {
+		const s = item || serviceDraft;
+		const sName = s.name.trim();
+		if (!sName) {
+			setValidationError("Please enter a service name.");
+			return;
+		}
+		setServicesList([...servicesList, {
+			name: sName,
+			durationMin: Number(s.durationMin) || 15,
+			pricePkr: Number(s.pricePkr) || 0,
+			category: s.category?.trim() || "General"
+		}]);
+		if (!item) setServiceDraft({
+			name: "",
+			durationMin: 30,
+			pricePkr: 2e3,
+			category: serviceDraft.category
+		});
+		setValidationError(null);
+	};
+	const handleRemoveService = (idx) => {
+		setServicesList(servicesList.filter((_, i) => i !== idx));
+	};
+	const handleNextFromStep1 = (e) => {
+		e.preventDefault();
+		if (name.trim().length < 2) {
+			setValidationError("Please enter a clinic name (at least 2 characters).");
+			return;
+		}
+		setValidationError(null);
+		setStep(2);
+	};
+	const handleNextFromStep2 = () => {
+		if (hours.filter((h) => !h.closed).length === 0) {
+			setValidationError("Please keep at least one day open for appointments.");
+			return;
+		}
+		setValidationError(null);
+		setStep(3);
+	};
+	const handleNextFromStep3 = () => {
+		if (staffList.length === 0) {
+			setValidationError("Please add at least one practitioner or doctor.");
+			return;
+		}
+		setValidationError(null);
+		setStep(4);
+	};
+	const handleFinish = async () => {
+		if (servicesList.length === 0) {
+			setValidationError("Please add at least one service before launching.");
+			return;
+		}
+		setValidationError(null);
+		await onSave({
+			name: name.trim(),
+			timezone,
+			bufferMinutes,
+			hours,
+			staff: staffList,
+			services: servicesList
+		});
+	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: "grid min-h-screen place-items-center bg-bg px-4",
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
-			className: "w-full max-w-md space-y-5 rounded-2xl border border-border bg-surface p-6",
-			onSubmit: (e) => {
-				e.preventDefault();
-				onSave(name);
-			},
+		className: "min-h-screen bg-bg px-4 py-8 sm:px-6",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mx-auto max-w-2xl",
 			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					className: "text-xs font-semibold uppercase tracking-wider text-accent",
-					children: "WaBook"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-					className: "text-2xl font-semibold tracking-tight",
-					children: "Name your clinic"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					className: "text-sm text-muted",
-					children: "This is what patients see on the booking link and in WhatsApp reminders. You can change it later."
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-					className: "block text-sm",
-					children: ["Clinic name", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-						autoFocus: true,
-						required: true,
-						minLength: 2,
-						value: name,
-						onChange: (e) => setName(e.target.value),
-						placeholder: "e.g. Hashir Dental & Aesthetic Clinic",
-						className: "mt-1.5 w-full rounded-md border border-border bg-elevated px-3 py-2.5 text-fg"
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mb-6 flex items-center justify-between",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-2.5",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "grid size-9 place-items-center rounded-lg bg-accent text-accent-fg font-semibold",
+							children: "W"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "font-semibold text-fg tracking-tight",
+							children: "WaBook"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-xs text-muted",
+							children: "Clinic Onboarding"
+						})] })]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						type: "button",
+						onClick: () => void signOut(),
+						className: "flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-xs text-muted transition-colors hover:bg-elevated hover:text-fg",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogOut, { className: "size-3.5" }), " Sign out"]
 					})]
 				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-					type: "submit",
-					disabled: busy || name.trim().length < 2,
-					className: "w-full rounded-md bg-accent py-2.5 text-sm font-semibold text-accent-fg disabled:opacity-50",
-					children: busy ? "Saving…" : "Continue"
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "mb-6 rounded-xl border border-border bg-surface p-4",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "grid grid-cols-4 gap-2 text-center text-xs font-medium",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								onClick: () => setStep(1),
+								className: `flex items-center justify-center gap-1.5 rounded-lg py-2 transition-colors ${step === 1 ? "bg-accent-dim text-accent font-semibold" : name.trim().length >= 2 ? "text-fg hover:bg-elevated" : "text-muted"}`,
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Building2, { className: "size-3.5" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "hidden sm:inline",
+										children: "1. Profile"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "sm:hidden",
+										children: "1"
+									})
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								disabled: name.trim().length < 2,
+								onClick: () => setStep(2),
+								className: `flex items-center justify-center gap-1.5 rounded-lg py-2 transition-colors ${step === 2 ? "bg-accent-dim text-accent font-semibold" : step > 2 ? "text-fg hover:bg-elevated" : "text-muted disabled:opacity-40"}`,
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "size-3.5" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "hidden sm:inline",
+										children: "2. Hours"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "sm:hidden",
+										children: "2"
+									})
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								disabled: step < 3 && name.trim().length < 2,
+								onClick: () => {
+									if (name.trim().length >= 2) setStep(3);
+								},
+								className: `flex items-center justify-center gap-1.5 rounded-lg py-2 transition-colors ${step === 3 ? "bg-accent-dim text-accent font-semibold" : staffList.length > 0 ? "text-fg hover:bg-elevated" : "text-muted disabled:opacity-40"}`,
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { className: "size-3.5" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "hidden sm:inline",
+										children: "3. Staff"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "sm:hidden",
+										children: "3"
+									})
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								disabled: staffList.length === 0,
+								onClick: () => {
+									if (staffList.length > 0) setStep(4);
+								},
+								className: `flex items-center justify-center gap-1.5 rounded-lg py-2 transition-colors ${step === 4 ? "bg-accent-dim text-accent font-semibold" : servicesList.length > 0 ? "text-fg hover:bg-elevated" : "text-muted disabled:opacity-40"}`,
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Stethoscope, { className: "size-3.5" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "hidden sm:inline",
+										children: "4. Services"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "sm:hidden",
+										children: "4"
+									})
+								]
+							})
+						]
+					})
+				}),
+				validationError && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mb-6 rounded-md border border-warn/40 bg-warn/10 p-3 text-xs text-warn leading-relaxed flex items-center justify-between",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: validationError }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						onClick: () => setValidationError(null),
+						className: "text-warn hover:opacity-75 ml-2",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "size-3.5" })
+					})]
+				}),
+				step === 1 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+					onSubmit: handleNextFromStep1,
+					className: "rounded-2xl border border-border bg-surface p-6 sm:p-8 space-y-6 shadow-sm",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-xs font-semibold uppercase tracking-wider text-accent",
+								children: "Step 1 of 4"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+								className: "mt-1 text-2xl font-bold tracking-tight text-fg",
+								children: "Set up your clinic profile"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-2 text-sm text-muted",
+								children: "Enter your practice name and timezone. Your booking link and automated WhatsApp messages will display this name."
+							})
+						] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-4",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+								className: "block text-sm font-medium text-fg",
+								children: ["Clinic / Practice name *", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									autoFocus: true,
+									required: true,
+									minLength: 2,
+									value: name,
+									onChange: (e) => setName(e.target.value),
+									placeholder: "e.g. Apex Dental & Healthcare",
+									className: "mt-1.5 w-full rounded-md border border-border bg-elevated px-3 py-2.5 text-sm text-fg placeholder:text-muted/60 focus:border-accent focus:outline-none"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+								className: "block text-sm font-medium text-fg",
+								children: [
+									"Clinic Timezone",
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("select", {
+										value: timezone,
+										onChange: (e) => setTimezone(e.target.value),
+										className: "mt-1.5 w-full rounded-md border border-border bg-elevated px-3 py-2.5 text-sm text-fg focus:border-accent focus:outline-none",
+										children: TIMEZONES.map((tz) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+											value: tz.value,
+											children: tz.label
+										}, tz.value))
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "mt-1 block text-xs text-muted",
+										children: "Appointments and reminder sweeps operate according to this time."
+									})
+								]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "flex justify-end pt-4 border-t border-border",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "submit",
+								disabled: name.trim().length < 2,
+								className: "flex items-center gap-2 rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-accent-fg transition-opacity hover:opacity-90 disabled:opacity-50",
+								children: ["Next: Working Hours ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "size-4" })]
+							})
+						})
+					]
+				}),
+				step === 2 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "rounded-2xl border border-border bg-surface p-6 sm:p-8 space-y-6 shadow-sm",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-xs font-semibold uppercase tracking-wider text-accent",
+								children: "Step 2 of 4"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+								className: "mt-1 text-2xl font-bold tracking-tight text-fg",
+								children: "Configure working hours"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-2 text-sm text-muted",
+								children: "Specify when patients can book appointments. You can adjust individual days anytime later in settings."
+							})
+						] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-xs font-medium text-muted mb-2",
+							children: "Quick schedule presets:"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex flex-wrap gap-2",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: () => applySchedulePreset("09:00", "17:00", true),
+									className: "rounded-md border border-border bg-elevated px-2.5 py-1 text-xs font-medium text-fg hover:border-accent transition-colors",
+									children: "9:00 AM – 5:00 PM (Mon–Sat)"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: () => applySchedulePreset("10:00", "19:00", true),
+									className: "rounded-md border border-border bg-elevated px-2.5 py-1 text-xs font-medium text-fg hover:border-accent transition-colors",
+									children: "10:00 AM – 7:00 PM (Mon–Sat)"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: () => applySchedulePreset("17:00", "22:00", true),
+									className: "rounded-md border border-border bg-elevated px-2.5 py-1 text-xs font-medium text-fg hover:border-accent transition-colors",
+									children: "5:00 PM – 10:00 PM (Evening)"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: () => applySchedulePreset("09:00", "18:00", false),
+									className: "rounded-md border border-border bg-elevated px-2.5 py-1 text-xs font-medium text-fg hover:border-accent transition-colors",
+									children: "All 7 Days Open"
+								})
+							]
+						})] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "space-y-2 rounded-xl border border-border bg-elevated/40 p-4",
+							children: hours.map((h) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: `flex flex-wrap items-center justify-between gap-3 rounded-lg p-2 transition-colors ${h.closed ? "opacity-60 bg-surface/40" : "bg-surface"}`,
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+									className: "flex items-center gap-3 cursor-pointer select-none",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+											type: "checkbox",
+											checked: !h.closed,
+											onChange: (e) => setHours((prev) => prev.map((x) => x.day === h.day ? {
+												...x,
+												closed: !e.target.checked
+											} : x)),
+											className: "size-4 rounded accent-accent cursor-pointer"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-sm font-semibold text-fg w-20",
+											children: DAY_LABELS[h.day]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xs text-muted",
+											children: h.closed ? "Closed" : "Open"
+										})
+									]
+								}), !h.closed ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-2",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+											type: "time",
+											value: h.open,
+											onChange: (e) => setHours((prev) => prev.map((x) => x.day === h.day ? {
+												...x,
+												open: e.target.value
+											} : x)),
+											className: "rounded-md border border-border bg-elevated px-2.5 py-1 text-xs text-fg"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xs text-muted",
+											children: "to"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+											type: "time",
+											value: h.close,
+											onChange: (e) => setHours((prev) => prev.map((x) => x.day === h.day ? {
+												...x,
+												close: e.target.value
+											} : x)),
+											className: "rounded-md border border-border bg-elevated px-2.5 py-1 text-xs text-fg"
+										})
+									]
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs text-muted italic",
+									children: "No appointments on this day"
+								})]
+							}, h.day))
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "rounded-xl border border-border bg-surface p-4 flex flex-wrap items-center justify-between gap-3",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-sm font-medium text-fg",
+								children: "Appointment Buffer Time"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-xs text-muted",
+								children: "Break / sanitization gap between patient slots"
+							})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "flex items-center gap-2",
+								children: [
+									5,
+									10,
+									15,
+									20,
+									30
+								].map((min) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => setBufferMinutes(min),
+									className: `rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${bufferMinutes === min ? "bg-accent text-accent-fg" : "border border-border bg-elevated text-fg hover:border-accent"}`,
+									children: [min, "m"]
+								}, min))
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center justify-between pt-4 border-t border-border",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								onClick: () => setStep(1),
+								className: "flex items-center gap-1.5 rounded-md border border-border px-4 py-2 text-sm font-medium text-muted hover:bg-elevated hover:text-fg",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, { className: "size-4" }), " Back"]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								onClick: handleNextFromStep2,
+								className: "flex items-center gap-2 rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-accent-fg transition-opacity hover:opacity-90",
+								children: ["Next: Practitioners ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "size-4" })]
+							})]
+						})
+					]
+				}),
+				step === 3 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "rounded-2xl border border-border bg-surface p-6 sm:p-8 space-y-6 shadow-sm",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-xs font-semibold uppercase tracking-wider text-accent",
+								children: "Step 3 of 4"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+								className: "mt-1 text-2xl font-bold tracking-tight text-fg",
+								children: "Add clinic practitioners"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-2 text-sm text-muted",
+								children: "Add doctors, specialists, or consultants who take appointments at your clinic. Add at least one practitioner."
+							})
+						] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+								autoFocus: true,
+								placeholder: "e.g. Dr. Ayesha Ahmed or your name",
+								value: staffDraft,
+								onChange: (e) => setStaffDraft(e.target.value),
+								onKeyDown: (e) => {
+									if (e.key === "Enter") {
+										e.preventDefault();
+										handleAddStaff();
+									}
+								},
+								className: "flex-1 rounded-md border border-border bg-elevated px-3 py-2.5 text-sm text-fg placeholder:text-muted/60 focus:border-accent focus:outline-none"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								onClick: handleAddStaff,
+								disabled: !staffDraft.trim(),
+								className: "inline-flex items-center gap-1.5 rounded-md bg-accent px-4 py-2.5 text-sm font-semibold text-accent-fg transition-opacity hover:opacity-90 disabled:opacity-50",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "size-4" }), " Add"]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "text-xs font-semibold uppercase tracking-wider text-muted",
+								children: [
+									"Added Practitioners (",
+									staffList.length,
+									")"
+								]
+							}), staffList.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted",
+								children: "No practitioners added yet. Type a name above and click \"Add\"."
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "grid grid-cols-1 gap-2.5 sm:grid-cols-2",
+								children: staffList.map((doc, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center justify-between gap-2 rounded-xl border border-border bg-elevated/70 px-3.5 py-2.5",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center gap-2.5 min-w-0",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "grid size-7 shrink-0 place-items-center rounded-full bg-accent/20 text-xs font-bold text-accent",
+											children: doc.charAt(0).toUpperCase()
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "truncate text-sm font-medium text-fg",
+											children: doc
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										type: "button",
+										onClick: () => handleRemoveStaff(idx),
+										className: "rounded p-1 text-muted transition-colors hover:bg-surface hover:text-danger",
+										title: "Remove practitioner",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "size-4" })
+									})]
+								}, idx))
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center justify-between pt-4 border-t border-border",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								onClick: () => setStep(2),
+								className: "flex items-center gap-1.5 rounded-md border border-border px-4 py-2 text-sm font-medium text-muted hover:bg-elevated hover:text-fg",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, { className: "size-4" }), " Back"]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								disabled: staffList.length === 0,
+								onClick: handleNextFromStep3,
+								className: "flex items-center gap-2 rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-accent-fg transition-opacity hover:opacity-90 disabled:opacity-50",
+								children: ["Next: Services & Pricing ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "size-4" })]
+							})]
+						})
+					]
+				}),
+				step === 4 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "rounded-2xl border border-border bg-surface p-6 sm:p-8 space-y-6 shadow-sm",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-xs font-semibold uppercase tracking-wider text-accent",
+								children: "Step 4 of 4"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+								className: "mt-1 text-2xl font-bold tracking-tight text-fg",
+								children: "Define your services & pricing"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-2 text-sm text-muted",
+								children: "Add the treatments, consultations, or procedures patients can book. Add at least one service."
+							})
+						] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-xs font-medium text-muted mb-2",
+							children: "Click to quick-add common templates:"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "flex flex-wrap gap-2",
+							children: SUGGESTED_SERVICES.map((s, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								onClick: () => handleAddService(s),
+								className: "inline-flex items-center gap-1.5 rounded-md border border-border bg-elevated px-2.5 py-1 text-xs font-medium text-fg hover:border-accent hover:text-accent transition-colors",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "size-3" }),
+									" ",
+									s.name,
+									" (",
+									s.durationMin,
+									"m · ",
+									money(s.pricePkr),
+									")"
+								]
+							}, idx))
+						})] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "rounded-xl border border-border bg-elevated/40 p-4 space-y-3",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-xs font-semibold uppercase tracking-wider text-fg",
+									children: "Add custom service"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "grid grid-cols-1 gap-2.5 sm:grid-cols-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										placeholder: "Service Name (e.g. Scaling & Polishing)",
+										value: serviceDraft.name,
+										onChange: (e) => setServiceDraft({
+											...serviceDraft,
+											name: e.target.value
+										}),
+										className: "rounded-md border border-border bg-surface px-3 py-2 text-sm text-fg placeholder:text-muted/60 focus:border-accent focus:outline-none"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										placeholder: "Category (e.g. Consultation, Dental)",
+										value: serviceDraft.category,
+										onChange: (e) => setServiceDraft({
+											...serviceDraft,
+											category: e.target.value
+										}),
+										className: "rounded-md border border-border bg-surface px-3 py-2 text-sm text-fg placeholder:text-muted/60 focus:border-accent focus:outline-none"
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex flex-wrap items-center gap-3",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex items-center gap-1.5",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-xs text-muted",
+												children: "Duration:"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+												value: serviceDraft.durationMin,
+												onChange: (e) => setServiceDraft({
+													...serviceDraft,
+													durationMin: Number(e.target.value)
+												}),
+												className: "rounded-md border border-border bg-surface px-2.5 py-1.5 text-xs text-fg",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+														value: 15,
+														children: "15 mins"
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+														value: 30,
+														children: "30 mins"
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+														value: 45,
+														children: "45 mins"
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+														value: 60,
+														children: "60 mins"
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+														value: 90,
+														children: "90 mins"
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+														value: 120,
+														children: "120 mins"
+													})
+												]
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex items-center gap-1.5",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-xs text-muted",
+												children: "Fee (PKR):"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+												type: "number",
+												min: 0,
+												step: 100,
+												value: serviceDraft.pricePkr,
+												onChange: (e) => setServiceDraft({
+													...serviceDraft,
+													pricePkr: Number(e.target.value)
+												}),
+												className: "w-24 rounded-md border border-border bg-surface px-2.5 py-1.5 text-xs text-fg"
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+											type: "button",
+											onClick: () => handleAddService(),
+											disabled: !serviceDraft.name.trim(),
+											className: "ml-auto inline-flex items-center gap-1.5 rounded-md bg-accent px-4 py-1.5 text-xs font-semibold text-accent-fg hover:opacity-90 disabled:opacity-50",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "size-3.5" }), " Add Service"]
+										})
+									]
+								})
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "text-xs font-semibold uppercase tracking-wider text-muted",
+								children: [
+									"Configured Services (",
+									servicesList.length,
+									")"
+								]
+							}), servicesList.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted",
+								children: "No services added yet. Use the quick-add buttons or fill out the form above."
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "grid grid-cols-1 gap-2.5 sm:grid-cols-2",
+								children: servicesList.map((svc, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-start justify-between gap-2 rounded-xl border border-border bg-surface p-3.5 shadow-xs",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-sm font-semibold text-fg",
+											children: svc.name
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "mt-1 flex items-center gap-2",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												className: "rounded bg-elevated px-2 py-0.5 text-[11px] text-muted",
+												children: [svc.durationMin, " min"]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "rounded bg-elevated/70 px-2 py-0.5 text-[11px] text-muted",
+												children: svc.category
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "mt-2 text-xs font-bold text-accent",
+											children: money(svc.pricePkr)
+										})
+									] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										type: "button",
+										onClick: () => handleRemoveService(idx),
+										className: "rounded p-1 text-muted transition-colors hover:bg-elevated hover:text-danger",
+										title: "Delete service",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "size-4" })
+									})]
+								}, idx))
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center justify-between pt-4 border-t border-border",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								onClick: () => setStep(3),
+								className: "flex items-center gap-1.5 rounded-md border border-border px-4 py-2 text-sm font-medium text-muted hover:bg-elevated hover:text-fg",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, { className: "size-4" }), " Back"]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								disabled: busy || servicesList.length === 0,
+								onClick: handleFinish,
+								className: "flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 text-sm font-semibold text-accent-fg transition-opacity hover:opacity-90 disabled:opacity-50",
+								children: busy ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, { className: "size-4 animate-spin" }), " Saving Clinic…"] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "size-4" }), " Finish Setup & Launch Desk"] })
+							})]
+						})
+					]
 				})
 			]
 		})
