@@ -1,13 +1,14 @@
-import { t as __exportAll } from "./rolldown-runtime-D7D4PA-g.js";
-import { a as getServerFnById, i as TSS_SERVER_FUNCTION, r as createServerFn } from "../index.js";
-import { t as auth } from "./server-D0ChcEkX.js";
-import { t as authMiddleware } from "./middleware-CcmIlKRu.js";
-import { useEffect } from "react";
-import { HeadContent, Outlet, Scripts, createFileRoute, createRootRoute, createRouter, lazyRouteComponent, useRouter } from "@tanstack/react-router";
-import { Fragment, jsx, jsxs } from "react/jsx-runtime";
-import { z } from "zod";
-import { TriangleAlert } from "lucide-react";
-//#region node_modules/@tanstack/start-server-core/dist/esm/createSsrRpc.js
+import { o as __toESM } from "../_runtime.mjs";
+import { t as __exportAll } from "./rolldown-runtime-D7D4PA-g.mjs";
+import { K as require_react, _ as createRootRoute, b as require_jsx_runtime, d as HeadContent, g as createFileRoute, h as lazyRouteComponent, m as Outlet, p as createRouter, u as Scripts, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
+import { a as getServerFnById, i as TSS_SERVER_FUNCTION, r as createServerFn } from "./ssr.mjs";
+import { F as string, I as union, M as object, j as number, k as literal } from "../_libs/@better-auth/core+[...].mjs";
+import { t as auth } from "./server-D0ChcEkX.mjs";
+import { t as authMiddleware } from "./middleware-CcmIlKRu.mjs";
+import { a as TriangleAlert } from "../_libs/lucide-react.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/router-6x0HBDml.js
+var import_react = /* @__PURE__ */ __toESM(require_react());
+var import_jsx_runtime = require_jsx_runtime();
 var createSsrRpc = (functionId) => {
 	const url = "/_serverFn/" + functionId;
 	const serverFnMeta = { id: functionId };
@@ -20,10 +21,8 @@ var createSsrRpc = (functionId) => {
 		[TSS_SERVER_FUNCTION]: true
 	});
 };
-//#endregion
-//#region src/lib/booking/api.ts
 async function db() {
-	const { getSql } = await import("./db-0-UzWVIo.js").then((n) => n.t);
+	const { getSql } = await import("./db-0-UzWVIo.mjs").then((n) => n.t).then((n) => n.t);
 	return getSql();
 }
 var getDashboard = createServerFn({ method: "GET" }).middleware([authMiddleware]).handler(createSsrRpc("a86639b5ea8524bc0f1eeb5d2447792499ed0681e0ba24c8d6b714ae30f9f07d"));
@@ -61,7 +60,7 @@ async function sweepAllDueReminders() {
       limit 40
     `;
 		for (const job of due) {
-			const result = await (await import("./send-Dcymvhx0.js")).sendWhatsappText(job.phone, job.body, {
+			const result = await (await import("./send-oXxmCk-B.mjs")).sendWhatsappText(job.phone, job.body, {
 				token: shop.wa_token,
 				phoneId: shop.wa_phone_id
 			});
@@ -87,8 +86,6 @@ async function sweepAllDueReminders() {
 		simulated
 	};
 }
-//#endregion
-//#region src/lib/error-component.tsx
 var FALLBACK_MESSAGE = "An unexpected error occurred. Try reloading the page.";
 function errorMessage(error) {
 	if (error instanceof Error && error.message) return error.message;
@@ -96,30 +93,28 @@ function errorMessage(error) {
 	return FALLBACK_MESSAGE;
 }
 function AppErrorComponent({ error }) {
-	return /* @__PURE__ */ jsxs("main", {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", {
 		className: "flex min-h-screen flex-col items-center justify-center gap-3 px-6 text-center bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50",
 		children: [
-			/* @__PURE__ */ jsx("span", {
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 				className: "text-red-500",
 				"aria-hidden": "true",
-				children: /* @__PURE__ */ jsx(TriangleAlert, {
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, {
 					className: "size-10",
 					strokeWidth: 2
 				})
 			}),
-			/* @__PURE__ */ jsx("h1", {
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 				className: "text-lg font-semibold",
 				children: "Something went wrong"
 			}),
-			/* @__PURE__ */ jsx("p", {
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "max-w-md text-sm break-words text-zinc-500 dark:text-zinc-400",
 				children: errorMessage(error)
 			})
 		]
 	});
 }
-//#endregion
-//#region src/lib/auth/provider.tsx
 /**
 * App-wide client provider mounted once near the root (in `src/routes/__root.tsx`):
 *
@@ -131,13 +126,9 @@ function AppErrorComponent({ error }) {
 * (e.g. a toast or theme provider) without churning the root shell.
 */
 function AuthProvider({ children }) {
-	return /* @__PURE__ */ jsx(Fragment, { children });
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children });
 }
-//#endregion
-//#region src/lib/app-data/types.ts
 var CONNECTOR_TOKEN_READY_EVENT = "grok:connector-token-ready";
-//#endregion
-//#region src/lib/preview-embedder-origin.ts
 function isGrokEmbedderOrigin(origin) {
 	try {
 		const url = new URL(origin);
@@ -174,8 +165,6 @@ function resolveParentEmbedderOrigin(parentIsSelf, referrer, ancestorOrigin, gue
 	} catch {}
 	return null;
 }
-//#endregion
-//#region src/lib/preview-host-bridge.ts
 /**
 * Guest side of the grok-web ↔ sandbox preview postMessage bridge.
 *
@@ -183,21 +172,21 @@ function resolveParentEmbedderOrigin(parentIsSelf, referrer, ancestorOrigin, gue
 * Top-level runs (download/export, local `npm run dev`, deployed sites) noop.
 */
 var PREVIEW_BRIDGE_CHANNEL = "grok-preview-bridge";
-var EnvelopeSchema = z.object({
-	channel: z.literal(PREVIEW_BRIDGE_CHANNEL),
-	version: z.number().int().positive(),
-	type: z.string().min(1)
+var EnvelopeSchema = object({
+	channel: literal(PREVIEW_BRIDGE_CHANNEL),
+	version: number().int().positive(),
+	type: string().min(1)
 });
-var HelloSchema = EnvelopeSchema.extend({ type: z.literal("hello") });
+var HelloSchema = EnvelopeSchema.extend({ type: literal("hello") });
 var NavigateSchema = EnvelopeSchema.extend({
-	type: z.literal("navigate"),
-	path: z.string().min(1)
+	type: literal("navigate"),
+	path: string().min(1)
 });
 var HistorySchema = EnvelopeSchema.extend({
-	type: z.literal("history"),
-	delta: z.union([z.literal(-1), z.literal(1)])
+	type: literal("history"),
+	delta: union([literal(-1), literal(1)])
 });
-var ConnectorTokenReadySchema = EnvelopeSchema.extend({ type: z.literal("connector-token-ready") });
+var ConnectorTokenReadySchema = EnvelopeSchema.extend({ type: literal("connector-token-ready") });
 function isSafeBridgePath(path) {
 	if (!path.startsWith("/") || path.startsWith("//") || path.includes("\\")) return false;
 	try {
@@ -372,15 +361,13 @@ function collectRoutePathsFromTree(routeTree) {
 	walk(routeTree);
 	return [...paths];
 }
-//#endregion
-//#region src/components/preview-host-bridge.tsx
 /**
 * Mount once in `__root.tsx` so the Grok preview chrome can drive navigation
 * (and later receive registered routes). Noops when the app is not embedded.
 */
 function PreviewHostBridge() {
 	const router = useRouter();
-	useEffect(() => {
+	(0, import_react.useEffect)(() => {
 		return installPreviewHostBridge({
 			navigate: (path) => {
 				router.history.push(path);
@@ -390,11 +377,7 @@ function PreviewHostBridge() {
 	}, [router]);
 	return null;
 }
-//#endregion
-//#region src/styles.css?url
 var styles_default = "/assets/styles-cC164_3w.css";
-//#endregion
-//#region src/routes/__root.tsx
 var APP_NAME = "WaBook";
 var Route$6 = createRootRoute({
 	head: () => ({
@@ -447,39 +430,29 @@ var Route$6 = createRootRoute({
 			}
 		]
 	}),
-	component: () => /* @__PURE__ */ jsxs("html", {
+	component: () => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("html", {
 		lang: "en",
 		suppressHydrationWarning: true,
-		children: [/* @__PURE__ */ jsx("head", { children: /* @__PURE__ */ jsx(HeadContent, {}) }), /* @__PURE__ */ jsxs("body", {
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("head", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HeadContent, {}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("body", {
 			suppressHydrationWarning: true,
 			children: [
-				/* @__PURE__ */ jsx(PreviewHostBridge, {}),
-				/* @__PURE__ */ jsx(AuthProvider, { children: /* @__PURE__ */ jsx(Outlet, {}) }),
-				/* @__PURE__ */ jsx(Scripts, {})
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PreviewHostBridge, {}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {}) }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Scripts, {})
 			]
 		})]
 	})
 });
-//#endregion
-//#region src/routes/index.tsx
-var $$splitComponentImporter$2 = () => import("./routes-DSBdZRRw.js");
+var $$splitComponentImporter$2 = () => import("./routes-C9FOEmKO.mjs");
 var Route$5 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$2, "component") });
-//#endregion
-//#region src/routes/login.tsx
-var $$splitComponentImporter$1 = () => import("./login-C0r6gDi1.js");
+var $$splitComponentImporter$1 = () => import("./login-C0r6gDi1.mjs");
 var Route$4 = createFileRoute("/login")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
-//#endregion
-//#region src/routes/book.$slug.tsx
-var $$splitComponentImporter = () => import("./book._slug-DDa_VDy9.js");
+var $$splitComponentImporter = () => import("./book._slug-CgPsknOL.mjs");
 var Route$3 = createFileRoute("/book/$slug")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
-//#endregion
-//#region src/routes/api/auth/$.ts
 var Route$2 = createFileRoute("/api/auth/$")({ server: { handlers: {
 	GET: ({ request }) => auth.handler(request),
 	POST: ({ request }) => auth.handler(request)
 } } });
-//#endregion
-//#region src/routes/api/cron/reminders.ts
 var Route$1 = createFileRoute("/api/cron/reminders")({ server: { handlers: {
 	GET: handle,
 	POST: handle
@@ -492,7 +465,7 @@ async function handle({ request }) {
 		status: 403,
 		headers: { "Content-Type": "application/json" }
 	});
-	const { sweepAllDueReminders } = await import("./api-aWtHHZXM.js");
+	const { sweepAllDueReminders } = await import("./api-DNIc_wWz.mjs");
 	const result = await sweepAllDueReminders();
 	return Response.json({
 		ok: true,
@@ -500,11 +473,9 @@ async function handle({ request }) {
 		...result
 	});
 }
-//#endregion
-//#region src/routes/api/whatsapp/webhook.ts
 var Route = createFileRoute("/api/whatsapp/webhook")({ server: { handlers: {
 	GET: async ({ request }) => {
-		const { getWhatsappConfig } = await import("./config-COO7Pf6s.js");
+		const { getWhatsappConfig } = await import("./config-COO7Pf6s.mjs");
 		const url = new URL(request.url);
 		const mode = url.searchParams.get("hub.mode");
 		const token = url.searchParams.get("hub.verify_token");
@@ -518,7 +489,7 @@ var Route = createFileRoute("/api/whatsapp/webhook")({ server: { handlers: {
 		return new Response("Forbidden", { status: 403 });
 	},
 	POST: async ({ request }) => {
-		const { handleInboundWhatsapp } = await import("./inbound-BrF2Uee4.js");
+		const { handleInboundWhatsapp } = await import("./inbound-BrF2Uee4.mjs");
 		let payload = {};
 		try {
 			payload = await request.json();
@@ -539,8 +510,6 @@ var Route = createFileRoute("/api/whatsapp/webhook")({ server: { handlers: {
 		return new Response("ok", { status: 200 });
 	}
 } } });
-//#endregion
-//#region src/routeTree.gen.ts
 var rootRouteChildren = {
 	IndexRoute: Route$5.update({
 		id: "/",
@@ -574,16 +543,14 @@ var rootRouteChildren = {
 	})
 };
 var routeTree = Route$6._addFileChildren(rootRouteChildren)._addFileTypes();
-//#endregion
-//#region src/router.tsx
 var router_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
 function getRouter() {
 	return createRouter({
 		routeTree,
 		defaultErrorComponent: AppErrorComponent,
-		defaultNotFoundComponent: () => /* @__PURE__ */ jsx("div", {
+		defaultNotFoundComponent: () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			className: "flex min-h-screen items-center justify-center bg-bg text-muted",
-			children: /* @__PURE__ */ jsx("p", {
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "text-sm",
 				children: "Page not found"
 			})
@@ -591,4 +558,4 @@ function getRouter() {
 	});
 }
 //#endregion
-export { updateBookingStatus as _, createPublicBooking as a, deleteStaff as c, getPublicSlots as d, runReminderSweep as f, sweepAllDueReminders as g, getRouter, simulateInbound as h, createDashboardBooking as i, getDashboard as l, sendBookingReminder as m, Route$3 as n, createStaff as o, saveSettings as p, completeOnboarding as r, deleteService as s, router_exports as t, getPublicShop as u, upsertService as v };
+export { updateBookingStatus as _, createPublicBooking as a, deleteStaff as c, getPublicSlots as d, runReminderSweep as f, sweepAllDueReminders as g, simulateInbound as h, createDashboardBooking as i, getDashboard as l, sendBookingReminder as m, Route$3 as n, createStaff as o, saveSettings as p, completeOnboarding as r, deleteService as s, router_exports as t, getPublicShop as u, upsertService as v };

@@ -89,8 +89,13 @@ export async function sendWhatsappText(
   if (templatePayload) {
     const second = await graphSend(phoneId, token, templatePayload);
     if (second.ok) return second;
-    // If the template failed due to language code mismatch (e.g. Meta registered it as "en" instead of "en_US"), retry with "en"
-    if (second.error && second.error.toLowerCase().includes("language")) {
+    // If the template failed on en_US, retry with language code "en"
+    if (
+      second.error &&
+      (second.error.toLowerCase().includes("language") ||
+        second.error.toLowerCase().includes("does not exist") ||
+        second.error.toLowerCase().includes("132001"))
+    ) {
       const altPayload = {
         ...templatePayload,
         template: {

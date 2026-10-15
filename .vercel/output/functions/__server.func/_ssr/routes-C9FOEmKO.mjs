@@ -1,9 +1,9 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { K as require_react, b as require_jsx_runtime, v as Navigate } from "../_libs/@tanstack/react-router+[...].mjs";
 import { C as Check, E as Bell, S as ChevronLeft, T as Building2, _ as Link2, b as Clock, c as Sparkles, d as Pencil, f as MessageSquare, g as List, h as LoaderCircle, i as UserPlus, l as Send, m as LogOut, n as Users, o as Trash2, p as Menu, r as UserX, s as Stethoscope, t as X, u as Plus, v as CreditCard, w as CalendarDays, x as ChevronRight, y as Copy } from "../_libs/lucide-react.mjs";
-import { _ as updateBookingStatus, c as deleteStaff, f as runReminderSweep, h as simulateInbound, i as createDashboardBooking, l as getDashboard, m as sendBookingReminder, o as createStaff, p as saveSettings, r as completeOnboarding, s as deleteService, v as upsertService } from "./router-CGxfKhfK.mjs";
+import { _ as updateBookingStatus, c as deleteStaff, f as runReminderSweep, h as simulateInbound, i as createDashboardBooking, l as getDashboard, m as sendBookingReminder, o as createStaff, p as saveSettings, r as completeOnboarding, s as deleteService, v as upsertService } from "./router-6x0HBDml.mjs";
 import { i as signOut, t as authClient } from "./client-DaPSa0yY.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-DSBdZRRw.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-C9FOEmKO.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 /**
