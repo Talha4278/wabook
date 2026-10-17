@@ -63,7 +63,7 @@ function Login() {
             🔥 7-Day Free Trial Active
           </p>
           <p className="text-muted leading-relaxed">
-            Sign in to start your free 7-day trial and lock in the <strong>50% Early Bird Discount</strong> (Rs 3,999/mo). No credit card required.
+            Sign in to start your free 7-day trial and lock in <strong>50% OFF</strong>: Core at <strong>Rs 1,999/mo</strong> (was Rs 3,999) and Clinic at <strong>Rs 3,499/mo</strong> (was Rs 6,999). No credit card required.
           </p>
         </div>
 

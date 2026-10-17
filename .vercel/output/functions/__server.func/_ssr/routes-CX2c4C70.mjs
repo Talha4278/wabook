@@ -1,9 +1,9 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { K as require_react, b as require_jsx_runtime, v as Navigate } from "../_libs/@tanstack/react-router+[...].mjs";
 import { A as ChevronLeft, C as Flame, D as Clock, E as Copy, F as Building2, I as Bell, L as Award, M as Check, N as CheckCheck, O as CircleCheck, P as CalendarDays, R as ArrowRight, S as Link2, T as CreditCard, _ as MessageSquare, a as UserPlus, b as LoaderCircle, c as Trash2, d as ShieldCheck, f as Send, g as Pencil, h as Percent, i as UserX, j as ChevronDown, k as ChevronRight, l as Stethoscope, m as PhoneCall, n as X, p as Plus, r as Users, s as TrendingUp, t as Zap, u as Sparkles, v as Menu, w as ExternalLink, x as List, y as LogOut } from "../_libs/lucide-react.mjs";
-import { _ as updateBookingStatus, c as deleteStaff, f as runReminderSweep, h as simulateInbound, i as createDashboardBooking, l as getDashboard, m as sendBookingReminder, o as createStaff, p as saveSettings, r as completeOnboarding, s as deleteService, v as upsertService } from "./router-rMwRF8UO.mjs";
+import { _ as updateBookingStatus, c as deleteStaff, f as runReminderSweep, h as simulateInbound, i as createDashboardBooking, l as getDashboard, m as sendBookingReminder, o as createStaff, p as saveSettings, r as completeOnboarding, s as deleteService, v as upsertService } from "./router-wwyp4sx_.mjs";
 import { i as signOut, t as authClient } from "./client-DaPSa0yY.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-CtpyEaT_.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-CX2c4C70.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 /**
@@ -2777,7 +2777,6 @@ function ClinicSetup({ onSave, busy }) {
 	});
 }
 function LandingPage({ user, onOpenDesk }) {
-	const [billingPeriod, setBillingPeriod] = (0, import_react.useState)("monthly");
 	const [openFaq, setOpenFaq] = (0, import_react.useState)(0);
 	const [simLang, setSimLang] = (0, import_react.useState)("ur");
 	const [simStatus, setSimStatus] = (0, import_react.useState)("pending");
@@ -2789,7 +2788,7 @@ function LandingPage({ user, onOpenDesk }) {
 	const monthlyNoShows = Math.round(monthlyTotalSlots * noShowRate / 100);
 	const monthlyLostPkr = monthlyNoShows * ticketPrice;
 	const monthlySavedPkr = Math.round(monthlyLostPkr * .85);
-	const subscriptionCost = 3999;
+	const subscriptionCost = 3499;
 	const netProfitPkr = monthlySavedPkr - subscriptionCost;
 	const roiMultiplier = Math.round(monthlySavedPkr / subscriptionCost * 10) / 10;
 	const handleStartTrial = () => {
@@ -2807,7 +2806,7 @@ function LandingPage({ user, onOpenDesk }) {
 							className: "inline-flex items-center gap-1 rounded-full bg-accent/20 px-2 py-0.5 text-xs font-semibold text-accent border border-accent/30",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flame, { className: "size-3.5 fill-accent" }), "Pakistan Launch Special"]
 						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "50% OFF Lifetime Early Bird Discount" }), " for the first 50 Clinics & Salons!"] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "50% OFF Launch Special:" }), " Core Plan Rs 1,999/mo (was Rs 3,999) & Clinic Plan Rs 3,499/mo (was Rs 6,999)!"] }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 							onClick: handleStartTrial,
 							className: "ml-2 inline-flex items-center gap-1 underline underline-offset-4 hover:text-accent transition-colors font-semibold cursor-pointer",
@@ -2971,7 +2970,7 @@ function LandingPage({ user, onOpenDesk }) {
 													}),
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 														className: "text-sm font-semibold text-fg",
-														children: "Get 50% Lifetime Early Bird Discount — Rs 3,999/mo (was Rs 7,999)"
+														children: "50% OFF Launch Offer: Core from Rs 1,999/mo (was Rs 3,999) • Clinic Rs 3,499/mo (was Rs 6,999)"
 													}),
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 														className: "text-xs text-muted",
@@ -3575,7 +3574,7 @@ function LandingPage({ user, onOpenDesk }) {
 										children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 												className: "flex justify-between text-muted",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "WaBook Early Bird Fee:" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "WaBook Clinic Plan Fee:" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 													className: "font-semibold text-fg",
 													children: [
 														"Rs ",
@@ -3753,39 +3752,18 @@ function LandingPage({ user, onOpenDesk }) {
 							children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "inline-flex items-center gap-2 rounded-full bg-accent/15 px-4 py-1.5 text-xs font-bold text-accent border border-accent/30",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Percent, { className: "size-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "LIMITED EARLY BIRD OFFER • 50% OFF LIFETIME" })]
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Percent, { className: "size-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "50% OFF LAUNCH PRICING • LIMITED TIME" })]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 									className: "text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-fg",
-									children: "Transparent Pakistani Pricing. No Hidden Surprises."
+									children: "Simple, Predictable Plans for Clinics & Salons."
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 									className: "text-base text-muted",
 									children: [
 										"Start with a ",
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "7-Day Free Trial" }),
-										" today. Lock in 50% early bird discount forever. No credit card required."
-									]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "pt-4 flex items-center justify-center gap-3",
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: `text-sm font-medium ${billingPeriod === "monthly" ? "text-fg" : "text-muted"}`,
-											children: "Monthly Billing"
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-											onClick: () => setBillingPeriod(billingPeriod === "monthly" ? "annual" : "monthly"),
-											className: "relative inline-flex h-7 w-14 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-elevated transition-colors duration-200 ease-in-out focus:outline-none",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `pointer-events-none inline-block size-6 transform rounded-full bg-accent shadow-lg ring-0 transition duration-200 ease-in-out ${billingPeriod === "annual" ? "translate-x-7" : "translate-x-0"}` })
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-											className: `text-sm font-medium flex items-center gap-1.5 ${billingPeriod === "annual" ? "text-fg" : "text-muted"}`,
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Annual Billing" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "rounded-full bg-accent/20 px-2 py-0.5 text-[10px] font-bold text-accent",
-												children: "2 MONTHS FREE"
-											})]
-										})
+										" today. Lock in 50% discount. No credit card required. Billed monthly in PKR."
 									]
 								})
 							]
@@ -3800,70 +3778,92 @@ function LandingPage({ user, onOpenDesk }) {
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "flex items-center justify-between",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-												className: "text-xl font-bold text-fg",
-												children: "Solo Clinic / Studio"
+												className: "text-2xl font-bold text-fg",
+												children: "Core"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "rounded-full bg-elevated px-2.5 py-1 text-xs text-muted font-medium",
-												children: "1 Doctor / Stylist"
+												className: "rounded-full bg-elevated px-3 py-1 text-xs text-muted font-medium border border-border",
+												children: "Solo Practice"
 											})]
 										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 											className: "text-sm text-muted",
-											children: "Perfect for individual doctors, dentists, single-chair salons, or private consultants."
+											children: [
+												"Designed for a ",
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "solo doctor or one chair" }),
+												"."
+											]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "pt-2",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "flex items-baseline gap-2",
-												children: [
-													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-														className: "text-sm text-muted line-through",
-														children: ["Rs ", billingPeriod === "monthly" ? "7,999" : "79,990"]
-													}),
-													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-														className: "text-3xl sm:text-4xl font-extrabold text-fg",
-														children: ["Rs ", billingPeriod === "monthly" ? "3,999" : "39,990"]
-													}),
-													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "pt-2 space-y-1",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex items-center gap-2",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-sm text-muted line-through font-medium",
+														children: "Rs 3,999"
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "rounded-full bg-accent/20 px-2 py-0.5 text-[11px] font-bold text-accent border border-accent/30",
+														children: "50% OFF"
+													})]
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex items-baseline gap-1.5",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-4xl font-extrabold text-fg",
+														children: "Rs 1,999"
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 														className: "text-sm text-muted font-medium",
-														children: ["/", billingPeriod === "monthly" ? "month" : "year"]
-													})
-												]
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "inline-block mt-1 text-xs font-semibold text-accent",
-												children: "50% Early Bird Discount applied"
-											})]
+														children: "/ month"
+													})]
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													className: "text-xs text-muted",
+													children: "Billed monthly"
+												})
+											]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "border-t border-border pt-5 space-y-3 text-sm text-muted",
 											children: [
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 													className: "font-semibold text-xs uppercase tracking-wider text-fg",
-													children: "What's included:"
+													children: "Included Features:"
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 													className: "flex items-center gap-2.5",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Unlimited Online Bookings" })]
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "1 Login" }), " included"] })]
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 													className: "flex items-center gap-2.5",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Automated WhatsApp Reminders (24h & 2h)" })]
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Up to 2 names" }), " on the calendar"] })]
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 													className: "flex items-center gap-2.5",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Bilingual: Roman Urdu & English templates" })]
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "200 WhatsApp reminders" }), " included"] })]
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 													className: "flex items-center gap-2.5",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Custom public booking link for Instagram bio" })]
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["WhatsApp reminder: ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "24h only" })] })]
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 													className: "flex items-center gap-2.5",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "1-Tap YES / NO patient confirmation" })]
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Booking page, QR & Instagram link" })]
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 													className: "flex items-center gap-2.5",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "JazzCash & EasyPaisa invoice notes" })]
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Services and prices configuration" })]
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex items-center gap-2.5",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Urdu + English bilingual templates" })]
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex items-center gap-2.5",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "No-show rate (Basic count)" })]
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex items-center gap-2.5 text-muted/60",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "size-4 text-muted/60 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "YES / NO confirm" })]
 												})
 											]
 										})
@@ -3884,7 +3884,7 @@ function LandingPage({ user, onOpenDesk }) {
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 										className: "absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-xs font-bold text-accent-fg shadow-md",
-										children: "MOST POPULAR IN PAKISTAN"
+										children: "MOST POPULAR FOR CLINICS"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "space-y-5",
@@ -3892,70 +3892,92 @@ function LandingPage({ user, onOpenDesk }) {
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 												className: "flex items-center justify-between",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-													className: "text-xl font-bold text-fg",
-													children: "Multi-Doctor & Salon Pro"
+													className: "text-2xl font-bold text-fg",
+													children: "Clinic"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "rounded-full bg-accent/20 px-2.5 py-1 text-xs text-accent font-semibold",
-													children: "Up to 10 Staff / Chairs"
+													className: "rounded-full bg-accent/20 px-3 py-1 text-xs text-accent font-semibold border border-accent/30",
+													children: "Owner + Reception"
 												})]
 											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 												className: "text-sm text-muted",
-												children: "Designed for aesthetic centers, polyclinics, bridal salons, and multi-specialty practices."
+												children: [
+													"Designed for ",
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "owner + reception" }),
+													" team collaboration."
+												]
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "pt-2",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-													className: "flex items-baseline gap-2",
-													children: [
-														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-															className: "text-sm text-muted line-through",
-															children: ["Rs ", billingPeriod === "monthly" ? "14,999" : "149,990"]
-														}),
-														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-															className: "text-3xl sm:text-4xl font-extrabold text-accent",
-															children: ["Rs ", billingPeriod === "monthly" ? "7,499" : "74,990"]
-														}),
-														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												className: "pt-2 space-y-1",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-center gap-2",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "text-sm text-muted line-through font-medium",
+															children: "Rs 6,999"
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "rounded-full bg-accent/20 px-2 py-0.5 text-[11px] font-bold text-accent border border-accent/30",
+															children: "50% OFF"
+														})]
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-baseline gap-1.5",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "text-4xl font-extrabold text-accent",
+															children: "Rs 3,499"
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 															className: "text-sm text-muted font-medium",
-															children: ["/", billingPeriod === "monthly" ? "month" : "year"]
-														})
-													]
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "inline-block mt-1 text-xs font-semibold text-accent",
-													children: "50% Early Bird Discount applied"
-												})]
+															children: "/ month"
+														})]
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+														className: "text-xs text-muted",
+														children: "Billed monthly"
+													})
+												]
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 												className: "border-t border-border pt-5 space-y-3 text-sm text-muted",
 												children: [
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 														className: "font-semibold text-xs uppercase tracking-wider text-fg",
-														children: "Everything in Solo, plus:"
+														children: "Everything in Core, plus:"
 													}),
 													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 														className: "flex items-center gap-2.5 text-fg",
-														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Up to 10 Doctors / Stylists / Chairs" }) })]
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "3 Logins" }), " included"] })]
 													}),
 													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 														className: "flex items-center gap-2.5 text-fg",
-														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Separate working hours & buffer times per doctor" })]
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Up to 5 names" }), " on the calendar"] })]
 													}),
 													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 														className: "flex items-center gap-2.5 text-fg",
-														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Custom WhatsApp Business Phone ID integration" })]
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "500 reminders included" }), " (then Meta's rate + Rs 2)"] })]
 													}),
 													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 														className: "flex items-center gap-2.5 text-fg",
-														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Multi-service catalog & custom pricing" })]
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["WhatsApp reminders: ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "24h and 2h" })] })]
 													}),
 													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 														className: "flex items-center gap-2.5 text-fg",
-														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Daily WhatsApp morning schedule to doctor's phone" })]
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "YES / NO confirmation" }), " prompt"] })]
 													}),
 													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 														className: "flex items-center gap-2.5 text-fg",
-														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Priority WhatsApp VIP Support from our Lahore team" })]
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "No-show rate analytics" }), " (this month vs last)"] })]
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-center gap-2.5 text-fg",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Booking page, QR & Instagram link" })]
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-center gap-2.5 text-fg",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Services and prices configuration" })]
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-center gap-2.5 text-fg",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "size-4 text-accent shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Urdu + English bilingual templates" })]
 													})
 												]
 											})
@@ -3979,8 +4001,30 @@ function LandingPage({ user, onOpenDesk }) {
 								]
 							})]
 						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "mt-8 max-w-2xl mx-auto",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "rounded-2xl border border-accent/30 bg-surface/80 p-5 text-xs sm:text-sm text-muted leading-relaxed space-y-1.5 shadow-sm",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+									className: "font-bold text-fg flex items-center gap-1.5 text-sm",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-accent font-extrabold text-base leading-none",
+										children: "*"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Custom WhatsApp Number Setup:" })]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+									className: "pl-3.5",
+									children: [
+										"The software is monthly. Clinic own WhatsApp number is ",
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Rs 6,000 once" }),
+										" if we set it up with Meta. If you already have the number connected, that fee is ",
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "zero" }),
+										"."
+									]
+								})]
+							})
+						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "mt-12 max-w-2xl mx-auto rounded-2xl border border-border bg-surface p-4 text-center text-xs text-muted",
+							className: "mt-8 max-w-2xl mx-auto rounded-2xl border border-border bg-surface p-4 text-center text-xs text-muted",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 								className: "font-semibold text-fg",
 								children: "Supported Payment Methods:"
@@ -4018,8 +4062,12 @@ function LandingPage({ user, onOpenDesk }) {
 								a: "You get full, unrestricted access to all features (automated WhatsApp reminders, custom booking link, multi-staff calendar) for 7 days. You do not need to enter any credit card. If you love it, you can subscribe with JazzCash, EasyPaisa, or Bank Transfer. If not, you won't be charged anything."
 							},
 							{
-								q: "What is the Early Bird Discount?",
-								a: "To celebrate our Pakistan launch, the first 50 verified clinics and salons receive a permanent 50% discount for the lifetime of their account. For Solo it is Rs 3,999/mo (was Rs 7,999) and for Multi-Staff it is Rs 7,499/mo (was Rs 14,999)."
+								q: "What are the pricing plans and discount?",
+								a: "We offer two transparent monthly plans in Pakistan with a 50% launch discount: Core at Rs 1,999/month (was Rs 3,999) for a solo doctor or one chair, and Clinic at Rs 3,499/month (was Rs 6,999) for owner + reception with multi-staff calendar and 24h & 2h WhatsApp reminders."
+							},
+							{
+								q: "Can I use my clinic's own WhatsApp number?",
+								a: "Yes! The software is monthly. Connecting your clinic's own WhatsApp number is Rs 6,000 once if we set it up with Meta for you. If you already have the number connected, that fee is zero."
 							},
 							{
 								q: "Do my clients or patients need to install any new app?",
@@ -4062,7 +4110,7 @@ function LandingPage({ user, onOpenDesk }) {
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "inline-flex items-center gap-2 rounded-full bg-accent/20 px-4 py-1.5 text-xs font-bold text-accent border border-accent/40",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flame, { className: "size-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Only 13 Early Bird Discount Spots Remaining" })]
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flame, { className: "size-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "50% OFF: Core Rs 1,999/mo (was Rs 3,999) & Clinic Rs 3,499/mo (was Rs 6,999)" })]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
 							className: "text-3xl sm:text-5xl font-extrabold tracking-tight text-fg leading-tight",
@@ -4090,7 +4138,7 @@ function LandingPage({ user, onOpenDesk }) {
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "size-5" })
 								]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-								href: "https://wa.me/923001234567?text=Hi%20WaBook%2C%20I%20want%20to%20learn%20more%20about%20the%20Early%20Bird%20Offer",
+								href: "https://wa.me/923001234567?text=Hi%20WaBook%2C%20I%20want%20to%20learn%20more%20about%20the%20Clinic%20Plans",
 								target: "_blank",
 								rel: "noopener noreferrer",
 								className: "w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-border bg-surface px-6 py-4 text-sm font-semibold text-fg hover:bg-elevated transition-colors",

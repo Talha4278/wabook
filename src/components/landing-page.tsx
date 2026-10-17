@@ -35,7 +35,6 @@ export function LandingPage({
   user?: AppUser | { displayName?: string | null; primaryEmail?: string | null } | null;
   onOpenDesk?: () => void;
 }) {
-  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">("monthly");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   // Interactive WhatsApp Simulator State
@@ -54,7 +53,7 @@ export function LandingPage({
   const monthlyNoShows = Math.round((monthlyTotalSlots * noShowRate) / 100);
   const monthlyLostPkr = monthlyNoShows * ticketPrice;
   const monthlySavedPkr = Math.round(monthlyLostPkr * 0.85); // 85% recovered
-  const subscriptionCost = 3999;
+  const subscriptionCost = 3499;
   const netProfitPkr = monthlySavedPkr - subscriptionCost;
   const roiMultiplier = Math.round((monthlySavedPkr / subscriptionCost) * 10) / 10;
 
@@ -72,7 +71,7 @@ export function LandingPage({
             Pakistan Launch Special
           </span>
           <span>
-            <strong>50% OFF Lifetime Early Bird Discount</strong> for the first 50 Clinics & Salons!
+            <strong>50% OFF Launch Special:</strong> Core Plan Rs 1,999/mo (was Rs 3,999) & Clinic Plan Rs 3,499/mo (was Rs 6,999)!
           </span>
           <button
             onClick={handleStartTrial}
@@ -201,7 +200,7 @@ export function LandingPage({
                       <span className="text-xs text-muted">No credit card required</span>
                     </div>
                     <p className="text-sm font-semibold text-fg">
-                      Get 50% Lifetime Early Bird Discount — Rs 3,999/mo (was Rs 7,999)
+                      50% OFF Launch Offer: Core from Rs 1,999/mo (was Rs 3,999) • Clinic Rs 3,499/mo (was Rs 6,999)
                     </p>
                     <p className="text-xs text-muted">
                       Setup takes 2 minutes. Includes automated reminders, custom link & staff calendar.
@@ -668,7 +667,7 @@ export function LandingPage({
 
                 <div className="rounded-xl bg-surface p-3 text-xs space-y-1 border border-border">
                   <div className="flex justify-between text-muted">
-                    <span>WaBook Early Bird Fee:</span>
+                    <span>WaBook Clinic Plan Fee:</span>
                     <span className="font-semibold text-fg">Rs {subscriptionCost.toLocaleString("en-PK")}/mo</span>
                   </div>
                   <div className="flex justify-between text-accent font-bold">
@@ -781,102 +780,93 @@ export function LandingPage({
 
 
 
-      {/* 9. Pricing Section & Early Bird Discount Offer */}
+      {/* 9. Pricing Section */}
       <section className="py-20 md:py-28 relative" id="pricing">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="text-center max-w-3xl mx-auto space-y-4">
             <div className="inline-flex items-center gap-2 rounded-full bg-accent/15 px-4 py-1.5 text-xs font-bold text-accent border border-accent/30">
               <Percent className="size-3.5" />
-              <span>LIMITED EARLY BIRD OFFER • 50% OFF LIFETIME</span>
+              <span>50% OFF LAUNCH PRICING • LIMITED TIME</span>
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-fg">
-              Transparent Pakistani Pricing. No Hidden Surprises.
+              Simple, Predictable Plans for Clinics & Salons.
             </h2>
             <p className="text-base text-muted">
-              Start with a <strong>7-Day Free Trial</strong> today. Lock in 50% early bird discount forever. No credit card required.
+              Start with a <strong>7-Day Free Trial</strong> today. Lock in 50% discount. No credit card required. Billed monthly in PKR.
             </p>
-
-            {/* Billing Period Toggle */}
-            <div className="pt-4 flex items-center justify-center gap-3">
-              <span className={`text-sm font-medium ${billingPeriod === "monthly" ? "text-fg" : "text-muted"}`}>
-                Monthly Billing
-              </span>
-              <button
-                onClick={() => setBillingPeriod(billingPeriod === "monthly" ? "annual" : "monthly")}
-                className="relative inline-flex h-7 w-14 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-elevated transition-colors duration-200 ease-in-out focus:outline-none"
-              >
-                <span
-                  className={`pointer-events-none inline-block size-6 transform rounded-full bg-accent shadow-lg ring-0 transition duration-200 ease-in-out ${
-                    billingPeriod === "annual" ? "translate-x-7" : "translate-x-0"
-                  }`}
-                />
-              </button>
-              <span className={`text-sm font-medium flex items-center gap-1.5 ${billingPeriod === "annual" ? "text-fg" : "text-muted"}`}>
-                <span>Annual Billing</span>
-                <span className="rounded-full bg-accent/20 px-2 py-0.5 text-[10px] font-bold text-accent">
-                  2 MONTHS FREE
-                </span>
-              </span>
-            </div>
           </div>
 
+          {/* Plan Cards */}
           <div className="mt-14 grid lg:grid-cols-2 max-w-4xl mx-auto gap-8">
-            {/* Plan 1: Starter Clinic / Solo Studio */}
+            {/* Plan 1: Core */}
             <div className="rounded-3xl border border-border bg-surface p-8 space-y-6 flex flex-col justify-between">
               <div className="space-y-5">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-bold text-fg">Solo Clinic / Studio</h3>
-                  <span className="rounded-full bg-elevated px-2.5 py-1 text-xs text-muted font-medium">
-                    1 Doctor / Stylist
+                  <h3 className="text-2xl font-bold text-fg">Core</h3>
+                  <span className="rounded-full bg-elevated px-3 py-1 text-xs text-muted font-medium border border-border">
+                    Solo Practice
                   </span>
                 </div>
                 <p className="text-sm text-muted">
-                  Perfect for individual doctors, dentists, single-chair salons, or private consultants.
+                  Designed for a <strong>solo doctor or one chair</strong>.
                 </p>
 
                 {/* Price */}
-                <div className="pt-2">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-sm text-muted line-through">
-                      Rs {billingPeriod === "monthly" ? "7,999" : "79,990"}
+                <div className="pt-2 space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted line-through font-medium">
+                      Rs 3,999
                     </span>
-                    <span className="text-3xl sm:text-4xl font-extrabold text-fg">
-                      Rs {billingPeriod === "monthly" ? "3,999" : "39,990"}
-                    </span>
-                    <span className="text-sm text-muted font-medium">
-                      /{billingPeriod === "monthly" ? "month" : "year"}
+                    <span className="rounded-full bg-accent/20 px-2 py-0.5 text-[11px] font-bold text-accent border border-accent/30">
+                      50% OFF
                     </span>
                   </div>
-                  <span className="inline-block mt-1 text-xs font-semibold text-accent">
-                    50% Early Bird Discount applied
-                  </span>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-4xl font-extrabold text-fg">Rs 1,999</span>
+                    <span className="text-sm text-muted font-medium">/ month</span>
+                  </div>
+                  <p className="text-xs text-muted">
+                    Billed monthly
+                  </p>
                 </div>
 
                 <div className="border-t border-border pt-5 space-y-3 text-sm text-muted">
-                  <p className="font-semibold text-xs uppercase tracking-wider text-fg">What's included:</p>
+                  <p className="font-semibold text-xs uppercase tracking-wider text-fg">Included Features:</p>
                   <div className="flex items-center gap-2.5">
                     <Check className="size-4 text-accent shrink-0" />
-                    <span>Unlimited Online Bookings</span>
+                    <span><strong>1 Login</strong> included</span>
                   </div>
                   <div className="flex items-center gap-2.5">
                     <Check className="size-4 text-accent shrink-0" />
-                    <span>Automated WhatsApp Reminders (24h & 2h)</span>
+                    <span><strong>Up to 2 names</strong> on the calendar</span>
                   </div>
                   <div className="flex items-center gap-2.5">
                     <Check className="size-4 text-accent shrink-0" />
-                    <span>Bilingual: Roman Urdu & English templates</span>
+                    <span><strong>200 WhatsApp reminders</strong> included</span>
                   </div>
                   <div className="flex items-center gap-2.5">
                     <Check className="size-4 text-accent shrink-0" />
-                    <span>Custom public booking link for Instagram bio</span>
+                    <span>WhatsApp reminder: <strong>24h only</strong></span>
                   </div>
                   <div className="flex items-center gap-2.5">
                     <Check className="size-4 text-accent shrink-0" />
-                    <span>1-Tap YES / NO patient confirmation</span>
+                    <span>Booking page, QR & Instagram link</span>
                   </div>
                   <div className="flex items-center gap-2.5">
                     <Check className="size-4 text-accent shrink-0" />
-                    <span>JazzCash & EasyPaisa invoice notes</span>
+                    <span>Services and prices configuration</span>
+                  </div>
+                  <div className="flex items-center gap-2.5">
+                    <Check className="size-4 text-accent shrink-0" />
+                    <span>Urdu + English bilingual templates</span>
+                  </div>
+                  <div className="flex items-center gap-2.5">
+                    <Check className="size-4 text-accent shrink-0" />
+                    <span>No-show rate (Basic count)</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-muted/60">
+                    <X className="size-4 text-muted/60 shrink-0" />
+                    <span>YES / NO confirm</span>
                   </div>
                 </div>
               </div>
@@ -893,67 +883,80 @@ export function LandingPage({
               </div>
             </div>
 
-            {/* Plan 2: Multi-Doctor Clinic / Salon Pro (Popular) */}
+            {/* Plan 2: Clinic */}
             <div className="rounded-3xl border-2 border-accent bg-gradient-to-b from-surface via-surface to-elevated p-8 space-y-6 flex flex-col justify-between shadow-2xl relative">
               {/* Popular Badge */}
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-xs font-bold text-accent-fg shadow-md">
-                MOST POPULAR IN PAKISTAN
+                MOST POPULAR FOR CLINICS
               </div>
 
               <div className="space-y-5">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-bold text-fg">Multi-Doctor & Salon Pro</h3>
-                  <span className="rounded-full bg-accent/20 px-2.5 py-1 text-xs text-accent font-semibold">
-                    Up to 10 Staff / Chairs
+                  <h3 className="text-2xl font-bold text-fg">Clinic</h3>
+                  <span className="rounded-full bg-accent/20 px-3 py-1 text-xs text-accent font-semibold border border-accent/30">
+                    Owner + Reception
                   </span>
                 </div>
                 <p className="text-sm text-muted">
-                  Designed for aesthetic centers, polyclinics, bridal salons, and multi-specialty practices.
+                  Designed for <strong>owner + reception</strong> team collaboration.
                 </p>
 
                 {/* Price */}
-                <div className="pt-2">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-sm text-muted line-through">
-                      Rs {billingPeriod === "monthly" ? "14,999" : "149,990"}
+                <div className="pt-2 space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted line-through font-medium">
+                      Rs 6,999
                     </span>
-                    <span className="text-3xl sm:text-4xl font-extrabold text-accent">
-                      Rs {billingPeriod === "monthly" ? "7,499" : "74,990"}
-                    </span>
-                    <span className="text-sm text-muted font-medium">
-                      /{billingPeriod === "monthly" ? "month" : "year"}
+                    <span className="rounded-full bg-accent/20 px-2 py-0.5 text-[11px] font-bold text-accent border border-accent/30">
+                      50% OFF
                     </span>
                   </div>
-                  <span className="inline-block mt-1 text-xs font-semibold text-accent">
-                    50% Early Bird Discount applied
-                  </span>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-4xl font-extrabold text-accent">Rs 3,499</span>
+                    <span className="text-sm text-muted font-medium">/ month</span>
+                  </div>
+                  <p className="text-xs text-muted">
+                    Billed monthly
+                  </p>
                 </div>
 
                 <div className="border-t border-border pt-5 space-y-3 text-sm text-muted">
-                  <p className="font-semibold text-xs uppercase tracking-wider text-fg">Everything in Solo, plus:</p>
+                  <p className="font-semibold text-xs uppercase tracking-wider text-fg">Everything in Core, plus:</p>
                   <div className="flex items-center gap-2.5 text-fg">
                     <Check className="size-4 text-accent shrink-0" />
-                    <span><strong>Up to 10 Doctors / Stylists / Chairs</strong></span>
+                    <span><strong>3 Logins</strong> included</span>
                   </div>
                   <div className="flex items-center gap-2.5 text-fg">
                     <Check className="size-4 text-accent shrink-0" />
-                    <span>Separate working hours & buffer times per doctor</span>
+                    <span><strong>Up to 5 names</strong> on the calendar</span>
                   </div>
                   <div className="flex items-center gap-2.5 text-fg">
                     <Check className="size-4 text-accent shrink-0" />
-                    <span>Custom WhatsApp Business Phone ID integration</span>
+                    <span><strong>500 reminders included</strong> (then Meta's rate + Rs 2)</span>
                   </div>
                   <div className="flex items-center gap-2.5 text-fg">
                     <Check className="size-4 text-accent shrink-0" />
-                    <span>Multi-service catalog & custom pricing</span>
+                    <span>WhatsApp reminders: <strong>24h and 2h</strong></span>
                   </div>
                   <div className="flex items-center gap-2.5 text-fg">
                     <Check className="size-4 text-accent shrink-0" />
-                    <span>Daily WhatsApp morning schedule to doctor's phone</span>
+                    <span><strong>YES / NO confirmation</strong> prompt</span>
                   </div>
                   <div className="flex items-center gap-2.5 text-fg">
                     <Check className="size-4 text-accent shrink-0" />
-                    <span>Priority WhatsApp VIP Support from our Lahore team</span>
+                    <span><strong>No-show rate analytics</strong> (this month vs last)</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-fg">
+                    <Check className="size-4 text-accent shrink-0" />
+                    <span>Booking page, QR & Instagram link</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-fg">
+                    <Check className="size-4 text-accent shrink-0" />
+                    <span>Services and prices configuration</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-fg">
+                    <Check className="size-4 text-accent shrink-0" />
+                    <span>Urdu + English bilingual templates</span>
                   </div>
                 </div>
               </div>
@@ -972,8 +975,22 @@ export function LandingPage({
             </div>
           </div>
 
+          {/* Notes outside plans */}
+          <div className="mt-8 max-w-2xl mx-auto">
+
+            <div className="rounded-2xl border border-accent/30 bg-surface/80 p-5 text-xs sm:text-sm text-muted leading-relaxed space-y-1.5 shadow-sm">
+              <p className="font-bold text-fg flex items-center gap-1.5 text-sm">
+                <span className="text-accent font-extrabold text-base leading-none">*</span>
+                <span>Custom WhatsApp Number Setup:</span>
+              </p>
+              <p className="pl-3.5">
+                The software is monthly. Clinic own WhatsApp number is <strong>Rs 6,000 once</strong> if we set it up with Meta. If you already have the number connected, that fee is <strong>zero</strong>.
+              </p>
+            </div>
+          </div>
+
           {/* Payment Methods Banner */}
-          <div className="mt-12 max-w-2xl mx-auto rounded-2xl border border-border bg-surface p-4 text-center text-xs text-muted">
+          <div className="mt-8 max-w-2xl mx-auto rounded-2xl border border-border bg-surface p-4 text-center text-xs text-muted">
             <span className="font-semibold text-fg">Supported Payment Methods:</span> JazzCash, EasyPaisa, Raast Direct, Bank Transfer (Meezan, HBL, Alfalah), Visa & Mastercard.
           </div>
         </div>
@@ -1001,8 +1018,12 @@ export function LandingPage({
                 a: "You get full, unrestricted access to all features (automated WhatsApp reminders, custom booking link, multi-staff calendar) for 7 days. You do not need to enter any credit card. If you love it, you can subscribe with JazzCash, EasyPaisa, or Bank Transfer. If not, you won't be charged anything.",
               },
               {
-                q: "What is the Early Bird Discount?",
-                a: "To celebrate our Pakistan launch, the first 50 verified clinics and salons receive a permanent 50% discount for the lifetime of their account. For Solo it is Rs 3,999/mo (was Rs 7,999) and for Multi-Staff it is Rs 7,499/mo (was Rs 14,999).",
+                q: "What are the pricing plans and discount?",
+                a: "We offer two transparent monthly plans in Pakistan with a 50% launch discount: Core at Rs 1,999/month (was Rs 3,999) for a solo doctor or one chair, and Clinic at Rs 3,499/month (was Rs 6,999) for owner + reception with multi-staff calendar and 24h & 2h WhatsApp reminders.",
+              },
+              {
+                q: "Can I use my clinic's own WhatsApp number?",
+                a: "Yes! The software is monthly. Connecting your clinic's own WhatsApp number is Rs 6,000 once if we set it up with Meta for you. If you already have the number connected, that fee is zero.",
               },
               {
                 q: "Do my clients or patients need to install any new app?",
@@ -1058,7 +1079,7 @@ export function LandingPage({
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6 text-center space-y-6">
           <div className="inline-flex items-center gap-2 rounded-full bg-accent/20 px-4 py-1.5 text-xs font-bold text-accent border border-accent/40">
             <Flame className="size-4" />
-            <span>Only 13 Early Bird Discount Spots Remaining</span>
+            <span>50% OFF: Core Rs 1,999/mo (was Rs 3,999) & Clinic Rs 3,499/mo (was Rs 6,999)</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-fg leading-tight">
@@ -1081,7 +1102,7 @@ export function LandingPage({
               <ArrowRight className="size-5" />
             </button>
             <a
-              href="https://wa.me/923001234567?text=Hi%20WaBook%2C%20I%20want%20to%20learn%20more%20about%20the%20Early%20Bird%20Offer"
+              href="https://wa.me/923001234567?text=Hi%20WaBook%2C%20I%20want%20to%20learn%20more%20about%20the%20Clinic%20Plans"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-border bg-surface px-6 py-4 text-sm font-semibold text-fg hover:bg-elevated transition-colors"

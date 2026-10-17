@@ -1,7 +1,7 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { K as require_react, b as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
 import { r as signIn, t as authClient } from "./client-DaPSa0yY.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/login--rGkvI8U.js
+//#region node_modules/.nitro/vite/services/ssr/assets/login-Bvmy_Gx6.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function Login() {
@@ -60,9 +60,13 @@ function Login() {
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 						className: "text-muted leading-relaxed",
 						children: [
-							"Sign in to start your free 7-day trial and lock in the ",
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "50% Early Bird Discount" }),
-							" (Rs 3,999/mo). No credit card required."
+							"Sign in to start your free 7-day trial and lock in ",
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "50% OFF" }),
+							": Core at ",
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Rs 1,999/mo" }),
+							" (was Rs 3,999) and Clinic at ",
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Rs 3,499/mo" }),
+							" (was Rs 6,999). No credit card required."
 						]
 					})]
 				}),
