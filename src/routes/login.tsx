@@ -34,18 +34,42 @@ function Login() {
   return (
     <main className="grid min-h-screen place-items-center bg-bg px-5 py-10">
       <div className="w-full max-w-sm">
-        <div className="mb-8 flex items-center gap-3">
-          <div className="grid size-10 place-items-center rounded-lg bg-accent text-accent-fg font-semibold">
+        {/* Back Link */}
+        <a
+          href="/"
+          className="inline-flex items-center gap-1.5 text-xs text-muted hover:text-accent mb-6 transition-colors"
+        >
+          ← Back to WaBook Overview & Pricing
+        </a>
+
+        <div className="mb-6 flex items-center gap-3">
+          <div className="grid size-11 place-items-center rounded-xl bg-gradient-to-br from-accent to-emerald-600 text-accent-fg font-bold shadow-lg shadow-accent/20">
             W
           </div>
           <div>
-            <p className="text-lg font-semibold tracking-tight text-fg">WaBook</p>
-            <p className="text-sm text-muted">Clinic owner sign in</p>
+            <div className="flex items-center gap-2">
+              <p className="text-lg font-bold tracking-tight text-fg">WaBook</p>
+              <span className="rounded-full bg-accent-dim px-2 py-0.5 text-[10px] font-semibold text-accent border border-accent/20">
+                Pakistan 🇵🇰
+              </span>
+            </div>
+            <p className="text-xs text-muted">Clinic & Salon Portal</p>
           </div>
         </div>
-        <h1 className="text-2xl font-semibold tracking-tight text-fg">Open your desk</h1>
-        <p className="mt-2 text-sm text-muted">
-          Manage appointments, automated WhatsApp reminders, and your public booking link.
+
+        {/* Offer Banner */}
+        <div className="mb-5 rounded-xl border border-accent/30 bg-accent/10 p-3 text-xs text-fg space-y-1">
+          <p className="font-bold text-accent flex items-center gap-1">
+            🔥 7-Day Free Trial Active
+          </p>
+          <p className="text-muted leading-relaxed">
+            Sign in to start your free 7-day trial and lock in the <strong>50% Early Bird Discount</strong> (Rs 3,999/mo). No credit card required.
+          </p>
+        </div>
+
+        <h1 className="text-2xl font-bold tracking-tight text-fg">Open your clinic desk</h1>
+        <p className="mt-1.5 text-xs text-muted leading-relaxed">
+          Manage your schedule, automated bilingual WhatsApp reminders, and custom booking link in 2 minutes.
         </p>
 
         {error && (
@@ -54,12 +78,12 @@ function Login() {
           </div>
         )}
 
-        <div className="mt-8">
+        <div className="mt-6">
           <button
             type="button"
             disabled={busy}
             onClick={handleGoogleSignIn}
-            className="flex w-full items-center justify-center gap-3 rounded-md border border-border bg-surface px-4 py-2.5 text-sm font-medium text-fg transition-colors hover:bg-elevated disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-3 rounded-xl border border-border bg-surface px-4 py-3 text-sm font-semibold text-fg transition-all hover:bg-elevated hover:border-accent/40 disabled:opacity-50 shadow-md cursor-pointer"
           >
             <svg className="size-4 shrink-0" viewBox="0 0 24 24">
               <path
@@ -79,8 +103,13 @@ function Login() {
                 d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.94 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98Z"
               />
             </svg>
-            {busy ? "Redirecting to Google…" : "Continue with Google"}
+            {busy ? "Connecting to Google…" : "Continue with Google"}
           </button>
+        </div>
+
+        <div className="mt-6 border-t border-border/80 pt-4 text-center text-[11px] text-muted space-y-1">
+          <p>⚡ Setup takes under 2 minutes • No card needed</p>
+          <p>Protected by Meta Official WhatsApp Cloud API</p>
         </div>
       </div>
     </main>
